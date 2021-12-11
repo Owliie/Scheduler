@@ -33,7 +33,7 @@ export const getLoggerFor = (context: string) => {
                 format: 'YYYY-MM-DD HH:mm:ss'
             }),
             winston.format.printf((log: any) => {
-                return `[core-suite-server]-[${log.timestamp}]-[${log.level.toUpperCase()}]-[${context}]: ${log.message}`
+                return `[api]-[${log.timestamp}]-[${log.level.toUpperCase()}]-[${context}]: ${log.message}`
             })
         ),
         transports: transports
