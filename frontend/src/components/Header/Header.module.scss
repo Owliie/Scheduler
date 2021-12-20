@@ -1,0 +1,17 @@
+@import '../../sharedStyles/shared.module.scss';
+
+.Header {
+    background-color: $primary-color;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    *,
+    a {
+        color: $secondary-color !important;
+    }
+
+    img {
+        max-width: 30px;
+        max-height: 30px;
+    }
+}
