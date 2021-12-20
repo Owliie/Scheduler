@@ -1,9 +1,9 @@
 import { Token } from './token'
-import { UserData } from './user-data'
+import { User } from './user'
 import { Credentials } from './credentials'
 
 export {
     Token,
-    UserData,
+    User,
     Credentials
 }

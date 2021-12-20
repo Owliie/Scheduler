@@ -1,4 +1,4 @@
-export class UserData {
+export class User {
 
     public firstName: string = null;
     public lastName: string = null;
@@ -6,12 +6,8 @@ export class UserData {
     public email: string = null;
     public password: string = null;
     public companyName: string = null;
-    public companyPosition: string = null;
 
-    public isBusinessHolder: boolean = false;
-    public pendingActivation: boolean = false;
-
-    public constructor (userData: UserData) {
+    public constructor (userData: User) {
         for (const key in userData) {
             if (this.hasOwnProperty(key)) {
                 this[key] = userData[key]
