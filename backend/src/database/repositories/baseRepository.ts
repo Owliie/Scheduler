@@ -2,6 +2,7 @@ import MongoDatabase from '../db-connectors/mongoDatabase'
 import to from 'await-to-js'
 
 import { getLoggerFor } from '../../services/logger'
+import { utils } from '../../utils'
 
 class BaseRepository {
 
@@ -91,12 +92,33 @@ class BaseRepository {
         return data as any[]
     }
 
-    public async batchGet (field: string, batch: any[]): Promise<any> {
-        if (this.noDb) { return undefined }
+    public async batchGet (field: string, batch: any[], returnNone = false): Promise<any> {
+        if (this.noDb) { return [] }
 
         const [err, data] = await to(this.db.batchGet(field, batch))
         if (err) {
-            this.logger.error(`Error when getting batch for collection ${this.collection} `, err.message)
+            this.logger.error(`Error when getting a batch ${this.collection}`, err.message)
+        }
+
+        if (!returnNone) {
+            return data
+        }
+
+        const result = []
+        const resultObject = utils.mapify(field, data as any[])
+        for (let i = 0; i < batch.length; i++) {
+            resultObject[batch[i]] ? result.push(resultObject[batch[i]]) : result.push({})
+        }
+
+        return result
+    }
+
+    public async batchGetWhere (filter: any, batchField: string, batch: any[]): Promise<any> {
+        if (this.noDb) { return [] }
+
+        const [err, data] = await to(this.db.batchGetWhere(filter, batchField, batch))
+        if (err) {
+            this.logger.error(`Error when getting a batch by filter ${this.collection}`, err.message)
         }
 
         return data
