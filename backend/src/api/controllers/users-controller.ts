@@ -26,13 +26,18 @@ class UsersController {
 
     public login = async (req: Request, res: Response): Promise<void> => {
         const { email, password } = req.body
-        const { userData, accessToken } = await userService.login(email, password)
+        const loginData = await userService.login(email, password)
+
+        if (!loginData) {
+            res.status(400).json('Invalid username or password')
+            return
+        }
 
         res.json({
-            token: accessToken,
-            username: userData.username,
-            email: userData.email,
-            id: userData.id
+            token: loginData.accessToken,
+            username: loginData.userData.username,
+            email: loginData.userData.email,
+            id: loginData.userData.id
         })
     }
 
