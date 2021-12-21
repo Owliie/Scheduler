@@ -2,10 +2,11 @@ import express from 'express'
 import { createServer, Server } from 'http'
 import lusca from 'lusca'
 import cors from 'cors'
-
 import { registerApiRoutes } from './api/routes/api-router'
 import APIErrorHandler from './api/middleware/global-error-handler'
 import { getLoggerFor } from './services/logger'
+
+const mongoose = require('mongoose')
 
 export class APIServer {
 
@@ -17,6 +18,7 @@ export class APIServer {
 
     public constructor () {
         this.createApp()
+        this.initializeDatabase()
         this.config()
         this.createServer()
 
@@ -29,8 +31,17 @@ export class APIServer {
         this.app = express()
     }
 
+    private initializeDatabase () {
+        mongoose.connect('mongodb://localhost:27017/scheduler')
+            .then(() => {
+                console.log('DB Connected')
+            })
+    }
+
     private config (): void {
         this.port = process.env.PORT
+        this.app.use(express.urlencoded({ extended: false }))
+        this.app.use(express.json())
         this.app.use(cors())
         this.app.use(lusca.xframe('SAMEORIGIN'))
         this.app.use(lusca.xssProtection(true))

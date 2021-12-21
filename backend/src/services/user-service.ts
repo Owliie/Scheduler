@@ -1,22 +1,30 @@
-import { User } from '../models'
-import { UserData } from '../database/repositories'
+import { UserModel } from '../models/user-model'
 
-export class UserService {
+const User = require('../data/models/user')
+const jwt = require('jsonwebtoken')
 
-    public static async create (user: User): Promise<void> {
-        // TODO hash password
-        const currentUser: User = await UserData.getOne(user.username)
-        if (!currentUser) {
-            await UserData.create(user)
+exports.register = (user: UserModel): Promise<void> => User.create(user)
+
+exports.login = async (email: string, password: string) => {
+    const user: UserModel = await User.findOne({
+        email,
+        password
+    })
+    console.log(user)
+    if (user) {
+        const userData = {
+            id: user._id,
+            email: user.email,
+            username: user.username
         }
-    }
 
-    public static async exists (username: string, password: string): Promise<boolean> {
-        // TODO: has the password
-        return UserData.getOne({
-            username,
-            password
-        })
-    }
+        const accessToken: string = jwt.sign(userData, process.env.TOKEN_SECRET, { expiresIn: '1h' })
 
+        return {
+            userData: userData,
+            accessToken
+        }
+    } else {
+        throw new Error('No such user')
+    }
 }

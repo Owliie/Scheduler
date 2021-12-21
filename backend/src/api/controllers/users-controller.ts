@@ -1,42 +1,39 @@
 import { Request, Response } from 'express'
-import { UserService } from '../../services/user-service'
-import { User } from '../../models'
-import { JwtService } from '../../services/jwt-service'
+
+const userService = require('../../services/user-service')
 
 class UsersController {
 
     public register = async (req: Request, res: Response): Promise<void> => {
-        const user: User = {
+        const user = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username,
             password: req.body.password,
-            email: req.body.email.body,
-            companyName: req.body.companyName
+            email: req.body.email
         }
 
-        await UserService.create(user)
-        const token: string = JwtService.generateAccessToken(user.username)
+        await userService.register(user)
+        const { accessToken, userData } = await userService.login(user.email, user.password)
 
         res.json({
-            token,
-            username: user.username
+            token: accessToken,
+            username: user.username,
+            email: user.email,
+            id: userData.id
         })
     }
 
     public login = async (req: Request, res: Response): Promise<void> => {
-        if (await UserService.exists(req.body.username, req.body.password)) {
-            const token: string = JwtService.generateAccessToken(req.body.username)
+        const { email, password } = req.body
+        const { userData, accessToken } = await userService.login(email, password)
 
-            res.json({
-                token,
-                username: req.body.username
-            })
-
-            return
-        }
-
-        res.send('Invalid username or password').status(400)
+        res.json({
+            token: accessToken,
+            username: userData.username,
+            email: userData.email,
+            id: userData.id
+        })
     }
 
 }
