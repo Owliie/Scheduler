@@ -8,25 +8,34 @@ class UsersController {
         const user: UserRegisterInputModel = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            username: req.body.username,
             password: req.body.password,
             email: req.body.email,
             phone: req.body.phone
         }
 
-        await UserService.register(user)
-        const { accessToken, userData } = await UserService.login(user.email, user.password)
+        const createdUser = await UserService.register(user)
+        if (!createdUser) {
+            res.status(400).json('User with the same email already exists')
+            return
+        }
+
+        const {
+            accessToken,
+            userData
+        } = await UserService.login(user.email, user.password)
 
         res.json({
             token: accessToken,
-            username: user.username,
             email: user.email,
             id: userData.id
         })
     }
 
     public login = async (req: Request, res: Response): Promise<void> => {
-        const { email, password } = req.body
+        const {
+            email,
+            password
+        } = req.body
         const loginData = await UserService.login(email, password)
 
         if (!loginData) {
@@ -36,7 +45,6 @@ class UsersController {
 
         res.json({
             token: loginData.accessToken,
-            username: loginData.userData.username,
             email: loginData.userData.email,
             id: loginData.userData.id
         })
