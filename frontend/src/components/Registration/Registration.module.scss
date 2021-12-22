@@ -1,0 +1,69 @@
+@import '../../sharedStyles/shared.module.scss';
+
+.Register {
+    >ul {
+        justify-content: center;
+        border: none;
+
+        >li>button {
+            text-decoration: none !important;
+            color: $muted-color;
+            border: none !important;
+
+            &:hover,
+            &:active,
+            &:focus,
+            &:focus:not(:focus-visible) {
+                border: none;
+                outline: none;
+                text-decoration: none;
+                color: $tertiary-color;
+                background-color: $secondary-color;
+            }
+
+            &[aria-selected=true] {
+                border: none !important;
+                text-decoration: none !important;
+                color: $secondary-color !important;
+                background-color: $primary-color !important;
+            }
+        }
+    }
+
+    .BusinessRegister {
+        width: 500px;
+
+        .Content {
+            display: flex;
+            flex-direction: column;
+            flex-flow: wrap;
+            justify-content: space-evenly;
+
+            >div {
+                width: 45%;
+            }
+
+            .Availability {
+                width: 60%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    form {
+
+        width: 400px;
+
+        input[type=text],
+        input[type=password],
+        input[type=email],
+        input:active,
+        input:focus,
+        input:active:focus {
+            color: $tertiary-color;
+            background-color: white !important;
+        }
+    }
+}

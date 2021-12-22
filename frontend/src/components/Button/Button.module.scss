@@ -1,0 +1,24 @@
+@import '../../sharedStyles/shared.module.scss';
+
+.Btn {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    margin: auto;
+    display: block;
+    color: $secondary-color;
+
+    &:hover {
+        background-color: $muted-color;
+        border-color: $muted-color;
+        color: $secondary-color;
+    }
+
+    &:focus,
+    &:focus,
+    &:active:focus {
+        outline: none !important;
+        box-shadow: none;
+        border-color: $muted-color;
+        background-color: $tertiary-color !important;
+    }
+}
