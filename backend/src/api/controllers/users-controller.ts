@@ -1,15 +1,17 @@
 import { Request, Response } from 'express'
 import { UserService } from '../../services'
+import { UserRegisterInputModel } from '../../models/user-input-models'
 
 class UsersController {
 
     public register = async (req: Request, res: Response): Promise<void> => {
-        const user = {
+        const user: UserRegisterInputModel = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username,
             password: req.body.password,
-            email: req.body.email
+            email: req.body.email,
+            phone: req.body.phone
         }
 
         await UserService.register(user)

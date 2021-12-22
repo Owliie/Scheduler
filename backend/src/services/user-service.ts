@@ -1,12 +1,13 @@
 import { UserModel } from '../models/user-model'
 import { User } from '../data/models'
+import { UserRegisterInputModel } from '../models/user-input-models'
 
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 class UserService {
 
-    public async register (user: { firstName: string; lastName: string; password: string; email: string; username: string }): Promise<void> {
+    public async register (user: UserRegisterInputModel): Promise<void> {
         const salt = await bcrypt.genSalt(10)
         user.password = await bcrypt.hash(user.password, salt)
         await User.create(user)
