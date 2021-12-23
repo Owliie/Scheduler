@@ -27,7 +27,8 @@ class UserService {
         if (user && await bcrypt.compare(password, user.password)) {
             const userData = {
                 id: user._id,
-                email: user.email
+                email: user.email,
+                roles: user.roles
             }
 
             const accessToken: string = jwt.sign(userData, process.env.TOKEN_SECRET, { expiresIn: '1h' })
