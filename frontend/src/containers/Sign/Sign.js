@@ -6,10 +6,20 @@ import Registration from "../../components/Registration/Registration";
 import Button from "../../components/common/Button/Button";
 import { validateEmail, validatePassword } from "../../utils/validation";
 import Input from "../../components/common/Input/Input";
+import SignService from "../../services/signService";
+import { toastHandler, TOAST_STATES } from '../../helpers/toast';
 
 const Login = (props) => {
     const [emailField, setEmailField] = useState({ value: "", valid: true, message: 'Invalid email' });
     const [passwordField, setPasswordField] = useState({ value: "", valid: true, message: 'Password must contain at least 1 upper case letter, 1 lower case letter and 1 number. It should be at least 8 characters!' });
+
+    const loginClickedHandler = () => {
+        if (emailField.valid && passwordField.valid && emailField.value !== "" && passwordField.value !== "") {
+            SignService.login()
+        } else {
+            toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid email or password' })
+        }
+    }
 
     return (
         <div className={classes.Form}>
@@ -33,7 +43,7 @@ const Login = (props) => {
                                 placeholder="Enter password" label="Password"
                                 field={passwordField} setField={setPasswordField}
                                 validateFn={validatePassword} />
-                            <Button onClick={() => console.log('login')}>Login</Button>
+                            <Button onClick={loginClickedHandler}>Login</Button>
                         </Form>
                     </Tab>
                     <Tab eventKey="register" title="Register">

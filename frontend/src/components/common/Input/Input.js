@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 
 const Input = (props) => {
     const validate = (field, setField, fn) => {
-        setField({ ...field, valid: fn(field.value) })
+        if (props.onBlur) {
+            setField({ ...field, valid: fn(field.value) && props.onBlur() })
+        } else {
+            setField({ ...field, valid: fn(field.value) })
+        }
     }
 
     const changeField = (field, setField, newValue) => {

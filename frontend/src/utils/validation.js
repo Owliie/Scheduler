@@ -40,7 +40,7 @@ const validateAddress = (address) => {
 
 const validatePhoneNumber = (phoneNumber) => {
     const firstChars = phoneNumber.toString().substr(0, 3)
-    return phoneNumber.toString().length === 10 && phoneNumber.toString()[0] === 0 && (firstChars === "087" || firstChars === "089" || firstChars === "088" || phoneNumber.toString()[1] === 2)
+    return phoneNumber.toString().length === 10 && +phoneNumber.toString()[0] === 0 && (firstChars === "087" || firstChars === "089" || firstChars === "088" || +phoneNumber.toString()[1] === 2)
 }
 
 const validateConfirmPassword = (password, confirmPassword) => {

@@ -4,6 +4,8 @@ import classes from './Registration.module.scss';
 import { WorkingDays } from '../../utils/working-days';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
+import SignService from "../../services/signService";
+import { toastHandler, TOAST_STATES } from '../../helpers/toast';
 import { validateAddress, validateConfirmPassword, validateDescription, validateEmail, validateName, validatePassword, validatePhoneNumber } from '../../utils/validation';
 
 const defaultValues = {
@@ -50,8 +52,44 @@ const Registration = (props) => {
     }
 
     const validateConfirmPasswordHandler = () => {
-        if (validateConfirmPassword(passwordField.value, confirmPasswordField.value)) {
-            setConfirmPasswordField({ ...confirmPasswordField, valid: false })
+        return validateConfirmPassword(passwordField.value, confirmPasswordField.value)
+    }
+
+    const registerCustomerClickedHandler = () => {
+        let valid = true;
+        for (const data of fields.slice(0, 4)) {
+            if (!data.field.valid || data.field.value === "") {
+                valid = false
+            }
+        }
+
+        if (!confirmPasswordField.valid || confirmPasswordField.value === "") {
+            valid = false
+        }
+
+        if (valid) {
+            SignService.registerCustomer()
+        } else {
+            toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid form fields' })
+        }
+    }
+
+    const registerBHolderClickedHandler = () => {
+        let valid = true;
+        for (const data of fields) {
+            if (!data.field.valid || data.field.value === "") {
+                valid = false
+            }
+        }
+
+        if (!confirmPasswordField.valid || confirmPasswordField.value === "" || availability.length === 0) {
+            valid = false
+        }
+
+        if (valid) {
+            SignService.registerCustomer()
+        } else {
+            toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid form fields' })
         }
     }
 
@@ -110,14 +148,14 @@ const Registration = (props) => {
                             type='password' placeholder='Enter password'
                             field={confirmPasswordField} setField={setConfirmPasswordField}
                             validateFn={validatePassword} onBlur={validateConfirmPasswordHandler} />
-                        <Button onClick={() => console.log('register')}>Register</Button>
+                        <Button onClick={registerCustomerClickedHandler}>Register</Button>
                     </Form>
                 </Tab>
                 <Tab eventKey="bHolderRegister" title="As business holder">
                     <Form className={classes.BusinessRegister}>
                         <h3 className="h3 text-center">Register</h3>
                         <div className={classes.Content}>
-                            {fields.slice(0, 4).map(data => {
+                            {fields.slice(0, 3).concat(fields.slice(4)).map(data => {
                                 return (<Input key={data.label}
                                     controlId={data.controlId} label={data.label}
                                     type={data.type} placeholder={data.placeholder}
@@ -149,7 +187,7 @@ const Registration = (props) => {
                                 field={confirmPasswordField} setField={setConfirmPasswordField}
                                 validateFn={validatePassword} onBlur={validateConfirmPasswordHandler} />
                         </div>
-                        <Button onClick={() => console.log('register')}>Register</Button>
+                        <Button onClick={registerBHolderClickedHandler}>Register</Button>
                     </Form>
                 </Tab>
             </Tabs>

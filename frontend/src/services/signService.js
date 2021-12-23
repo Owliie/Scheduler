@@ -1,15 +1,15 @@
 import { RequestAPI } from "./baseApi";
 
 class SignService {
-    login = (data) => {
+    static login = (data) => {
         // RequestAPI.post()
     }
 
-    registerCustomer = (data) => {
+    static registerCustomer = (data) => {
         // RequestAPI.post()
     }
 
-    registerBusinessHolder = (data) => {
+    static registerBusinessHolder = (data) => {
         // RequestAPI.post()
     }
 }
