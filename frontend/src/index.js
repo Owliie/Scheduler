@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
+import { StoreProvider } from 'easy-peasy';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import store from './store';
 
 toast.configure({
   position: toast.POSITION.TOP_RIGHT,
@@ -16,12 +18,18 @@ toast.configure({
 
 ReactDOM.render(
   <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <StoreProvider store={store}>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+if (window.Cypress || process.env.NODE_ENV === 'development') {
+  window.store = store;
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
