@@ -32,7 +32,7 @@ export class APIServer {
     }
 
     private initializeDatabase () {
-        mongoose.connect('mongodb://localhost:27017/scheduler')
+        mongoose.connect(process.env.MONGODB_URI)
             .then(() => {
                 console.log('DB Connected')
             })
