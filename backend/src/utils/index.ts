@@ -1,3 +1,5 @@
+import { keys } from 'ts-transformer-keys'
+
 export const utils = {
     /*
         Provide an array of the same objects and return object of objects mapped by the prop
@@ -42,5 +44,15 @@ export const utils = {
         }
 
         return map
+    },
+
+    mapFrom: function mapFrom<TModel extends object> (obj: any): TModel {
+        const keysOfProps = keys<TModel>()
+        const result = {}
+        keysOfProps.forEach(key => {
+            result[key as string] = obj[key]
+        })
+
+        return result as TModel
     }
 }
