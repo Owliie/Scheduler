@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Sign from '../containers/Sign/Sign';
-import Spinner from './Spinner/Spinner';
+import Spinner from './common/Spinner/Spinner';
 import Dashboard from '../containers/Dashboard/Dashboard';
 
 const RouteOptions = {

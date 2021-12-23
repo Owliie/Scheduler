@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 
 import classes from './Header.module.scss';

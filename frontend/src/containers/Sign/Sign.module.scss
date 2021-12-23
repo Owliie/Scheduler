@@ -1,5 +1,36 @@
 @import '../../sharedStyles/shared.module.scss';
 
+.Register {
+    >ul {
+        justify-content: center;
+        border: none;
+
+        >li>button {
+            text-decoration: none !important;
+            color: $muted-color;
+            border: none !important;
+
+            &:hover,
+            &:active,
+            &:focus,
+            &:focus:not(:focus-visible) {
+                border: none;
+                outline: none;
+                text-decoration: none;
+                color: $tertiary-color;
+                background-color: $secondary-color;
+            }
+
+            &[aria-selected=true] {
+                border: none !important;
+                text-decoration: none !important;
+                color: $secondary-color !important;
+                background-color: $primary-color !important;
+            }
+        }
+    }
+}
+
 .Form {
     background-size: cover;
     background-position: bottom center;
@@ -31,21 +62,6 @@
         form {
 
             width: 400px;
-
-            input[type=text],
-            input[type=password],
-            input[type=email],
-            input:active,
-            input:focus,
-            input:active:focus {
-                color: $tertiary-color;
-                background-color: white !important;
-            }
-
-            span {
-                color: red;
-                font-weight: bold;
-            }
         }
     }
 }

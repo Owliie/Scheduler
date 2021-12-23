@@ -6,7 +6,7 @@ const numbers = /[0-9]/g;
 const validateEmail = (email) => {
     return email.toString()
         .toLowerCase()
-        .match(emailRegex);
+        .match(emailRegex) || email.toString() === "";
 };
 
 const validatePassword = (password) => {
@@ -26,7 +26,33 @@ const validatePassword = (password) => {
     return true
 }
 
+const validateName = (name) => {
+    return name.toString().length > 1
+}
+
+const validateDescription = (description) => {
+    return description.toString().length > 19
+}
+
+const validateAddress = (address) => {
+    return address.toString().length > 9
+}
+
+const validatePhoneNumber = (phoneNumber) => {
+    const firstChars = phoneNumber.toString().substr(0, 3)
+    return phoneNumber.toString().length === 10 && phoneNumber.toString()[0] === 0 && (firstChars === "087" || firstChars === "089" || firstChars === "088" || phoneNumber.toString()[1] === 2)
+}
+
+const validateConfirmPassword = (password, confirmPassword) => {
+    return password.toString() === confirmPassword.toString()
+}
+
 export {
     validateEmail,
-    validatePassword
+    validatePassword,
+    validateName,
+    validateDescription,
+    validateAddress,
+    validatePhoneNumber,
+    validateConfirmPassword
 }

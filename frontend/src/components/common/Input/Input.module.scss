@@ -1,0 +1,25 @@
+@import '../../../sharedStyles/shared.module.scss';
+
+.Input {
+    margin-bottom: 16px;
+
+    input[type=text],
+    input[type=password],
+    input[type=email] {
+        color: $tertiary-color;
+    }
+
+    input:active,
+    input:focus,
+    input:active:focus,
+    input:visited {
+        outline: none;
+        box-shadow: none;
+        border: 1px solid $primary-color;
+    }
+
+    >span {
+        color: $primary-color;
+        font-weight: bold;
+    }
+}
