@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 import { UserService } from '../../services'
 import { UserRegisterInputModel } from '../../models/user-input-models'
+import { Roles } from '../../common'
+
+const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
 
 class UsersController {
 
@@ -11,6 +14,17 @@ class UsersController {
             password: req.body.password,
             email: req.body.email,
             phone: req.body.phone
+        }
+
+        const registrationType = req.query.type
+
+        if (registrationType === BUSINESS_HOLDER_REGISTRATION_TYPE) {
+            user.roles = [Roles.businessHolder]
+            user.company = {
+                description: req.body.description,
+                address: req.body.address,
+                availability: req.body.availability
+            }
         }
 
         const createdUser = await UserService.register(user)
@@ -27,6 +41,7 @@ class UsersController {
         res.json({
             token: accessToken,
             email: user.email,
+            roles: user.roles,
             id: userData.id
         })
     }
