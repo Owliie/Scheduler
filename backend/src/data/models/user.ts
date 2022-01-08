@@ -5,7 +5,8 @@ import { Company } from '../../models/company'
 const companySchema = new Schema<Company>({
     description: { type: String, required: true },
     address: { type: String, required: true },
-    availability: { type: [Number], required: true }
+    availability: { type: [Number], required: true },
+    businessType: { type: Schema.Types.ObjectId, ref: 'BusinessType' }
 })
 
 const userSchema = new Schema<UserModel>({
