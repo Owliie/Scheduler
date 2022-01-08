@@ -6,5 +6,7 @@ export const usersRoutes = (expressApp: any) => {
     router.post('/register', UsersController.register)
     router.post('/login', UsersController.login)
 
+    router.get('/favourites', UsersController.getFavourites)
+
     return router
 }

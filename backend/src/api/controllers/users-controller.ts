@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { UserService } from '../../services'
 import { UserRegisterInputModel } from '../../models/user-input-models'
 import { Roles } from '../../common'
+import { AuthenticatedRequest } from '../common/authenticated-request'
 
 const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
 
@@ -63,6 +64,22 @@ class UsersController {
             email: loginData.userData.email,
             id: loginData.userData.id
         })
+    }
+
+    public getFavourites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        // let userId = req.user.id
+        // TODO: get the favourite users
+        const response = [{
+            firstName: 'Atanas',
+            lastName: 'Vasilev',
+            company: {
+                description: 'some description',
+                address: 'Sofia, Studentski grad',
+                businessTypes: ['Hair Salon', 'Nail Salon']
+            }
+        }]
+
+        res.json(response)
     }
 
 }
