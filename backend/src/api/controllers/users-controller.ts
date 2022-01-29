@@ -3,6 +3,7 @@ import { UserService } from '../../services'
 import { UserRegisterInputModel } from '../../models/user-input-models'
 import { Roles } from '../../common'
 import { AuthenticatedRequest } from '../common/authenticated-request'
+import { HTTP_STATUS_CODES } from '../../common/global-constants'
 
 const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
 
@@ -30,7 +31,7 @@ class UsersController {
 
         const createdUser = await UserService.register(user)
         if (!createdUser) {
-            res.status(400).json('User with the same email already exists')
+            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json('User with the same email already exists')
             return
         }
 
@@ -80,6 +81,32 @@ class UsersController {
         }]
 
         res.json(response)
+    }
+
+    public addToFavourites = (req: AuthenticatedRequest, res: Response): void => {
+        const userId = req.user.id
+        const businessId = req.body.businessId
+        UserService.addToFavourites(userId, businessId)
+            .then(() => {
+                res.json('Successfully added to favourites.')
+            })
+            .catch(() => {
+                res.status(HTTP_STATUS_CODES.BAD_REQUEST)
+                    .json('Problem while adding to favourites.')
+            })
+    }
+
+    public removeFromFavourites = (req: AuthenticatedRequest, res: Response): void => {
+        const userId = req.user.id
+        const businessId = req.body.id
+        UserService.removeFromFavourites(userId, businessId)
+            .then(() => {
+                res.json('Successfully remove from favourites.')
+            })
+            .catch(() => {
+                res.status(HTTP_STATUS_CODES.BAD_REQUEST)
+                    .json('Problem while removing from favourites.')
+            })
     }
 
 }

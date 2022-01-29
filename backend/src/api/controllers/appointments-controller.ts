@@ -1,5 +1,7 @@
 import { AuthenticatedRequest } from '../common/authenticated-request'
 import { Response } from 'express'
+import { AppointmentService } from '../../services'
+import { HTTP_STATUS_CODES } from '../../common/global-constants'
 
 class AppointmentsController {
 
@@ -43,6 +45,30 @@ class AppointmentsController {
         ]
 
         res.json(response)
+    }
+
+    public decline = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
+        const id = req.params.id
+
+        AppointmentService.decline(id)
+            .then(() => {
+                res.json('The appointment is successfully declined!')
+            })
+            .catch(() => {
+                res.status(HTTP_STATUS_CODES.BAD_REQUEST).json('Error while declining the appointment.')
+            })
+    }
+
+    public accept = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
+        const id = req.params.id
+
+        AppointmentService.accept(id)
+            .then(() => {
+                res.json('The appointment is approved.')
+            })
+            .catch(() => {
+                res.status(HTTP_STATUS_CODES.BAD_REQUEST).json('Error while accepting the appointment')
+            })
     }
 
 }

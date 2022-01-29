@@ -7,6 +7,8 @@ export const usersRoutes = (expressApp: any) => {
     router.post('/login', UsersController.login)
 
     router.get('/favourites', UsersController.getFavourites)
+    router.post('/favourites', UsersController.addToFavourites)
+    router.delete('/favourites/{id}', UsersController.removeFromFavourites)
 
     return router
 }

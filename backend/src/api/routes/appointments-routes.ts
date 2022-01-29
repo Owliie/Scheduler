@@ -6,5 +6,8 @@ export const appointmentsRoutes = (expressApp: any) => {
     router.get('/upcoming', AppointmentsController.getUpcoming)
     router.get('/pending', AppointmentsController.getPending)
 
+    router.post('/decline', AppointmentsController.decline)
+    router.post('/accept', AppointmentsController.accept)
+
     return router
 }

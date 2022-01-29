@@ -42,6 +42,14 @@ class UserService {
         }
     }
 
+    public async addToFavourites (userId: string, businessId: string): Promise<void> {
+        // TODO add the business to user favourites
+    }
+
+    public async removeFromFavourites (userId: string, businessId: string): Promise<void> {
+        // TODO remove the business to user favourites
+    }
+
 }
 
 export default new UserService()
