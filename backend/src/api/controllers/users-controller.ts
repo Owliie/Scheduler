@@ -3,7 +3,6 @@ import { UserService } from '../../services'
 import { UserRegisterInputModel } from '../../models/user-input-models'
 import { Roles } from '../../common'
 import { AuthenticatedRequest } from '../common/authenticated-request'
-import { HTTP_STATUS_CODES } from '../../common/global-constants'
 import { responseUtils } from '../../utils/response-utils.js'
 
 const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
@@ -32,7 +31,7 @@ class UsersController {
 
         const createdUser = await UserService.register(user)
         if (!createdUser) {
-            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json('User with the same email already exists')
+            responseUtils.sendErrorMessage(res, 'User with the same email already exists.')
             return
         }
 
