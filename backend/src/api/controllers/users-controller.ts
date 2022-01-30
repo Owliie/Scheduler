@@ -2,6 +2,9 @@ import { Request, Response } from 'express'
 import { UserService } from '../../services'
 import { UserRegisterInputModel } from '../../models/user-input-models'
 import { Roles } from '../../common'
+import { AuthenticatedRequest } from '../common/authenticated-request'
+import { HTTP_STATUS_CODES } from '../../common/global-constants'
+import { responseUtils } from '../../utils/response-utils.js'
 
 const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
 
@@ -29,7 +32,7 @@ class UsersController {
 
         const createdUser = await UserService.register(user)
         if (!createdUser) {
-            res.status(400).json('User with the same email already exists')
+            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json('User with the same email already exists')
             return
         }
 
@@ -63,6 +66,47 @@ class UsersController {
             email: loginData.userData.email,
             id: loginData.userData.id
         })
+    }
+
+    public getFavourites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        // let userId = req.user.id
+        // TODO: get the favourite users
+        const response = [{
+            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e',
+            firstName: 'Atanas',
+            lastName: 'Vasilev',
+            company: {
+                description: 'some description',
+                address: 'Sofia, Studentski grad',
+                businessTypes: ['Hair Salon', 'Nail Salon']
+            }
+        }]
+
+        res.json(response)
+    }
+
+    public addToFavourites = (req: AuthenticatedRequest, res: Response): void => {
+        const userId = req.user?.id
+        const businessId = req.body.businessId
+        UserService.addToFavourites(userId, businessId)
+            .then(() => {
+                responseUtils.sendSuccessMessage(res, 'Added to favourites.')
+            })
+            .catch(() => {
+                responseUtils.sendErrorMessage(res, 'Problem while adding to favourites.')
+            })
+    }
+
+    public removeFromFavourites = (req: AuthenticatedRequest, res: Response): void => {
+        const userId = req.user?.id
+        const businessId = req.params.id
+        UserService.removeFromFavourites(userId, businessId)
+            .then(() => {
+                responseUtils.sendSuccessMessage(res, 'Removed from favourites.')
+            })
+            .catch(() => {
+                responseUtils.sendErrorMessage(res, 'Problem while removing from favourites.')
+            })
     }
 
 }
