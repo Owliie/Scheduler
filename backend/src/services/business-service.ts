@@ -61,7 +61,7 @@ class BusinessService {
         return Promise.resolve({ ...businessHolders.find(b => b.id === id) })
     }
 
-    public async getByType (businessType: number, userId: string): Promise<any> {
+    public async getByType (businessType: string, userId: string): Promise<any> {
         // TODO: user the userId to evaluate addedToFavourites for each of the businesses
         return Promise.resolve([...businessHolders])
     }

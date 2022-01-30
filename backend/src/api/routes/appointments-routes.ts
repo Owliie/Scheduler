@@ -3,11 +3,13 @@ import AppointmentsController from '../controllers/appointments-controller'
 export const appointmentsRoutes = (expressApp: any) => {
     const router = expressApp.Router()
 
-    router.get('/upcoming', AppointmentsController.getUpcoming)
-    router.get('/pending', AppointmentsController.getPending)
+    router.post('/', AppointmentsController.create)
 
-    router.post('/decline', AppointmentsController.decline)
-    router.post('/accept', AppointmentsController.accept)
+    router.get('/upcoming', AppointmentsController.getUpcomingForUser)
+    router.get('/pending', AppointmentsController.getPendingForUser)
+
+    router.post('/decline/:id', AppointmentsController.decline)
+    router.post('/accept/:id', AppointmentsController.accept)
 
     return router
 }

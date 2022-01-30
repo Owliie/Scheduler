@@ -95,14 +95,21 @@ const appointments = [
 
 class AppointmentService {
 
-    public getApprovedByBusinessAndDate (businessId: string, date: Date): Promise<any> {
-        return Promise.resolve(appointments
-            .find(a => a.status === AppointmentStatus.Declined && a.businessHolder.id === businessId))
+    public async getApprovedByBusinessAndDate (businessId: string, date: Date): Promise<any> {
+        const result = appointments
+            .filter(a => a.status === AppointmentStatus.Accepted)
+        return Promise.resolve([...result])
     }
 
-    public getPendingByBusiness (businessId: string): Promise<any> {
-        return Promise.resolve(appointments
-            .find(a => a.status === AppointmentStatus.Pending && a.businessHolder.id === businessId))
+    public async getPendingByBusiness (businessId: string): Promise<any> {
+        const result = appointments
+            .filter(a => a.status === AppointmentStatus.Pending)
+        return Promise.resolve([...result])
+    }
+
+    public create (appointment: any): Promise<any> {
+        appointments.push(appointment)
+        return Promise.resolve()
     }
 
     public decline (id: string): Promise<any> {

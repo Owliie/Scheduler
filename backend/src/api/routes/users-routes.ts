@@ -8,7 +8,7 @@ export const usersRoutes = (expressApp: any) => {
 
     router.get('/favourites', UsersController.getFavourites)
     router.post('/favourites', UsersController.addToFavourites)
-    router.delete('/favourites/{id}', UsersController.removeFromFavourites)
+    router.delete('/favourites/:id', UsersController.removeFromFavourites)
 
     return router
 }
