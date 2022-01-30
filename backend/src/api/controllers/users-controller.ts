@@ -56,7 +56,7 @@ class UsersController {
         const loginData = await UserService.login(email, password)
 
         if (!loginData) {
-            res.status(400).json('Invalid username or password')
+            responseUtils.sendErrorMessage(res, 'Invalid username or password.')
             return
         }
 
