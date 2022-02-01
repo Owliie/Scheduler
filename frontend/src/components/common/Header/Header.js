@@ -4,23 +4,18 @@ import { Navbar, Nav } from 'react-bootstrap';
 import classes from './Header.module.scss';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 
 const Header = (props) => {
-    const { isLoggedIn } = useStoreState((state) => state.userStore);
-    const { setAccount } = useStoreActions((actions) => actions.userStore);
-
-    const navigate = useNavigate();
+    const history = useNavigate();
 
     const onLogoutClick = () => {
-        setAccount(null)
-        navigate('/sign');
+        history.push('/login');
     }
 
     return (
         <Navbar collapseOnSelect expand="md" className={classes.Header} variant="dark">
             <Navbar.Brand href="/">Scheduler</Navbar.Brand>
-            {isLoggedIn ?
+            {false ? // after login
                 <>
                     <Nav>
                         <Link className="nav-link" to="/">Dashboard</Link>

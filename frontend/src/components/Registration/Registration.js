@@ -4,23 +4,25 @@ import classes from './Registration.module.scss';
 import { WorkingDays } from '../../utils/working-days';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
-import SignService from "../../services/signService";
 import { toastHandler, TOAST_STATES } from '../../helpers/toast';
 import { validateAddress, validateConfirmPassword, validateDescription, validateEmail, validateName, validatePassword, validatePhoneNumber } from '../../utils/validation';
+import { useStoreActions } from 'easy-peasy';
 
 const defaultValues = {
-    email: { value: "", valid: true, message: 'Invalid email' },
-    password: { value: "", valid: true, message: 'Password must contain at least 1 upper case letter, 1 lower case letter and 1 number. It should be at least 8 characters!' },
-    confirmPassword: { value: "", valid: true, message: 'Passwords not matching' },
-    firstName: { value: "", valid: true, message: 'First name should be at least 2 characters long' },
-    lastName: { value: "", valid: true, message: 'Last name should be at least 2 characters long' },
-    description: { value: "", valid: true, message: 'Description should be at least 20 characters long' },
-    address: { value: "", valid: true, message: 'Address should be at least 10 characters long' },
-    phoneNumber: { value: "", valid: true, message: 'Invalid phone number' },
-    availability: { value: "", valid: true, message: '' }
+    email: { name: 'email', value: "", valid: true, message: 'Invalid email' },
+    password: { name: 'password', value: "", valid: true, message: 'Password must contain at least 1 upper case letter, 1 lower case letter and 1 number. It should be at least 8 characters!' },
+    confirmPassword: { name: 'confirmPassword', value: "", valid: true, message: 'Passwords not matching' },
+    firstName: { name: 'firstName', value: "", valid: true, message: 'First name should be at least 2 characters long' },
+    lastName: { name: 'lastName', value: "", valid: true, message: 'Last name should be at least 2 characters long' },
+    description: { name: 'description', value: "", valid: true, message: 'Description should be at least 20 characters long' },
+    address: { name: 'address', value: "", valid: true, message: 'Address should be at least 10 characters long' },
+    phoneNumber: { name: 'phone', value: "", valid: true, message: 'Invalid phone number' },
+    availability: { name: 'availability', value: "", valid: true, message: '' }
 }
 
 const Registration = (props) => {
+    const { registerCustomer, registerBusinessHolder } = useStoreActions(actions => actions.userStore);
+
     const [activeTab, setActiveTab] = useState("userRegister");
     const [emailField, setEmailField] = useState(defaultValues.email);
     const [firstNameField, setFirstNameField] = useState(defaultValues.firstName);
@@ -57,24 +59,30 @@ const Registration = (props) => {
 
     const registerCustomerClickedHandler = () => {
         let valid = true;
-        for (const data of fields.slice(0, 4)) {
+        for (const data of fields.slice(0, 5)) {
             if (!data.field.valid || data.field.value === "") {
                 valid = false
             }
         }
 
-        if (!confirmPasswordField.valid || confirmPasswordField.value === "") {
+        if (valid && (!confirmPasswordField.valid || confirmPasswordField.value === "")) {
             valid = false
         }
 
+        const data = {}
+        fields.slice(0, 5).forEach(el => {
+            data[el.field.name] = el.field.value
+        })
+
         if (valid) {
-            SignService.registerCustomer()
+            registerCustomer(data)
+            clearForm()
         } else {
             toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid form fields' })
         }
     }
 
-    const registerBHolderClickedHandler = () => {
+    const registerBHolderClickedHandler = async () => {
         let valid = true;
         for (const data of fields) {
             if (!data.field.valid || data.field.value === "") {
@@ -82,12 +90,18 @@ const Registration = (props) => {
             }
         }
 
-        if (!confirmPasswordField.valid || confirmPasswordField.value === "" || availability.length === 0) {
+        if (valid && (!confirmPasswordField.valid || confirmPasswordField.value === "" || availability.length === 0)) {
             valid = false
         }
 
+        const data = {}
+        fields.forEach(el => {
+            data[el.field.name] = el.field.value
+        })
+
         if (valid) {
-            SignService.registerCustomer()
+            registerBusinessHolder(data)
+            clearForm()
         } else {
             toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid form fields' })
         }
@@ -101,6 +115,10 @@ const Registration = (props) => {
         {
             controlId: 'formGroupName', label: 'Last name', type: 'text', placeholder: 'Enter last name',
             field: lastNameField, setField: setLastNameField, validateFn: validateName
+        },
+        {
+            controlId: 'formGroupPhoneNumber', label: 'Phone number', type: 'text', placeholder: 'Enter phone number',
+            field: phoneNumberField, setField: setPhoneNumberField, validateFn: validatePhoneNumber
         },
         {
             controlId: 'formGroupEmail', label: 'Email', type: 'email', placeholder: 'Enter email',
@@ -117,10 +135,6 @@ const Registration = (props) => {
         {
             controlId: 'formGroupAddress', label: 'Address', type: 'text', placeholder: 'Enter address',
             field: addressField, setField: setAddressField, validateFn: validateAddress
-        },
-        {
-            controlId: 'formGroupPhoneNumber', label: 'Phone number', type: 'text', placeholder: 'Enter phone number',
-            field: phoneNumberField, setField: setPhoneNumberField, validateFn: validatePhoneNumber
         }
     ]
 
@@ -136,7 +150,7 @@ const Registration = (props) => {
                 <Tab eventKey="userRegister" title="As customer">
                     <Form>
                         <h3 className="h3 text-center">Register</h3>
-                        {fields.slice(0, 4).map(data => {
+                        {fields.slice(0, 5).map(data => {
                             return (<Input key={data.label}
                                 controlId={data.controlId} label={data.label}
                                 type={data.type} placeholder={data.placeholder}
@@ -155,15 +169,15 @@ const Registration = (props) => {
                     <Form className={classes.BusinessRegister}>
                         <h3 className="h3 text-center">Register</h3>
                         <div className={classes.Content}>
-                            {fields.slice(0, 3).concat(fields.slice(4)).map(data => {
+                            {fields.slice(0, 4).concat(fields.slice(4)).map(data => {
                                 return (<Input key={data.label}
                                     controlId={data.controlId} label={data.label}
                                     type={data.type} placeholder={data.placeholder}
                                     field={data.field} setField={data.setField}
                                     validateFn={data.validateFn} />)
                             })}
-                            <Form.Label>Availability</Form.Label>
                             <div className={classes.Availability}>
+                                <Form.Label>Availability</Form.Label>
                                 {Object.keys(WorkingDays).map((type) => (
                                     <div key={`inline-${type}`} className="mb-3 w-50 d-inline-block">
                                         <Form.Check

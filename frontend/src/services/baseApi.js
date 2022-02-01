@@ -3,19 +3,20 @@ import axios from 'axios';
 
 export class RequestAPI {
     static get(endpoint) {
-        axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint,)
+        return axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint)
             .then(data => {
-                return data;
+                return data.data;
             }).catch(error => {
                 this.handleError(error)
             })
     }
 
     static post(endpoint, body = undefined) {
-        axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
+        return axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
             .then(data => {
-                return data;
+                return data.data;
             }).catch(error => {
+                console.log('error', error);
                 this.handleError(error)
             })
     }
@@ -32,7 +33,7 @@ export class RequestAPI {
         }
     }
 
-    cannotConnectToServer(error) {
+    cannotConnectToServer = (error) => {
         // add toast notification
         if (error.status === 500) {
             throw new Error('Internal server: ' + error.message)

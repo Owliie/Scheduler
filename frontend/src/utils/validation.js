@@ -10,6 +10,9 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
+    if (password.toString() === "") {
+        return true
+    }
     if (!password.toString().match(lowerCaseLetters)) {
         return false
     }

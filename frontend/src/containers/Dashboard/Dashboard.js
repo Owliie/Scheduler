@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './Dashboard.module.scss';
 
-class Dashboard extends Component {
-
+const Dashboard = (props) => {
+    return (
+        <p>Dashboard</p>
+    )
 }
 
 export default Dashboard;
