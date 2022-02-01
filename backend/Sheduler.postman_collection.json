@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "c4aeb2eb-9dae-4920-baff-c4baf2f19a67",
+		"name": "Sheduler",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Register business",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Atanas\",\r\n    \"lastName\": \"Vasilev\",\r\n    \"password\": \"n.it2021#JSAdv@nced\",\r\n    \"email\": \"nasko.it@scheduler.com\",\r\n    \"phone\": \"0876357845\",\r\n    \"company\": {\r\n        \"address\": \"Sofia, Bulgaria, street ...\",\r\n        \"description\": \"One of the best hairdressers in the town!\",\r\n        \"availability\": [1, 2, 3, 4, 5]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/users/register?type=BusinessHolder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"register"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "BusinessHolder"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Business types all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/businessTypes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"businessTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Businesses by type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/businesses/byType/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"businesses",
+						"byType",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users favourites",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"businessId\": \"6c9ef89f-d9b0-43c6-9aae-99102281884c\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/users/favourites",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"favourites"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users favourites",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/users/favourites/6c9ef89f-d9b0-43c6-9aae-99102281884c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"favourites",
+						"6c9ef89f-d9b0-43c6-9aae-99102281884c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Business details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/businesses/6c9ef89f-d9b0-43c6-9aae-99102281884c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"businesses",
+						"6c9ef89f-d9b0-43c6-9aae-99102281884c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book appointment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Users favourites",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Upcomming appointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Get pending appointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Get shedule by date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Get pending for business holder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Accept appointment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Decline appointment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
