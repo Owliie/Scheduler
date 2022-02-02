@@ -1,0 +1,31 @@
+@import "../../sharedStyles/shared.module.scss";
+
+.Service {
+    width: 272.72px;
+    height: 279.7px;
+    background: transparent;
+    box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
+    border-radius: 12.2786px;
+    overflow: hidden;
+
+    p {
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+    .Heading {
+        background-color: pink;
+        padding: 5px 10px;
+    }
+
+    .Body {
+        background-color: white;
+        padding: 5px 10px;
+        height: calc(279.7px - 2*34px);
+    }
+
+    .Footer {
+        background-color: pink;
+        padding: 5px 10px;
+    }
+}

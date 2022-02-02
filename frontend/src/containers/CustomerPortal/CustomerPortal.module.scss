@@ -1,0 +1,24 @@
+@import "../..//sharedStyles/shared.module.scss";
+
+.CustomerSlide {
+    height: 100%;
+    width: 100%;
+
+    >h1 {
+        text-align: center;
+        color: $tertiary-color;
+        font-weight: 400;
+        line-height: 36px;
+        font-size: 34pt;
+        margin-bottom: 20px;
+    }
+
+    >p {
+        text-align: center;
+        color: $muted-color;
+        opacity: 0.6;
+        font-weight: 400;
+        line-height: 14px;
+        font-size: 14pt;
+    }
+}

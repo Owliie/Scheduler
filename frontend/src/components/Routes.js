@@ -3,16 +3,21 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Sign from '../containers/Sign/Sign';
 import Spinner from './common/Spinner/Spinner';
-import Dashboard from '../containers/Dashboard/Dashboard';
+import Portal from '../containers/Portal/Portal';
+import CustomerPortal from '../containers/CustomerPortal/CustomerPortal';
+import BHolderPortal from '../containers/BHolderPortal/BHolderPortal';
 import { useStoreState } from 'easy-peasy';
+import { PORTALS } from '../utils/portals';
 
 const RouteOptions = {
     GO_TO_SIGN: 'GO_TO_SIGN',
-    GO_TO_HOME: 'GO_TO_HOME',
+    GO_TO_CUSTOMER_PORTAL: 'GO_TO_CUSTOMER_PORTAL',
+    GO_TO_BHOLDER_PORTAL: 'GO_TO_BHOLDER_PORTAL',
+    GO_TO_PORTALS: 'GO_TO_PORTALS',
 };
 
 const Router = (props) => {
-    const { isLoggedIn } = useStoreState((state) => state.userStore);
+    const { isLoggedIn, account } = useStoreState((state) => state.userStore);
 
     const [routerAction, setRouterAction] = useState(null);
 
@@ -27,8 +32,12 @@ const Router = (props) => {
             switch (true) {
                 case !isLoggedIn:
                     return RouteOptions.GO_TO_SIGN;
-                case isLoggedIn:
-                    return RouteOptions.GO_TO_HOME;
+                case !account?.isCustomer && !account?.chosenPortal:
+                    return RouteOptions.GO_TO_PORTALS;
+                case !account?.isCustomer && account?.chosenPortal === PORTALS.B_HOLDER:
+                    return RouteOptions.GO_TO_BHOLDER_PORTAL;
+                case account?.isCustomer:
+                    return RouteOptions.GO_TO_CUSTOMER_PORTAL;
                 default:
                     return RouteOptions.GO_TO_SIGN;
             }
@@ -50,11 +59,29 @@ const Router = (props) => {
                         </Routes>
                     )
                 );
-            case RouteOptions.GO_TO_HOME:
+            case RouteOptions.GO_TO_PORTALS:
                 return (
                     (
                         <Routes>
-                            <Route path="/" exact element={<Dashboard />} />
+                            <Route path="/" exact element={<Portal />} />
+                            <Route path="*" element={<Navigate to='/' />} />
+                        </Routes>
+                    )
+                );
+            case RouteOptions.GO_TO_BHOLDER_PORTAL:
+                return (
+                    (
+                        <Routes>
+                            <Route path="/" exact element={<BHolderPortal />} />
+                            <Route path="*" element={<Navigate to='/' />} />
+                        </Routes>
+                    )
+                );
+            case RouteOptions.GO_TO_CUSTOMER_PORTAL:
+                return (
+                    (
+                        <Routes>
+                            <Route path="/" exact element={<CustomerPortal />} />
                             <Route path="*" element={<Navigate to='/' />} />
                         </Routes>
                     )
@@ -63,7 +90,7 @@ const Router = (props) => {
                 return (
                     (
                         <Routes>
-                            <Route path='/' exact element={<Dashboard />} />
+                            <Route path='/' exact element={<Sign />} />
                             <Route path="*" element={<Navigate to='/sign' />} />
                         </Routes>
                     )

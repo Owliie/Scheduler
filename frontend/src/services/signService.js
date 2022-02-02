@@ -6,11 +6,11 @@ class SignService {
     }
 
     static registerCustomer = (data) => {
-        return RequestAPI.post('/users/register', { ...data })
+        return RequestAPI.post('/users/register', data)
     }
 
     static registerBusinessHolder = (data) => {
-        return RequestAPI.post('/users/register?type=BusinessHolder', { ...data })
+        return RequestAPI.post('/users/register?type=BusinessHolder', data)
     }
 }
 
