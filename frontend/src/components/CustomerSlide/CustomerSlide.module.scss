@@ -1,19 +1,33 @@
+@import "../../sharedStyles/shared.module.scss";
+
 .Container {
     margin: 50px 0;
 
     .Slider {
+        width: 90%;
         margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        >div:nth-of-type(1) {
-            display: none;
+        >button {
+            padding: 11px 12px;
+            height: fit-content;
+            border-radius: 30px;
+            border: none;
+            background-color: $primary-color;
+
+            .Arrow {
+                color: white;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+            }
         }
 
-        >div:nth-of-type(2) {
-            height: 100%;
-        }
-
-        .Item {
-            padding: 0 10%;
+        .Page {
+            width: 90%;
             display: flex;
             // columns: 3;
             align-items: center;

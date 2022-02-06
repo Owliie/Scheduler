@@ -3,8 +3,28 @@
 .CustomerSlide {
     height: 100%;
     width: 100%;
+}
 
-    >h1 {
+.Container {
+    height: 100%;
+
+    .Services {
+        height: 100%;
+        width: 70%;
+        margin: auto;
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+
+        >div {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.Heading {
+    h1 {
         text-align: center;
         color: $tertiary-color;
         font-weight: 400;
@@ -13,7 +33,7 @@
         margin-bottom: 20px;
     }
 
-    >p {
+    p {
         text-align: center;
         color: $muted-color;
         opacity: 0.6;

@@ -1,6 +1,6 @@
 import { RequestAPI } from "./baseApi";
 
-class SignService {
+class BusinessService {
     static getTypes = () => {
         return RequestAPI.get('/businessTypes')
     }
@@ -18,4 +18,4 @@ class SignService {
     }
 }
 
-export default SignService;
+export default BusinessService;

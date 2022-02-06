@@ -1,49 +1,79 @@
-import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import { useStoreActions } from 'easy-peasy';
+import React, { useEffect, useState } from 'react';
+import { CaretLeftFill, CaretRightFill, Image, CardImage } from 'react-bootstrap-icons';
+
+import BusinessService from '../../services/businessService';
+import Spinner from '../common/Spinner/Spinner';
 import Service from '../Service/Service';
 import classes from './CustomerSlide.module.scss';
 
 const CustomerSlide = (props) => {
+    const { setType } = useStoreActions((actions) => actions.portalStore);
+
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [pageIndex, setPageIndex] = useState(0);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        const res = await BusinessService.getTypes();
+        prepareData(res)
+        setServices(prepareData(res))
+        setLoading(false)
+    }
+
+    const prepareData = (data) => {
+        const preppedData = []
+
+        for (let i = 0; i < data.length; i += 3) {
+            preppedData.push(data.slice(i, i + 3))
+        }
+
+        return preppedData
+    }
+
+    const loadType = (e) => {
+        const obj = e.target.dataset
+        setType({ name: obj.name, id: obj.id })
+    }
+
+    const nextPage = () => {
+        if (pageIndex < services.length - 1) {
+            setPageIndex(pageIndex + 1);
+        }
+    }
+
+    const prevPage = () => {
+        if (pageIndex > 0) {
+            setPageIndex(pageIndex - 1)
+        }
+    }
+
+    if (services.length === 0 && loading) {
+        return <Spinner />
+    }
+
     return (
         <div className={classes.Container}>
-            <Carousel className={classes.Slider} interval={null} variant='dark'>
-                <Carousel.Item className={classes.Item}>
-                    {/* <img
-                        className="d-block w-100"
-                        src="holder.js/800x400?text=First slide&bg=373940"
-                        alt="First slide"
-                    /> */}
-                    {/* <Carousel.Caption> */}
-                    <Service />
-                    <Service />
-                    <Service />
-                    {/* </Carousel.Caption> */}
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100"
-                        src="holder.js/800x400?text=Second slide&bg=282c34"
-                        alt="Second slide"
-                    />
-
-                    <Carousel.Caption>
-                        <h3>Second slide label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100"
-                        src="holder.js/800x400?text=Third slide&bg=20232a"
-                        alt="Third slide"
-                    />
-
-                    <Carousel.Caption>
-                        <h3>Third slide label</h3>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-            </Carousel>
+            <div className={classes.Slider}>
+                <button onClick={prevPage} disabled={pageIndex === 0}><CaretLeftFill size={25} className={classes.Arrow} /></button>
+                <div className={classes.Page}>
+                    {services[pageIndex].map((service, j) => <Service key={pageIndex + '' + j}
+                        caption={`Book a ${service.name} service`}
+                        heading={service.name}
+                        icon={<Image />}
+                        image={<CardImage />}
+                        button={<button
+                            onClick={loadType}
+                            data-id={service.id}
+                            data-name={service.name}>Book now</button>} />
+                    )}
+                </div>
+                <button disabled={pageIndex === services.length - 1} onClick={nextPage}><CaretRightFill size={25} className={classes.Arrow} /></button>
+            </div>
         </div>
     )
 }

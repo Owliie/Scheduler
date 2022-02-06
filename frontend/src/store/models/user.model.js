@@ -26,24 +26,31 @@ export const userStore = {
      * THUNKS
      */
     registerCustomer: thunk(async (actions, payload, { getState, getStoreState }) => {
-        const { portal } = getStoreState().portalStore;
+        const { portalStore } = getStoreState();
         const data = await SignService.registerCustomer(payload)
 
-        portal.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
+        portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),
     registerBusinessHolder: thunk(async (actions, payload, { getState, getStoreState }) => {
-        const { portal } = getStoreState().portalStore;
+        const { portalStore } = getStoreState();
         const data = await SignService.registerBusinessHolder(payload)
 
-        portal.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
+        portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),
     login: thunk(async (actions, payload, { getState, getStoreState }) => {
-        const { portal } = getStoreState().portalStore;
+        const { portalStore } = getStoreState();
         const data = await SignService.login(payload)
 
-        portal.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
+        portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
+    }),
+    logout: thunk((actions, payload, { getState, getStoreState }) => {
+        const { portalStore } = getStoreState();
+
+        portalStore.chosenPortal = null;
+        portalStore.chosenType = null;
+        actions.setAccount(null);
     })
 };

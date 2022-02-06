@@ -1,18 +1,31 @@
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classes from './Service.module.scss';
 
 const Service = (props) => (
     <div className={classes.Service}>
         <div className={classes.Heading}>
-            <p>icon {props.icon}</p>
-            <p>heading {props.heading}</p>
+            {props.icon}
+            <OverlayTrigger
+                key={'right'}
+                placement={'right'}
+                overlay={
+                    <Tooltip id={`tooltip-right`}>
+                        {props.heading}
+                    </Tooltip>
+                }
+            >
+                <p>{props.heading}</p>
+            </OverlayTrigger>
         </div>
         <div className={classes.Body}>
-            <p>img {props.image}</p>
-            <p>caption {props.caption}</p>
+            <div className={classes.Image}>
+                {props.image}
+            </div>
+            <p>{props.caption}</p>
         </div>
         <div className={classes.Footer}>
-            <p>button {props.button}</p>
+            <div className={classes.Btn}>{props.button}</div>
             {props.additionalBtn ?
                 <p>like {props.additionalBtn}</p>
                 : null

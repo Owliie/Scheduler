@@ -8,12 +8,12 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 
 const Header = (props) => {
     const { isLoggedIn } = useStoreState((state) => state.userStore);
-    const { setAccount } = useStoreActions((actions) => actions.userStore);
+    const { logout } = useStoreActions((actions) => actions.userStore);
 
     const navigate = useNavigate();
 
     const onLogoutClick = () => {
-        setAccount(null)
+        logout()
         navigate('/sign');
     }
 

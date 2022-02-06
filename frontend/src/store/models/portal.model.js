@@ -5,7 +5,7 @@ export const portalStore = {
      * STATE
      */
     chosenPortal: null,
-    chosenType: '',
+    chosenType: null,
     /**
      * ACTIONS
      */

@@ -2,7 +2,7 @@
 
 .Service {
     width: 272.72px;
-    height: 279.7px;
+    height: 300.7px;
     background: transparent;
     box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
     border-radius: 12.2786px;
@@ -14,18 +14,77 @@
     }
 
     .Heading {
+        height: 44px;
+        display: flex;
+        align-items: center;
         background-color: pink;
-        padding: 5px 10px;
+        padding: 10px 15px;
+        color: $tertiary-color;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 24px;
+        letter-spacing: 0.0753134px;
+
+        p {
+            flex: 1;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        svg {
+            margin-right: 10px;
+            color: $secondary-color;
+        }
     }
 
     .Body {
         background-color: white;
         padding: 5px 10px;
-        height: calc(279.7px - 2*34px);
+        height: calc(300.7px - 2*44px);
+
+        p {
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: 0.125522px;
+            color: $tertiary-color;
+        }
+
+        .Image {
+            height: 90%;
+
+            svg {
+                transform: scale(15) translateX(49%) translateY(32%);
+                color: $secondary-color;
+            }
+        }
     }
 
     .Footer {
+        height: 44px;
         background-color: pink;
-        padding: 5px 10px;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .Btn {
+            height: fit-content;
+            line-height: normal;
+
+            >button {
+                border: none;
+                border-radius: 3px;
+                background-color: $primary-color;
+                color: white;
+                padding: 6px;
+
+                font-weight: 500;
+                font-size: 10px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+        }
     }
 }

@@ -1,9 +1,10 @@
 
 import axios from 'axios';
+import { toastHandler, TOAST_STATES } from '../helpers/toast';
 
 export class RequestAPI {
     static get(endpoint) {
-        return axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint)
+        return axios.get(process.env.REACT_APP_API_ENDPOINT + endpoint)
             .then(data => {
                 return data.data;
             }).catch(error => {
@@ -16,7 +17,6 @@ export class RequestAPI {
             .then(data => {
                 return data.data;
             }).catch(error => {
-                console.log('error', error);
                 this.handleError(error)
             })
     }
@@ -24,19 +24,27 @@ export class RequestAPI {
     static handleError(error) {
         this.userUnauthorized(error);
         this.cannotConnectToServer(error);
+        this.notFound(error);
     }
 
     static userUnauthorized(error) {
-        // add toast notification
         if (error.status === 401 || error.status === 440 || error.status === 422) {
+            toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
             throw new Error('Unauthorized: ' + error.message);
         }
     }
 
-    cannotConnectToServer = (error) => {
-        // add toast notification
+    static cannotConnectToServer = (error) => {
         if (error.status === 500) {
+            toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
             throw new Error('Internal server: ' + error.message)
+        }
+    }
+
+    static notFound = (error) => {
+        if (error.status === 404) {
+            toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
+            throw new Error('Not found: ' + error.message)
         }
     }
 }
