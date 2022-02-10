@@ -7,6 +7,8 @@ import { getLoggerFor } from './services/logger'
 import { ApplicationSeeder } from './data/seeders/application-seeder'
 import { utils } from './utils'
 import lusca from 'lusca'
+import { ENVIRONMENT_VARIABLES_VALUES } from './common/global-constants'
+import { addDevelopmentAuthentication } from './api/middleware/add-development-authentication'
 
 const mongoose = require('mongoose')
 
@@ -65,6 +67,10 @@ export class APIServer {
     }
 
     private registerRoutes (): void {
+        if (process.env.NODE_ENV === ENVIRONMENT_VARIABLES_VALUES.development) {
+            this.app.use(addDevelopmentAuthentication)
+        }
+
         registerApiRoutes(this.app)
     }
 

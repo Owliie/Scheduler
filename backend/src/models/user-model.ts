@@ -9,5 +9,5 @@ export interface UserModel extends BaseModel {
     phone: string;
     roles: string[];
     company?: Company;
-    favourites: UserModel[];
+    favourites: string[];
 }
