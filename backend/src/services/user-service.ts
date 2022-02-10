@@ -26,7 +26,7 @@ class UserService {
 
         if (user && await bcrypt.compare(password, user.password)) {
             const userData = {
-                id: user._id,
+                id: user.id,
                 email: user.email,
                 roles: user.roles
             }

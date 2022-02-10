@@ -1,4 +1,4 @@
-import { Seeder } from './seeder'
+import { Seeder } from './common/seeder'
 import { BusinessTypeSeeder } from './business-type-seeder'
 
 export class ApplicationSeeder implements Seeder {

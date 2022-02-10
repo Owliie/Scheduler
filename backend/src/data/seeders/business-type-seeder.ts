@@ -1,6 +1,6 @@
-import { BusinessTypeModel } from '../../../models/business-type-model'
-import { BusinessType } from '../../models'
-import { Seeder } from './seeder'
+import { BusinessTypeModel } from '../../models/business-type-model'
+import { BusinessType } from '../models'
+import { Seeder } from './common/seeder'
 
 export class BusinessTypeSeeder implements Seeder {
 
