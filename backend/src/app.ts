@@ -1,10 +1,12 @@
 import express from 'express'
 import { createServer, Server } from 'http'
-import lusca from 'lusca'
 import cors from 'cors'
 import { registerApiRoutes } from './api/routes/api-router'
 import APIErrorHandler from './api/middleware/global-error-handler'
 import { getLoggerFor } from './services/logger'
+import { ApplicationSeeder } from './data/seeders/common/application-seeder'
+import { utils } from './utils'
+import lusca from 'lusca'
 
 const mongoose = require('mongoose')
 
@@ -66,11 +68,21 @@ export class APIServer {
             console.log('  Press CTRL-C to stop\n')
 
             this.logger.info(`Service has started  App is running at http://localhost:${this.port} in ${process.env.NODE_ENV} mode`)
+            this.seedData()
         })
     }
 
     public getApp (): express.Application {
         return this.app
+    }
+
+    public seedData (): void {
+        if (utils.toBoolean(process.env.SEED_DATA)) {
+            const applicationSeeder = new ApplicationSeeder()
+            applicationSeeder.seed()
+                .then(() => console.log(applicationSeeder.getSuccessMessage()))
+                .catch(err => console.log(applicationSeeder.getErrorMessage(err)))
+        }
     }
 
 }

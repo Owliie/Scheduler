@@ -1,4 +1,4 @@
 export interface BusinessTypeModel {
     name: string;
-    services: string[];
+    imagePath: string;
 }
