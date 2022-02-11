@@ -8,9 +8,11 @@ import CustomerPortal from '../containers/CustomerPortal/CustomerPortal';
 import BHolderPortal from '../containers/BHolderPortal/BHolderPortal';
 import { useStoreState } from 'easy-peasy';
 import { PORTALS } from '../utils/portals';
+import Favorites from '../containers/Favorites/Favorites';
 
 const RouteOptions = {
     GO_TO_SIGN: 'GO_TO_SIGN',
+    GO_TO_FAVORITES: 'GO_TO_FAVORITES',
     GO_TO_CUSTOMER_PORTAL: 'GO_TO_CUSTOMER_PORTAL',
     GO_TO_BHOLDER_PORTAL: 'GO_TO_BHOLDER_PORTAL',
     GO_TO_PORTALS: 'GO_TO_PORTALS',
@@ -82,6 +84,7 @@ const Router = (props) => {
                     (
                         <Routes>
                             <Route path="/" exact element={<CustomerPortal />} />
+                            <Route path="/favorites" exact element={<Favorites />} />
                             <Route path="*" element={<Navigate to='/' />} />
                         </Routes>
                     )

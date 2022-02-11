@@ -24,7 +24,7 @@ const Header = (props) => {
                 <>
                     <Nav>
                         <Link className="nav-link" to="/">Dashboard</Link>
-                        <Link className="nav-link" to="/history">Favorites</Link>
+                        <Link className="nav-link" to="/favorites">Favorites</Link>
                     </Nav>
                     <Nav className="ms-auto">
                         <Link className="nav-link" to='/login' onClick={onLogoutClick}>Logout</Link>

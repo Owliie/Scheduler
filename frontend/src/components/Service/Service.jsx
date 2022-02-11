@@ -27,7 +27,7 @@ const Service = (props) => (
         <div className={classes.Footer}>
             <div className={classes.Btn}>{props.button}</div>
             {props.additionalBtn ?
-                <p>like {props.additionalBtn}</p>
+                props.additionalBtn
                 : null
             }
         </div>

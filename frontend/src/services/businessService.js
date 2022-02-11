@@ -9,8 +9,12 @@ class BusinessService {
         return RequestAPI.get('/businesses/byType/' + id)
     }
 
-    static getFavourites = (id) => {
-        return RequestAPI.get('/users/favourites/' + id)
+    static getFavourites = () => {
+        return RequestAPI.get('/users/favourites')
+    }
+
+    static deleteFavourite = (id) => {
+        return RequestAPI.delete('/users/favourites/' + id)
     }
 
     static addFavourite = (businessId) => {

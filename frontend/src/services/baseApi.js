@@ -21,6 +21,15 @@ export class RequestAPI {
             })
     }
 
+    static delete(endpoint) {
+        return axios.delete(process.env.REACT_APP_API_ENDPOINT + endpoint)
+            .then(data => {
+                return data.data;
+            }).catch(error => {
+                this.handleError(error)
+            })
+    }
+
     static handleError(error) {
         this.userUnauthorized(error);
         this.cannotConnectToServer(error);

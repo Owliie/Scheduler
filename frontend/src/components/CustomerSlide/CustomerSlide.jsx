@@ -1,14 +1,10 @@
-import { useStoreActions } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
-import { CaretLeftFill, CaretRightFill, Image, CardImage } from 'react-bootstrap-icons';
+import { CaretLeftFill, CaretRightFill } from 'react-bootstrap-icons';
 
-import BusinessService from '../../services/businessService';
 import Spinner from '../common/Spinner/Spinner';
-import Service from '../Service/Service';
 import classes from './CustomerSlide.module.scss';
 
 const CustomerSlide = (props) => {
-    const { setType } = useStoreActions((actions) => actions.portalStore);
 
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,12 +12,13 @@ const CustomerSlide = (props) => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [props]);
 
-    const loadData = async () => {
-        const res = await BusinessService.getTypes();
-        prepareData(res)
-        setServices(prepareData(res))
+    useEffect(() => {
+    }, [services]);
+
+    const loadData = () => {
+        setServices(prepareData(props.services))
         setLoading(false)
     }
 
@@ -33,11 +30,6 @@ const CustomerSlide = (props) => {
         }
 
         return preppedData
-    }
-
-    const loadType = (e) => {
-        const obj = e.target.dataset
-        setType({ name: obj.name, id: obj.id })
     }
 
     const nextPage = () => {
@@ -61,16 +53,7 @@ const CustomerSlide = (props) => {
             <div className={classes.Slider}>
                 <button onClick={prevPage} disabled={pageIndex === 0}><CaretLeftFill size={25} className={classes.Arrow} /></button>
                 <div className={classes.Page}>
-                    {services[pageIndex].map((service, j) => <Service key={pageIndex + '' + j}
-                        caption={`Book a ${service.name} service`}
-                        heading={service.name}
-                        icon={<Image />}
-                        image={<CardImage />}
-                        button={<button
-                            onClick={loadType}
-                            data-id={service.id}
-                            data-name={service.name}>Book now</button>} />
-                    )}
+                    {services[pageIndex]}
                 </div>
                 <button disabled={pageIndex === services.length - 1} onClick={nextPage}><CaretRightFill size={25} className={classes.Arrow} /></button>
             </div>
