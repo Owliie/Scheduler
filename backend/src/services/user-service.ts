@@ -4,6 +4,7 @@ import { UserRegisterInputModel } from '../models/user-input-models'
 import { Repository } from '../data/repositories'
 import { TaskResult } from '../common/taskResult'
 import { Roles } from '../common'
+import { ObjectId } from 'mongodb'
 
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -56,20 +57,39 @@ class UserService {
         if (!user) {
             return TaskResult.failure('The user does not exist.')
         }
-        if (user.favourites.includes(businessId)) {
+        if (user.favourites.some(id => id.toString() === businessId)) {
             return TaskResult.failure('The passed business is already added to favourites.')
         }
-        if (!await this.usersData.exists({ _id: businessId, roles: Roles.businessHolder })) {
+        if (!await this.usersData.exists({
+            _id: businessId,
+            roles: Roles.businessHolder
+        })) {
             return TaskResult.failure('The chosen business is not valid.')
         }
 
-        user.favourites.push(businessId)
+        user.favourites.push(new ObjectId(businessId))
         await this.usersData.update(userId, { favourites: [...user.favourites] })
         return TaskResult.success('Added to favourites.')
     }
 
-    public async removeFromFavourites (userId: string, businessId: string): Promise<void> {
-        // TODO remove the business to user favourites
+    public async removeFromFavourites (userId: string, businessId: string): Promise<TaskResult> {
+        const user: UserModel = await this.usersData.getById(userId)
+        if (!user) {
+            return TaskResult.failure('The user does not exist.')
+        }
+        if (user.favourites.length === 0 || user.favourites.every(id => id.toString() !== businessId)) {
+            return TaskResult.failure('The passed business is not added to favourites.')
+        }
+        if (!await this.usersData.exists({
+            _id: businessId,
+            roles: Roles.businessHolder
+        })) {
+            return TaskResult.failure('The chosen business is not valid.')
+        }
+
+        user.favourites = user.favourites.filter(userId => userId.toString() !== businessId)
+        await this.usersData.update(userId, { favourites: [...user.favourites] })
+        return TaskResult.success('Removed from favourites.')
     }
 
 }

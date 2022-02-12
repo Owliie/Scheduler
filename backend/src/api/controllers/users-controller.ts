@@ -100,8 +100,8 @@ class UsersController {
         const userId = req.user?.id
         const businessId = req.params.id
         UserService.removeFromFavourites(userId, businessId)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'Removed from favourites.')
+            .then((result) => {
+                responseUtils.processTaskResult(res, result)
             })
             .catch(() => {
                 responseUtils.sendErrorMessage(res, 'Problem while removing from favourites.')
