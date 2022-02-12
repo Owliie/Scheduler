@@ -1,17 +1,19 @@
 import { Schema, model } from 'mongoose'
 import { BusinessTypeModel } from '../../models/business-type-model'
+import { TableNames } from './table-names'
+import { BusinessTypeColumns } from './business-type-columns'
 
 const businessTypeSchema = new Schema<BusinessTypeModel>({
-    name: {
+    [BusinessTypeColumns.name]: {
         type: String,
         required: true
     },
-    imagePath: {
+    [BusinessTypeColumns.imagePath]: {
         type: String,
         required: true
     }
 })
 
-const BusinessType = model<BusinessTypeModel>('BusinessType', businessTypeSchema)
+const BusinessType = model<BusinessTypeModel>(TableNames.businessType, businessTypeSchema)
 
 export default BusinessType

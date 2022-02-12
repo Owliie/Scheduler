@@ -27,8 +27,13 @@ export class Repository<T extends BaseModel> {
         return query.exec()
     }
 
-    public getById (id: string): Promise<T> {
-        return this.entity.findById(id).exec()
+    public getById (id: string, projection: string = ''): Promise<T> {
+        let query = this.entity.findById(id)
+        if (projection) {
+            query = query.select(projection)
+        }
+
+        return query.exec()
     }
 
     public update (id: string, updateValue: any): Promise<any> {
