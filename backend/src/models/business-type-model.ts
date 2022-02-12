@@ -1,4 +1,6 @@
-export interface BusinessTypeModel {
+import { BaseModel } from './base-model'
+
+export interface BusinessTypeModel extends BaseModel {
     name: string;
-    services: string[];
+    imagePath: string;
 }

@@ -1,71 +1,46 @@
-const businessHolders = [
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-99102281884c',
-        firstName: 'Anna',
-        lastName: 'Velichkova',
-        phone: '+35987568945',
-        description: 'Anna hairdressing studio',
-        address: 'Sofia, ul. "Atanas Manchev" 18',
-        addedToFavourites: false
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-99102281884c',
-        firstName: 'Galena',
-        lastName: 'Petrova',
-        phone: '+35987568333',
-        description: 'Gelena hairdressing studio',
-        address: 'Sofia, ul. "Atanas Ishirkov" 18',
-        addedToFavourites: true
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-99102281884d',
-        firstName: 'Maria',
-        lastName: 'Marinova',
-        phone: '+35987568777',
-        description: 'Maria hairdressing studio',
-        address: 'Sofia, ul. "Ivan Vazov" 18',
-        addedToFavourites: false
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-99102281884e',
-        firstName: 'Plamen',
-        lastName: 'Terziev',
-        phone: '+35987568475',
-        description: 'Plamen hairdressing studio',
-        address: 'Sofia, ul. "Ivan Ivanov" 18',
-        addedToFavourites: true
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818dfc',
-        firstName: 'Mario',
-        lastName: 'Kirov',
-        phone: '+35987568783',
-        description: 'Mario hairdressing studio',
-        address: 'Sofia, bul. "Asen Yordanov" 1',
-        addedToFavourites: false
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-99102281rf4c',
-        firstName: 'Ivan',
-        lastName: 'Ivanov',
-        phone: '+35987568478',
-        description: 'Ivan hairdressing studio',
-        address: 'Sofia, bul. "Bulgaria" 11',
-        addedToFavourites: false
-    }
-]
+import { Repository } from '../data/repositories'
+import { UserModel } from '../models/user-model'
+import { Roles } from '../common'
+import { User } from '../data/models'
+import { UserColumns } from '../data/models/user-columns'
+import { QueryArgsHelper } from '../utils/query-args-helper'
+import { BusinessDetailsProjectionModel } from '../models/projection/business-projection-models'
+import { BusinessMappings } from '../models/mappings/business-mappings'
 
 class BusinessService {
 
-    public getById (id: string): Promise<any> {
-        return Promise.resolve({ ...businessHolders.find(b => b.id === id) })
+    private usersData: Repository<UserModel>
+
+    public constructor (usersData: Repository<UserModel>) {
+        this.usersData = usersData
     }
 
-    public async getByType (businessType: string, userId: string): Promise<any> {
-        // TODO: user the userId to evaluate addedToFavourites for each of the businesses
-        return Promise.resolve([...businessHolders])
+    public async getById (id: string, userId: string): Promise<any> {
+        const business = await this.usersData.getById(id, BusinessDetailsProjectionModel)
+        const { favourites } = await this.usersData.getById(userId, UserColumns.favourites)
+        return {
+            ...BusinessMappings.mapToDetailsModel(business),
+            addedToFavourites: favourites.map(f => f.toString()).includes(id)
+        }
+    }
+
+    public async getByType (businessTypeId: string, userId: string): Promise<any> {
+        const filter = {
+            [UserColumns.roles]: Roles.businessHolder,
+            [QueryArgsHelper.combine(UserColumns.company, UserColumns.businessTypes)]: businessTypeId
+        }
+
+        const businesses = await this.usersData.filter(filter, BusinessDetailsProjectionModel)
+        const { favourites } = await this.usersData.getById(userId, UserColumns.favourites)
+        const favouritesSet = new Set<string>(favourites.map(f => f.toString()))
+        return businesses.map(b => {
+            return {
+                ...BusinessMappings.mapToDetailsModel(b),
+                addedToFavourites: favouritesSet.has(b.id.toString())
+            }
+        })
     }
 
 }
 
-export default new BusinessService()
+export default new BusinessService(new Repository<UserModel>(User))

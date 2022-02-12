@@ -1,5 +1,6 @@
 import { BaseModel } from './base-model'
 import { Company } from './company'
+import { ObjectId } from 'mongodb'
 
 export interface UserModel extends BaseModel {
     firstName: string;
@@ -9,5 +10,5 @@ export interface UserModel extends BaseModel {
     phone: string;
     roles: string[];
     company?: Company;
-    favourites: UserModel[];
+    favourites: ObjectId[];
 }

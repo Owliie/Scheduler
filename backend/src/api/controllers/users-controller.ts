@@ -88,8 +88,8 @@ class UsersController {
         const userId = req.user?.id
         const businessId = req.body.businessId
         UserService.addToFavourites(userId, businessId)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'Added to favourites.')
+            .then((result) => {
+                responseUtils.processTaskResult(res, result)
             })
             .catch(() => {
                 responseUtils.sendErrorMessage(res, 'Problem while adding to favourites.')
@@ -100,8 +100,8 @@ class UsersController {
         const userId = req.user?.id
         const businessId = req.params.id
         UserService.removeFromFavourites(userId, businessId)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'Removed from favourites.')
+            .then((result) => {
+                responseUtils.processTaskResult(res, result)
             })
             .catch(() => {
                 responseUtils.sendErrorMessage(res, 'Problem while removing from favourites.')

@@ -1,10 +1,14 @@
 import express from 'express'
 import { createServer, Server } from 'http'
-import lusca from 'lusca'
 import cors from 'cors'
 import { registerApiRoutes } from './api/routes/api-router'
 import APIErrorHandler from './api/middleware/global-error-handler'
 import { getLoggerFor } from './services/logger'
+import { ApplicationSeeder } from './data/seeders/application-seeder'
+import { utils } from './utils'
+import lusca from 'lusca'
+import { ENVIRONMENT_VARIABLES_VALUES } from './common/global-constants'
+import { addDevelopmentAuthentication } from './api/middleware/add-development-authentication'
 
 const mongoose = require('mongoose')
 
@@ -18,6 +22,7 @@ export class APIServer {
 
     public constructor () {
         this.createApp()
+        this.configureDatabase()
         this.initializeDatabase()
         this.config()
         this.createServer()
@@ -29,6 +34,16 @@ export class APIServer {
 
     private createApp (): void {
         this.app = express()
+    }
+
+    private configureDatabase () {
+        mongoose.set('toJSON', {
+            virtuals: true,
+            transform: (doc: any, converted: any) => {
+                delete converted._id
+                delete converted.__v
+            }
+        })
     }
 
     private initializeDatabase () {
@@ -52,6 +67,10 @@ export class APIServer {
     }
 
     private registerRoutes (): void {
+        if (process.env.NODE_ENV === ENVIRONMENT_VARIABLES_VALUES.development) {
+            this.app.use(addDevelopmentAuthentication)
+        }
+
         registerApiRoutes(this.app)
     }
 
@@ -66,11 +85,21 @@ export class APIServer {
             console.log('  Press CTRL-C to stop\n')
 
             this.logger.info(`Service has started  App is running at http://localhost:${this.port} in ${process.env.NODE_ENV} mode`)
+            this.seedData()
         })
     }
 
     public getApp (): express.Application {
         return this.app
+    }
+
+    public seedData (): void {
+        if (utils.toBoolean(process.env.SEED_DATA)) {
+            const applicationSeeder = new ApplicationSeeder()
+            applicationSeeder.seed()
+                .then(() => console.log(applicationSeeder.getSuccessMessage()))
+                .catch(err => console.log(applicationSeeder.getErrorMessage(err)))
+        }
     }
 
 }

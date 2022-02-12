@@ -1,11 +1,21 @@
 import { UserModel } from '../models/user-model'
 import { User } from '../data/models'
 import { UserRegisterInputModel } from '../models/user-input-models'
+import { Repository } from '../data/repositories'
+import { TaskResult } from '../common/taskResult'
+import { Roles } from '../common'
+import { ObjectId } from 'mongodb'
 
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 class UserService {
+
+    private usersData: Repository<UserModel>
+
+    public constructor (usersData: Repository<UserModel>) {
+        this.usersData = usersData
+    }
 
     public async register (user: UserRegisterInputModel): Promise<UserModel | null> {
         if (await User.findOne({ email: user.email })) {
@@ -26,7 +36,7 @@ class UserService {
 
         if (user && await bcrypt.compare(password, user.password)) {
             const userData = {
-                id: user._id,
+                id: user.id,
                 email: user.email,
                 roles: user.roles
             }
@@ -42,14 +52,46 @@ class UserService {
         }
     }
 
-    public async addToFavourites (userId: string, businessId: string): Promise<void> {
-        // TODO add the business to user favourites
+    public async addToFavourites (userId: string, businessId: string): Promise<TaskResult> {
+        const user: UserModel = await this.usersData.getById(userId)
+        if (!user) {
+            return TaskResult.failure('The user does not exist.')
+        }
+        if (user.favourites.some(id => id.toString() === businessId)) {
+            return TaskResult.failure('The passed business is already added to favourites.')
+        }
+        if (!await this.usersData.exists({
+            _id: businessId,
+            roles: Roles.businessHolder
+        })) {
+            return TaskResult.failure('The chosen business is not valid.')
+        }
+
+        user.favourites.push(new ObjectId(businessId))
+        await this.usersData.update(userId, { favourites: [...user.favourites] })
+        return TaskResult.success('Added to favourites.')
     }
 
-    public async removeFromFavourites (userId: string, businessId: string): Promise<void> {
-        // TODO remove the business to user favourites
+    public async removeFromFavourites (userId: string, businessId: string): Promise<TaskResult> {
+        const user: UserModel = await this.usersData.getById(userId)
+        if (!user) {
+            return TaskResult.failure('The user does not exist.')
+        }
+        if (user.favourites.length === 0 || user.favourites.every(id => id.toString() !== businessId)) {
+            return TaskResult.failure('The passed business is not added to favourites.')
+        }
+        if (!await this.usersData.exists({
+            _id: businessId,
+            roles: Roles.businessHolder
+        })) {
+            return TaskResult.failure('The chosen business is not valid.')
+        }
+
+        user.favourites = user.favourites.filter(userId => userId.toString() !== businessId)
+        await this.usersData.update(userId, { favourites: [...user.favourites] })
+        return TaskResult.success('Removed from favourites.')
     }
 
 }
 
-export default new UserService()
+export default new UserService(new Repository<UserModel>(User))

@@ -42,5 +42,9 @@ export const utils = {
         }
 
         return map
+    },
+
+    toBoolean: (str: string): boolean => {
+        return str === 'true'
     }
 }
