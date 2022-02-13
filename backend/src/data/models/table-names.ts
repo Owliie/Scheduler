@@ -1,5 +1,6 @@
 export const TableNames = {
     appointment: 'Appointment',
     user: 'User',
-    businessType: 'BusinessType'
+    businessType: 'BusinessType',
+    product: 'Product'
 }
