@@ -10,7 +10,7 @@ const appointmentSchema = new Schema<AppointmentModel>({
     [AppointmentColumns.businessHolder]: { type: Schema.Types.ObjectId, required: true, ref: TableNames.user },
     [AppointmentColumns.status]: { type: String, required: true },
     [AppointmentColumns.start]: { type: Date, required: true },
-    [AppointmentColumns.end]: { type: Date, required: true },
+    [AppointmentColumns.durationInMinutes]: { type: Number, required: true },
     [AppointmentColumns.product]: { type: ObjectId, required: true }
 })
 

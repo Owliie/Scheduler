@@ -12,6 +12,9 @@ const productSchema = new Schema<ProductModel>({
     [ProductColumns.price]: {
         type: Number
     },
+    [ProductColumns.durationInMinutes]: {
+        type: Number
+    },
     [ProductColumns.businessOwner]: {
         type: ObjectId,
         ref: TableNames.user,

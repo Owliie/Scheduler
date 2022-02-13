@@ -15,6 +15,7 @@ class ProductsController {
             name: req.body.name,
             price: req.body.price,
             businessType: req.body.businessTypeId,
+            durationInMinutes: req.body.durationInMinutes,
             businessOwner: req.user?.id
         }
 
@@ -28,7 +29,8 @@ class ProductsController {
         const newBody = {
             name: req.body.name,
             price: req.body.price,
-            businessType: req.body.businessTypeId
+            businessType: req.body.businessTypeId,
+            durationInMinutes: req.body.durationInMinutes
         }
 
         ProductService.update(id, newBody)

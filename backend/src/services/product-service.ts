@@ -22,6 +22,7 @@ class ProductService {
         const projection = QueryArgsHelper.build(
             ProductColumns.name,
             ProductColumns.price,
+            ProductColumns.durationInMinutes,
             ProductColumns.businessType
         )
         const options = {

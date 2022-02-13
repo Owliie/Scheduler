@@ -21,7 +21,7 @@ class AppointmentsController {
                     address: 'Studentki grad, Atanas Ishirkov 12'
                 },
                 start: '2022-01-15 15:30:00.000',
-                end: '2022-01-15 16:00:25.000',
+                durationInMinutes: '2022-01-15 16:00:25.000',
                 product: 'Short men cutting'
             }
         ]
@@ -44,7 +44,7 @@ class AppointmentsController {
                     address: 'Studentki grad, Stefan Mladenov 14'
                 },
                 start: '2022-01-15 15:30:00.000',
-                end: '2022-01-15 16:00:25.000',
+                durationInMinutes: '2022-01-15 16:00:25.000',
                 product: 'Short men cutting'
             }
         ]
