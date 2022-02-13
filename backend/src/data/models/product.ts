@@ -14,10 +14,12 @@ const productSchema = new Schema<ProductModel>({
     },
     [ProductColumns.businessOwner]: {
         type: ObjectId,
+        ref: TableNames.user,
         required: true
     },
     [ProductColumns.businessType]: {
         type: ObjectId,
+        ref: TableNames.businessType,
         required: true
     }
 })

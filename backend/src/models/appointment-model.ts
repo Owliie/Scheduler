@@ -1,7 +1,8 @@
 import { UserModel } from './user-model'
 import { AppointmentStatus } from './enums/appointment-status'
+import { BaseModel } from './base-model'
 
-export interface AppointmentModel {
+export interface AppointmentModel extends BaseModel {
     createdOn: Date;
     client: UserModel;
     businessHolder: UserModel;

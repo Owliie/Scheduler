@@ -22,7 +22,7 @@ class AppointmentsController {
                 },
                 start: '2022-01-15 15:30:00.000',
                 end: '2022-01-15 16:00:25.000',
-                service: 'Short men cutting'
+                product: 'Short men cutting'
             }
         ]
 
@@ -45,7 +45,7 @@ class AppointmentsController {
                 },
                 start: '2022-01-15 15:30:00.000',
                 end: '2022-01-15 16:00:25.000',
-                service: 'Short men cutting'
+                product: 'Short men cutting'
             }
         ]
 

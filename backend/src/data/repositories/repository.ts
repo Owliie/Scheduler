@@ -29,6 +29,9 @@ export class Repository<T extends BaseModel> {
                 path: options.populate
             })
         }
+        if (options && options.sort) {
+            query = query.sort(options.sort)
+        }
 
         return query.exec()
     }
@@ -52,6 +55,10 @@ export class Repository<T extends BaseModel> {
 
     public create (model: T): Promise<any> {
         return this.entity.create(model)
+    }
+
+    public delete (id: string): any {
+        return this.entity.deleteOne({ _id: id })
     }
 
 }

@@ -5,5 +5,5 @@ export const AppointmentColumns = {
     status: 'status',
     start: 'start',
     end: 'end',
-    service: 'service'
+    product: 'product'
 }
