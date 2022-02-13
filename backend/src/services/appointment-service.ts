@@ -4,8 +4,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818847',
         start: '2022-01-29T14:00:00',
-        end: '2022-01-29T15:00:00',
-        service: 'Lady hairstyle',
+        durationInMinutes: '2022-01-29T15:00:00',
+        product: 'Lady hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },
@@ -19,8 +19,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818841',
         start: '2022-01-29T15:00:00',
-        end: '2022-01-29T15:00:00',
-        service: 'Children hairstyle',
+        durationInMinutes: '2022-01-29T15:00:00',
+        product: 'Children hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },
@@ -34,8 +34,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818840',
         start: '2022-01-29T17:00:00',
-        end: '2022-01-29T17:30:00',
-        service: 'Gentleman hairstyle',
+        durationInMinutes: '2022-01-29T17:30:00',
+        product: 'Gentleman hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },
@@ -49,8 +49,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818842',
         start: '2022-01-29T17:00:00',
-        end: '2022-01-29T17:30:00',
-        service: 'Gentleman hairstyle',
+        durationInMinutes: '2022-01-29T17:30:00',
+        product: 'Gentleman hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },
@@ -64,8 +64,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818843',
         start: '2022-01-29T12:00:00',
-        end: '2022-01-29T12:30:00',
-        service: 'Gentleman hairstyle',
+        durationInMinutes: '2022-01-29T12:30:00',
+        product: 'Gentleman hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },
@@ -79,8 +79,8 @@ const appointments = [
     {
         id: '6c9ef89f-d9b0-43c6-9aae-991022818844',
         start: '2022-01-29T10:00:00',
-        end: '2022-01-29T10:30:00',
-        service: 'Gentleman hairstyle',
+        durationInMinutes: '2022-01-29T10:30:00',
+        product: 'Gentleman hairstyle',
         businessHolder: {
             id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
         },

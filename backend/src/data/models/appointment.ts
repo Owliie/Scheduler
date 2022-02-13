@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 import { AppointmentModel } from '../../models/appointment-model'
 import { AppointmentColumns } from './appointment-columns'
 import { TableNames } from './table-names'
+import { ObjectId } from 'mongodb'
 
 const appointmentSchema = new Schema<AppointmentModel>({
     [AppointmentColumns.createdOn]: { type: Date, required: true },
@@ -9,8 +10,8 @@ const appointmentSchema = new Schema<AppointmentModel>({
     [AppointmentColumns.businessHolder]: { type: Schema.Types.ObjectId, required: true, ref: TableNames.user },
     [AppointmentColumns.status]: { type: String, required: true },
     [AppointmentColumns.start]: { type: Date, required: true },
-    [AppointmentColumns.end]: { type: Date, required: true },
-    [AppointmentColumns.service]: { type: String, required: true }
+    [AppointmentColumns.durationInMinutes]: { type: Number, required: true },
+    [AppointmentColumns.product]: { type: ObjectId, required: true }
 })
 
 const Appointment = model<AppointmentModel>(TableNames.appointment, appointmentSchema)
