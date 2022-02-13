@@ -1,5 +1,6 @@
 import { Model } from 'mongoose'
 import { BaseModel } from '../../models/base-model'
+import { QueryOptions } from '../../models/common/query-options'
 
 export class Repository<T extends BaseModel> {
 
@@ -18,10 +19,15 @@ export class Repository<T extends BaseModel> {
         return query.exec()
     }
 
-    public filter (filter: any = {}, projection: string = ''): Promise<T[]> {
+    public filter (filter: any = {}, projection: string = '', options: QueryOptions = undefined): Promise<T[]> {
         let query = this.entity.find(filter)
         if (projection) {
             query = query.select(projection)
+        }
+        if (options && options.populate) {
+            query = query.populate({
+                path: options.populate
+            })
         }
 
         return query.exec()

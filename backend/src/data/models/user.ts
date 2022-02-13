@@ -2,14 +2,14 @@ import { Schema, model } from 'mongoose'
 import { UserModel } from '../../models/user-model'
 import { Company } from '../../models/company'
 import { ObjectId } from 'mongodb'
-import { UserColumns } from './user-columns'
+import { CompanyColumns, UserColumns } from './user-columns'
 import { TableNames } from './table-names'
 
 const companySchema = new Schema<Company>({
-    [UserColumns.description]: { type: String, required: true },
-    [UserColumns.address]: { type: String, required: true },
-    [UserColumns.availability]: { type: [Number], required: true },
-    [UserColumns.businessTypes]: { type: [ObjectId], ref: 'BusinessType' }
+    [CompanyColumns.description]: { type: String, required: true },
+    [CompanyColumns.address]: { type: String, required: true },
+    [CompanyColumns.availability]: { type: [Number], required: true },
+    [CompanyColumns.businessTypes]: { type: [ObjectId], ref: TableNames.businessType }
 })
 
 const userSchema = new Schema<UserModel>({

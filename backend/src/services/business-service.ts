@@ -2,7 +2,7 @@ import { Repository } from '../data/repositories'
 import { UserModel } from '../models/user-model'
 import { Roles } from '../common'
 import { User } from '../data/models'
-import { UserColumns } from '../data/models/user-columns'
+import { CompanyColumns, UserColumns } from '../data/models/user-columns'
 import { QueryArgsHelper } from '../utils/query-args-helper'
 import { BusinessDetailsProjectionModel } from '../models/projection/business-projection-models'
 import { BusinessMappings } from '../models/mappings/business-mappings'
@@ -27,7 +27,7 @@ class BusinessService {
     public async getByType (businessTypeId: string, userId: string): Promise<any> {
         const filter = {
             [UserColumns.roles]: Roles.businessHolder,
-            [QueryArgsHelper.combine(UserColumns.company, UserColumns.businessTypes)]: businessTypeId
+            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)]: businessTypeId
         }
 
         const businesses = await this.usersData.filter(filter, BusinessDetailsProjectionModel)

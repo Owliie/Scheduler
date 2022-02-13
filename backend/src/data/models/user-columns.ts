@@ -7,7 +7,10 @@ export const UserColumns = {
     phone: 'phone',
     roles: 'roles',
     company: 'company',
-    favourites: 'favourites',
+    favourites: 'favourites'
+}
+
+export const CompanyColumns = {
     description: 'description',
     address: 'address',
     availability: 'availability',
