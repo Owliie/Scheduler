@@ -60,7 +60,6 @@ class UserService {
             UserColumns.id,
             UserColumns.firstName,
             UserColumns.lastName,
-            // UserColumns.company,
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.description),
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.address),
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)
