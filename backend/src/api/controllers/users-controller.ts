@@ -68,20 +68,7 @@ class UsersController {
     }
 
     public getFavourites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-        // let userId = req.user.id
-        // TODO: get the favourite users
-        const response = [{
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e',
-            firstName: 'Atanas',
-            lastName: 'Vasilev',
-            company: {
-                description: 'some description',
-                address: 'Sofia, Studentski grad',
-                businessTypes: ['Hair Salon', 'Nail Salon']
-            }
-        }]
-
-        res.json(response)
+        res.json(await UserService.getFavouritesBusinesses(req.user?.id))
     }
 
     public addToFavourites = (req: AuthenticatedRequest, res: Response): void => {

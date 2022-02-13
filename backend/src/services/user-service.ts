@@ -5,6 +5,8 @@ import { Repository } from '../data/repositories'
 import { TaskResult } from '../common/taskResult'
 import { Roles } from '../common'
 import { ObjectId } from 'mongodb'
+import { QueryArgsHelper } from '../utils/query-args-helper'
+import { CompanyColumns, UserColumns } from '../data/models/user-columns'
 
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -50,6 +52,27 @@ class UserService {
         } else {
             return null
         }
+    }
+
+    public async getFavouritesBusinesses (userId: string): Promise<any> {
+        const { favourites } = await this.usersData.getById(userId)
+        const projection = QueryArgsHelper.build(
+            UserColumns.id,
+            UserColumns.firstName,
+            UserColumns.lastName,
+            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.description),
+            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.address),
+            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)
+        )
+        const filter = {
+            _id: {
+                $in: [...favourites]
+            }
+        }
+        const businesses = await this.usersData.filter(filter, projection, {
+            populate: QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)
+        })
+        return businesses
     }
 
     public async addToFavourites (userId: string, businessId: string): Promise<TaskResult> {
