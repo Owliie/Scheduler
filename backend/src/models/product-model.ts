@@ -1,8 +1,9 @@
 import { ObjectId } from 'mongodb'
+import { BaseModel } from './base-model'
 
-export interface ProductModel {
+export interface ProductModel extends BaseModel{
     name: string;
     price: number;
-    businessOwner: ObjectId;
-    businessType: ObjectId;
+    businessOwner: ObjectId | string;
+    businessType: ObjectId | string;
 }

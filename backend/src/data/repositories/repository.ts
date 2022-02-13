@@ -50,4 +50,8 @@ export class Repository<T extends BaseModel> {
         return this.entity.exists(filter)
     }
 
+    public create (model: T): Promise<any> {
+        return this.entity.create(model)
+    }
+
 }

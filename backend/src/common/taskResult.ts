@@ -2,10 +2,12 @@ export class TaskResult {
 
     private readonly _isSuccessful: boolean
     private readonly _message: string
+    private readonly _data: string;
 
-    private constructor (success: boolean, message: string = '') {
+    private constructor (success: boolean, message: string = '', data: any = {}) {
         this._isSuccessful = success
         this._message = message
+        this._data = data
     }
 
     public get isSuccessful (): boolean {
@@ -16,12 +18,16 @@ export class TaskResult {
         return this._message
     }
 
-    public static failure (errorMessage: string): TaskResult {
-        return new TaskResult(false, errorMessage)
+    public get data () {
+        return this._data
     }
 
-    public static success (successMessage: string): TaskResult {
-        return new TaskResult(true, successMessage)
+    public static failure (errorMessage: string, data: any = {}): TaskResult {
+        return new TaskResult(false, errorMessage, data)
+    }
+
+    public static success (successMessage: string, data: any = {}): TaskResult {
+        return new TaskResult(true, successMessage, data)
     }
 
 }
