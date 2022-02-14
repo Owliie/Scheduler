@@ -25,7 +25,7 @@ const CustomerPortal = (props) => {
     }, [chosenType]);
 
     const loadData = async () => {
-        const res = await BusinessService.getAllByType(chosenType)
+        const res = await BusinessService.getAllByType(chosenType.id)
         setServices(res)
         setLoading(false)
     }
@@ -40,6 +40,7 @@ const CustomerPortal = (props) => {
         if (service.addedToFavourites) {
             await BusinessService.deleteFavourite(service.id)
         } else {
+            console.log('service', service);
             await BusinessService.addFavourite(service.id)
         }
         const tempService = tempServices.find(el => el.address === service.address)

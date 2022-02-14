@@ -39,11 +39,11 @@ const Favorites = () => {
         const tempServices = {}
 
         data.forEach(service => service.company.businessTypes.forEach(type => {
-            if (!!tempServices[type] === false) {
-                tempServices[type] = []
+            if (!!tempServices[type.name] === false) {
+                tempServices[type.name] = []
             }
 
-            tempServices[type].push(service)
+            tempServices[type.name].push(service)
         }))
 
         setServices(tempServices)

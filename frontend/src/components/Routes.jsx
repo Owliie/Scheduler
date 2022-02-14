@@ -20,6 +20,7 @@ const RouteOptions = {
 
 const Router = (props) => {
     const { isLoggedIn, account } = useStoreState((state) => state.userStore);
+    const { chosenPortal } = useStoreState((state) => state.portalStore);
 
     const [routerAction, setRouterAction] = useState(null);
 
@@ -30,19 +31,17 @@ const Router = (props) => {
     }, [isLoggedIn]);
 
     const resolveNavigationRoute = () => {
-        if (isLoggedIn !== null) {
-            switch (true) {
-                case !isLoggedIn:
-                    return RouteOptions.GO_TO_SIGN;
-                case !account?.isCustomer && !account?.chosenPortal:
-                    return RouteOptions.GO_TO_PORTALS;
-                case !account?.isCustomer && account?.chosenPortal === PORTALS.B_HOLDER:
-                    return RouteOptions.GO_TO_BHOLDER_PORTAL;
-                case account?.isCustomer:
-                    return RouteOptions.GO_TO_CUSTOMER_PORTAL;
-                default:
-                    return RouteOptions.GO_TO_SIGN;
-            }
+        switch (true) {
+            case !isLoggedIn:
+                return RouteOptions.GO_TO_SIGN;
+            case !account?.isCustomer && !chosenPortal:
+                return RouteOptions.GO_TO_PORTALS;
+            case !account?.isCustomer && chosenPortal === PORTALS.B_HOLDER:
+                return RouteOptions.GO_TO_BHOLDER_PORTAL;
+            case account?.isCustomer:
+                return RouteOptions.GO_TO_CUSTOMER_PORTAL;
+            default:
+                return RouteOptions.GO_TO_SIGN;
         }
     };
 

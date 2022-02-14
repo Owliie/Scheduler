@@ -18,7 +18,7 @@ class BusinessService {
     }
 
     static addFavourite = (businessId) => {
-        return RequestAPI.post('/users/favourites', businessId)
+        return RequestAPI.post('/users/favourites', { businessId })
     }
 }
 

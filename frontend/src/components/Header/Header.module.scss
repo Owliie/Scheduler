@@ -4,14 +4,78 @@
     background-color: $primary-color;
     padding-left: 20px;
     padding-right: 20px;
+}
 
-    *,
-    a {
-        color: $secondary-color !important;
+.CloseTitle {
+    height: 56px;
+    background-color: $primary-color;
+}
+
+.Body {
+    hr {
+        color: $muted-color;
+        opacity: 8%;
     }
 
-    img {
-        max-width: 30px;
-        max-height: 30px;
+    .Account {
+        height: 20%;
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        flex-direction: column;
+
+        h1 {
+            color: $tertiary-color;
+
+            font-weight: 700;
+            font-size: 23.2648pt;
+            line-height: 16px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: $muted-color;
+            font-size: 16.28535pt;
+            line-height: 13px;
+        }
+    }
+
+    .BodyNav {
+        height: calc(80% - 2rem - 1px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .Nav {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            height: 50px;
+
+            * {
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 16px;
+            }
+
+            svg:not([name=vivid]) {
+                color: black;
+                opacity: 0.6;
+            }
+
+            a,
+            p {
+                cursor: pointer;
+                margin-bottom: 0;
+                margin-left: 30px;
+                color: $tertiary-color;
+                text-decoration: none;
+            }
+
+            .Logout {
+                color: $primary-color;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ export const userStore = {
     /**
      * STATE
      */
-    isLoggedIn: null,
+    isLoggedIn: false,
     account: null,
     /**
      * ACTIONS
