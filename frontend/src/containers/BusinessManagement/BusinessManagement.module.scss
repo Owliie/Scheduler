@@ -2,6 +2,7 @@
 
 .Container {
     width: 600px;
+    padding-bottom: 50px;
 
     .Heading {
         margin-bottom: 50px;
@@ -84,6 +85,26 @@
     .ExpandFormBtn {
         font-size: 15pt;
         font-weight: 500;
+    }
+
+    .Availability {
+        color: $tertiary-color;
+
+        .Time {
+            input {
+                color: $tertiary-color;
+                width: 50px;
+                text-align: center;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+            }
+        }
+
+        &+button {
+            padding: 7px 10px;
+            margin: auto;
+            display: block;
+        }
     }
 }
 
