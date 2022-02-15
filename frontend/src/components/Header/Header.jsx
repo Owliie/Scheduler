@@ -5,11 +5,13 @@ import classes from './Header.module.scss';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import { Bell, ExclamationCircle, Grid3x3GapFill, HeartFill, StarFill, UiChecksGrid } from 'react-bootstrap-icons';
+import { Bell, CalendarCheck, ExclamationCircle, Grid3x3GapFill, HeartFill, StarFill, UiChecksGrid } from 'react-bootstrap-icons';
 import Spinner from '../common/Spinner/Spinner';
+import { PORTALS } from '../../utils/portals';
 
 const Header = (props) => {
     const { isLoggedIn, account } = useStoreState((state) => state.userStore);
+    const { chosenPortal } = useStoreState((state) => state.portalStore);
     const { logout } = useStoreActions((actions) => actions.userStore);
     const { setPortal, setType } = useStoreActions((actions) => actions.portalStore);
 
@@ -21,12 +23,16 @@ const Header = (props) => {
     }
 
     const servicesHandler = () => {
-        setPortal(null)
+        setPortal(PORTALS.CUSTOMER)
         setType(null)
     }
 
     const typesHandler = () => {
         setType(null)
+    }
+
+    const businessHandler = () => {
+        setPortal(PORTALS.B_HOLDER)
     }
 
     if (account === null && isLoggedIn) {
@@ -58,15 +64,24 @@ const Header = (props) => {
                                     <HeartFill name="vivid" />
                                     <Link className="nav-link" to="/favorites">Favorites</Link>
                                 </div>
+                                <div className={classes.Nav}>
+                                    <Bell />
+                                    <Link className="nav-link" to="/">Booked</Link>
+                                </div>
                                 {!account?.isCustomer ?
                                     <>
-                                        <div className={classes.Nav}>
-                                            <Grid3x3GapFill />
-                                            <p onClick={servicesHandler}>Services</p>
-                                        </div>
+                                        {chosenPortal === PORTALS.CUSTOMER ?
+                                            <div className={classes.Nav}>
+                                                <CalendarCheck />
+                                                <p onClick={businessHandler}>Schedule</p>
+                                            </div>
+                                            : <div className={classes.Nav}>
+                                                <Grid3x3GapFill />
+                                                <p onClick={servicesHandler}>Services</p>
+                                            </div>}
                                         <div className={classes.Nav}>
                                             <StarFill />
-                                            <Link className="nav-link" to="/">Business</Link>
+                                            <Link onClick={businessHandler} className="nav-link" to="/management">Business</Link>
                                         </div>
                                     </>
                                     :
@@ -81,10 +96,6 @@ const Header = (props) => {
                                         </div>
                                     </>
                                 }
-                                <div className={classes.Nav}>
-                                    <Bell />
-                                    <Link className="nav-link" to="/">{!account?.isCustomer ? 'Schedule' : 'Booked'}</Link>
-                                </div>
                             </Nav>
                             <Nav>
                                 <div className={classes.Nav}>

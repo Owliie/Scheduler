@@ -30,14 +30,13 @@ const Favorites = () => {
         setServices(tempServices)
     }
 
-    const loadData = async () => {
-        return await BusinessService.getFavourites()
+    const loadData = () => {
+        return BusinessService.getFavourites()
     }
 
     const setData = async (pendingData) => {
         const data = await pendingData
         const tempServices = {}
-
         data.forEach(service => service.company.businessTypes.forEach(type => {
             if (!!tempServices[type.name] === false) {
                 tempServices[type.name] = []
@@ -54,7 +53,6 @@ const Favorites = () => {
         return (<Spinner />)
     }
 
-    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>
@@ -70,6 +68,7 @@ const Favorites = () => {
                             caption={service.company.address}
                             heading={service.company.description}
                             icon={<Image />}
+                            theme={classes.ServiceTheme}
                             image={<CardImage />}
                             button={<button id={service.id}>Details</button>}
                             additionalBtn={<button className={classes.LikeBtn}

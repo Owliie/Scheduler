@@ -1,6 +1,6 @@
 import { RequestAPI } from "./baseApi";
 
-class SignService {
+class UserService {
     static login = (data) => {
         return RequestAPI.post('/users/login', data)
     }
@@ -12,6 +12,10 @@ class SignService {
     static registerBusinessHolder = (data) => {
         return RequestAPI.post('/users/register?type=BusinessHolder', data)
     }
+
+    static setBusinessType = (data) => {
+        return RequestAPI.post('/users/profile/businessType', { data })
+    }
 }
 
-export default SignService;
+export default UserService;

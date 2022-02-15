@@ -40,7 +40,6 @@ const CustomerPortal = (props) => {
         if (service.addedToFavourites) {
             await BusinessService.deleteFavourite(service.id)
         } else {
-            console.log('service', service);
             await BusinessService.addFavourite(service.id)
         }
         const tempService = tempServices.find(el => el.address === service.address)
@@ -62,6 +61,7 @@ const CustomerPortal = (props) => {
                 <CustomerSlide services={servicesTypes.map((service, i) => <Service key={i}
                     caption={`Book a ${service.name} service`}
                     heading={service.name}
+                    theme={classes.ServiceTheme}
                     icon={<Image />}
                     image={<CardImage />}
                     button={<button
@@ -89,6 +89,7 @@ const CustomerPortal = (props) => {
                     heading={service.description}
                     icon={<Image />}
                     image={<CardImage />}
+                    theme={classes.ServiceTheme}
                     button={<button id={service.id}>Details</button>}
                     additionalBtn={<button className={classes.LikeBtn}
                         onClick={() => likeServiceHandler(service)}>

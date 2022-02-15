@@ -9,6 +9,7 @@ import BHolderPortal from '../containers/BHolderPortal/BHolderPortal';
 import { useStoreState } from 'easy-peasy';
 import { PORTALS } from '../utils/portals';
 import Favorites from '../containers/Favorites/Favorites';
+import BusinessManagement from '../containers/BusinessManagement/BusinessManagement';
 
 const RouteOptions = {
     GO_TO_SIGN: 'GO_TO_SIGN',
@@ -28,7 +29,7 @@ const Router = (props) => {
         setRouterAction(resolveNavigationRoute())
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoggedIn]);
+    }, [isLoggedIn, chosenPortal]);
 
     const resolveNavigationRoute = () => {
         switch (true) {
@@ -38,7 +39,7 @@ const Router = (props) => {
                 return RouteOptions.GO_TO_PORTALS;
             case account && !account.isCustomer && chosenPortal === PORTALS.B_HOLDER:
                 return RouteOptions.GO_TO_BHOLDER_PORTAL;
-            case account && account.isCustomer:
+            case account && (account.isCustomer || chosenPortal === PORTALS.CUSTOMER):
                 return RouteOptions.GO_TO_CUSTOMER_PORTAL;
             default:
                 return RouteOptions.GO_TO_SIGN;
@@ -74,6 +75,7 @@ const Router = (props) => {
                     (
                         <Routes>
                             <Route path="/" exact element={<BHolderPortal />} />
+                            <Route path="/management" exact element={<BusinessManagement />} />
                             <Route path="*" element={<Navigate to='/' />} />
                         </Routes>
                     )
