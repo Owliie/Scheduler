@@ -37,9 +37,7 @@ class UserService {
     }
 
     public async login (email: string, password: string) {
-        const user: UserModel = await User.findOne({
-            email
-        })
+        const user = await this.usersData.findOne({ email })
 
         if (user && await bcrypt.compare(password, user.password)) {
             const userData = {
@@ -51,7 +49,12 @@ class UserService {
             const accessToken: string = jwt.sign(userData, process.env.TOKEN_SECRET, { expiresIn: '1h' })
 
             return {
-                userData: userData,
+                userData: {
+                    ...userData,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    phone: user.phone
+                },
                 accessToken
             }
         } else {

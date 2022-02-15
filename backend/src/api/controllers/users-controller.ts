@@ -62,8 +62,7 @@ class UsersController {
 
         res.json({
             token: loginData.accessToken,
-            email: loginData.userData.email,
-            id: loginData.userData.id
+            ...loginData.userData
         })
     }
 

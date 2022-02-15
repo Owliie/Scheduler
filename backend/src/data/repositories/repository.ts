@@ -45,6 +45,10 @@ export class Repository<T extends BaseModel> {
         return query.exec()
     }
 
+    public findOne (filter: any, projection: string = ''): Promise<T> {
+        return this.entity.findOne(filter, projection).exec()
+    }
+
     public update (id: string, updateValue: any): Promise<any> {
         return this.entity.updateOne({ _id: id }, updateValue).exec()
     }
