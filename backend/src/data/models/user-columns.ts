@@ -16,3 +16,11 @@ export const CompanyColumns = {
     availability: 'availability',
     businessType: 'businessType'
 }
+
+export const AvailabilityColumns = {
+    day: 'day',
+    startHour: 'startHour',
+    startMinute: 'startMinute',
+    endHour: 'endHour',
+    endMinute: 'endMinute'
+}

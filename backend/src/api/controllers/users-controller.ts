@@ -25,7 +25,7 @@ class UsersController {
             user.company = {
                 description: req.body.description,
                 address: req.body.address,
-                availability: req.body.availability
+                availability: UserService.buildDefaultAvailability(req.body.availability)
             }
         }
 
@@ -101,6 +101,17 @@ class UsersController {
         UserService.setBusinessType(req.user?.id, businessTypeId)
             .then((result) => responseUtils.processTaskResult(res, result))
             .catch(() => responseUtils.sendErrorMessage(res, 'Error while setting the business type.'))
+    }
+
+    public setAvailability = (req: AuthenticatedRequest, res: Response): void => {
+        const parsedAvailabilityResult = UserService.parseAvailability(req.body.availability)
+        if (!parsedAvailabilityResult.isSuccessful) {
+            return responseUtils.sendErrorMessage(res, parsedAvailabilityResult.message)
+        }
+
+        UserService.setAvailability(req.user?.id, parsedAvailabilityResult.data)
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while updating the availability.'))
     }
 
 }

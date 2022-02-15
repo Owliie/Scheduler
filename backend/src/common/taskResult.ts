@@ -1,10 +1,10 @@
-export class TaskResult {
+export class TaskResult<T = any> {
 
     private readonly _isSuccessful: boolean
     private readonly _message: string
-    private readonly _data: string;
+    private readonly _data: T
 
-    private constructor (success: boolean, message: string = '', data: any = {}) {
+    private constructor (success: boolean, message: string = '', data: T = null) {
         this._isSuccessful = success
         this._message = message
         this._data = data
@@ -22,12 +22,12 @@ export class TaskResult {
         return this._data
     }
 
-    public static failure (errorMessage: string, data: any = {}): TaskResult {
-        return new TaskResult(false, errorMessage, data)
+    public static failure<TData = any> (errorMessage: string, data: TData = null): TaskResult {
+        return new TaskResult<TData>(false, errorMessage, data)
     }
 
-    public static success (successMessage: string, data: any = {}): TaskResult {
-        return new TaskResult(true, successMessage, data)
+    public static success<TData = any> (successMessage: string, data: TData = null): TaskResult {
+        return new TaskResult<TData>(true, successMessage, data)
     }
 
 }
