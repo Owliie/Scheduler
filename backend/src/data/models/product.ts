@@ -19,11 +19,6 @@ const productSchema = new Schema<ProductModel>({
         type: ObjectId,
         ref: TableNames.user,
         required: true
-    },
-    [ProductColumns.businessType]: {
-        type: ObjectId,
-        ref: TableNames.businessType,
-        required: true
     }
 })
 

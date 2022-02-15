@@ -10,5 +10,7 @@ export const usersRoutes = (expressApp: any) => {
     router.post('/favourites', UsersController.addToFavourites)
     router.delete('/favourites/:id', UsersController.removeFromFavourites)
 
+    router.post('/profile/businessType', UsersController.setBusinessType)
+
     return router
 }

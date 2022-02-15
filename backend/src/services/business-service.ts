@@ -27,7 +27,7 @@ class BusinessService {
     public async getByType (businessTypeId: string, userId: string): Promise<any> {
         const filter = {
             [UserColumns.roles]: Roles.businessHolder,
-            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)]: businessTypeId
+            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)]: businessTypeId
         }
 
         const businesses = await this.usersData.filter(filter, BusinessDetailsProjectionModel)

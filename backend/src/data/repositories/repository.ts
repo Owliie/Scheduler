@@ -46,7 +46,7 @@ export class Repository<T extends BaseModel> {
     }
 
     public update (id: string, updateValue: any): Promise<any> {
-        return this.entity.updateOne({ id }, updateValue).exec()
+        return this.entity.updateOne({ _id: id }, updateValue).exec()
     }
 
     public exists (filter: any): Promise<boolean> {

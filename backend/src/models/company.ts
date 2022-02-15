@@ -1,8 +1,8 @@
-import { BusinessTypeModel } from './business-type-model'
+import { ObjectId } from 'mongodb'
 
 export interface Company {
     description: string;
     address: string;
     availability: number[];
-    businessTypes?: BusinessTypeModel[];
+    businessType?: string | ObjectId;
 }

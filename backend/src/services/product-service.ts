@@ -22,11 +22,9 @@ class ProductService {
         const projection = QueryArgsHelper.build(
             ProductColumns.name,
             ProductColumns.price,
-            ProductColumns.durationInMinutes,
-            ProductColumns.businessType
+            ProductColumns.durationInMinutes
         )
         const options = {
-            populate: ProductColumns.businessType,
             sort: ProductColumns.name
         }
 
@@ -51,7 +49,7 @@ class ProductService {
 
     public update (id: string, newData: any): Promise<TaskResult> {
         return this.productsData.update(id, newData)
-            .then((updateResult) => TaskResult.success('The product were updated successfully.'))
+            .then(() => TaskResult.success('The product were updated successfully.'))
             .catch((err: any) => TaskResult.failure('Error while updating the product', err))
     }
 

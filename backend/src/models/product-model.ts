@@ -6,5 +6,4 @@ export interface ProductModel extends BaseModel{
     price: number;
     durationInMinutes: number;
     businessOwner: ObjectId | string;
-    businessType: ObjectId | string;
 }

@@ -62,15 +62,19 @@ class UserService {
             UserColumns.lastName,
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.description),
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.address),
-            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)
+            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)
         )
         const filter = {
             _id: {
                 $in: [...favourites]
             }
         }
+        filter[QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)] = {
+            $ne: undefined
+        }
+
         const businesses = await this.usersData.filter(filter, projection, {
-            populate: QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessTypes)
+            populate: QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)
         })
         return businesses
     }
@@ -113,6 +117,16 @@ class UserService {
         user.favourites = user.favourites.filter(userId => userId.toString() !== businessId)
         await this.usersData.update(userId, { favourites: [...user.favourites] })
         return TaskResult.success('Removed from favourites.')
+    }
+
+    public setBusinessType (userId: string, businessType: string): Promise<TaskResult> {
+        const updatedFields = {
+            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)]: businessType
+        }
+
+        return this.usersData.update(userId, updatedFields)
+            .then(() => TaskResult.success('The new business type is set.'))
+            .catch(() => TaskResult.failure('Error while setting the business type'))
     }
 
 }
