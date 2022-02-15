@@ -9,7 +9,7 @@ const companySchema = new Schema<Company>({
     [CompanyColumns.description]: { type: String, required: true },
     [CompanyColumns.address]: { type: String, required: true },
     [CompanyColumns.availability]: { type: [Number], required: true },
-    [CompanyColumns.businessTypes]: { type: [ObjectId], ref: TableNames.businessType }
+    [CompanyColumns.businessType]: { type: ObjectId, ref: TableNames.businessType }
 })
 
 const userSchema = new Schema<UserModel>({

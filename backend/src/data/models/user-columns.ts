@@ -14,5 +14,5 @@ export const CompanyColumns = {
     description: 'description',
     address: 'address',
     availability: 'availability',
-    businessTypes: 'businessTypes'
+    businessType: 'businessType'
 }

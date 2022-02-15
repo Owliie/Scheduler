@@ -95,6 +95,14 @@ class UsersController {
             })
     }
 
+    public setBusinessType = (req: AuthenticatedRequest, res: Response): void => {
+        const businessTypeId = req.body.businessTypeId
+
+        UserService.setBusinessType(req.user?.id, businessTypeId)
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while setting the business type.'))
+    }
+
 }
 
 export default new UsersController()
