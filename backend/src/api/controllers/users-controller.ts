@@ -66,6 +66,10 @@ class UsersController {
         })
     }
 
+    public profile = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        res.json(await UserService.getProfileData(req.user?.id))
+    }
+
     public getFavourites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         res.json(await UserService.getFavouritesBusinesses(req.user?.id))
     }

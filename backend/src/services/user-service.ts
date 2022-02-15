@@ -62,6 +62,14 @@ class UserService {
         }
     }
 
+    public async getProfileData (userId: string): Promise<any> {
+        const projection = QueryArgsHelper.build(
+            QueryArgsHelper.disable(UserColumns.password),
+            QueryArgsHelper.disable(UserColumns.favourites)
+        )
+        return this.usersData.getById(userId, projection)
+    }
+
     public async getFavouritesBusinesses (userId: string): Promise<any> {
         const { favourites } = await this.usersData.getById(userId)
         const projection = QueryArgsHelper.build(

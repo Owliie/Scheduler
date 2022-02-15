@@ -4,5 +4,8 @@ export const QueryArgsHelper = {
     },
     combine: (...args: string[]): string => {
         return args.join('.')
+    },
+    disable: (property: string): string => {
+        return '-' + property
     }
 }
