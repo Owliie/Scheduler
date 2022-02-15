@@ -11,6 +11,7 @@ export const usersRoutes = (expressApp: any) => {
     router.delete('/favourites/:id', UsersController.removeFromFavourites)
 
     router.get('/profile', UsersController.profile)
+    router.put('/profile', UsersController.updateProfile)
     router.post('/profile/businessType', UsersController.setBusinessType)
     router.post('/profile/availability', UsersController.setAvailability)
 

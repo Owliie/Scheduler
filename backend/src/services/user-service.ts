@@ -155,6 +155,12 @@ class UserService {
             .catch(() => TaskResult.failure('Error while updating the availability.'))
     }
 
+    public updatePersonalData (userId: string, personalData: { firstName: string; lastName: string; phone: string }): Promise<TaskResult> {
+        return this.usersData.update(userId, personalData)
+            .then(() => TaskResult.success('The user personal data is updated.'))
+            .catch(() => TaskResult.failure('Error while updating the user personal data.'))
+    }
+
     public buildDefaultAvailability (workingDays: number[]): AvailabilityModel[] {
         return workingDays.map(day => {
             return ModelBuilders.buildAvailability(WORKING_TIME.start, WORKING_TIME.end, day)

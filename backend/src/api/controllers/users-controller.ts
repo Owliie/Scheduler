@@ -70,6 +70,18 @@ class UsersController {
         res.json(await UserService.getProfileData(req.user?.id))
     }
 
+    public updateProfile = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        const body = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phone: req.body.phone
+        }
+
+        UserService.updatePersonalData(req.user?.id, body)
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while updating the user personal data.'))
+    }
+
     public getFavourites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         res.json(await UserService.getFavouritesBusinesses(req.user?.id))
     }
