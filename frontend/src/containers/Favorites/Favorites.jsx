@@ -54,6 +54,7 @@ const Favorites = () => {
         return (<Spinner />)
     }
 
+    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>
