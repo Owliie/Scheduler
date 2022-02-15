@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Form, InputGroup, Table } from 'react-bootstrap';
 import { CloudPlus, TrashFill } from 'react-bootstrap-icons';
 import { toastHandler, TOAST_STATES } from '../../helpers/toast';
 import BusinessService from '../../services/businessService';
@@ -15,12 +15,14 @@ const BusinessManagement = (props) => {
     const [expandForm, setExpandForm] = useState(false);
     const [newProduct, setNewProduct] = useState({});
     const [weekData, setWeekData] = useState([]);
+    const [availableDays, setAvailableDays] = useState([]);
 
     const selectRef = useRef(null);
 
     useEffect(() => {
         loadProducts()
         loadTypes()
+        loadWeekData()
     }, []);
 
     const loadProducts = async () => {
@@ -31,6 +33,18 @@ const BusinessManagement = (props) => {
     const loadTypes = async () => {
         const res = await BusinessService.getTypes()
         setBusinessTypes(res)
+    }
+
+    const loadWeekData = async () => {
+        const res = await UserService.getProfile()
+        const tempDays = []
+        for (const day of res.company.availability) {
+            if (day.startHour !== day.endHour) {
+                tempDays.push(day.day)
+            }
+        }
+        setAvailableDays(tempDays)
+        setWeekData(res.company.availability)
     }
 
     const saveTypeHandler = async () => {
@@ -75,6 +89,41 @@ const BusinessManagement = (props) => {
         found.edit = true
 
         setProducts(updatedProducts)
+    }
+
+    const changeDayHandler = async (e, value, day) => {
+        const newValue = e.target.value
+        const updatedWeekData = [...weekData]
+        let found = updatedWeekData.find(el => el.id === day.id)
+        found[value] = newValue
+
+        setWeekData(updatedWeekData)
+    }
+
+    const updateAvailableDaysHandler = (day, checked) => {
+        let tempDays = [...availableDays]
+        if (checked) {
+            tempDays.push(day)
+        } else {
+            const found = tempDays.indexOf(day)
+            if (found !== -1) {
+                tempDays.splice(found, 1);
+            }
+        }
+
+        setAvailableDays(tempDays)
+    }
+
+    const saveWeekData = async () => {
+        const tempData = [...weekData]
+        for (const data of tempData) {
+            if (!availableDays.includes(data.day)) {
+                data.startHour = data.endHour = data.startMinute = data.endMinute = 0
+            }
+        }
+
+        await UserService.setAvailability(tempData)
+        await loadWeekData()
     }
 
     return (
@@ -137,7 +186,35 @@ const BusinessManagement = (props) => {
             <hr />
             <div>
                 <div className={classes.Category}>Change availability</div>
-                {/* {weekDays.map()} */}
+                <Table className={classes.Availability}>
+                    <thead>
+                        <tr>
+                            <th />
+                            <th>Day</th>
+                            <th>Start</th>
+                            <th>End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {weekData.map((day, i) => {
+                            return (<tr key={i}>
+                                <th>
+                                    <Form.Check type='checkbox' defaultChecked={day.startHour !== day.endHour} onChange={(e) => updateAvailableDaysHandler(day.day, e.target.checked)} />
+                                </th>
+                                <td>{weekDays[i]}</td>
+                                <td className={classes.Time}>
+                                    <input onChange={(e) => changeDayHandler(e, 'startHour', day)} defaultValue={day.startHour} placeholder='h' /> :
+                                    <input onChange={(e) => changeDayHandler(e, 'startMinute', day)} defaultValue={day.startMinute} placeholder='m' />
+                                </td>
+                                <td className={classes.Time}>
+                                    <input onChange={(e) => changeDayHandler(e, 'endHour', day)} defaultValue={day.endHour} placeholder='h' /> :
+                                    <input onChange={(e) => changeDayHandler(e, 'endMinute', day)} defaultValue={day.endMinute} placeholder='m' />
+                                </td>
+                            </tr>)
+                        })}
+                    </tbody>
+                </Table>
+                <button className={classes.SaveBtn} onClick={saveWeekData}>Save</button>
             </div>
         </div >
     )

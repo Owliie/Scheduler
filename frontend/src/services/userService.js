@@ -16,6 +16,14 @@ class UserService {
     static setBusinessType = (data) => {
         return RequestAPI.post('/users/profile/businessType', { data })
     }
+
+    static getProfile = () => {
+        return RequestAPI.get('/users/profile')
+    }
+
+    static setAvailability = (availability) => {
+        return RequestAPI.post('/users/profile/availability', { availability })
+    }
 }
 
 export default UserService;
