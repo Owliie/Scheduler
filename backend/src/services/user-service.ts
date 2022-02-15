@@ -196,7 +196,7 @@ class UserService {
                 minute: element.endMinute
             }
 
-            if (TimeHelper.compare(start, end) >= 0) {
+            if (TimeHelper.compare(start, end) > 0) {
                 return TaskResult.failure('Start time cannot be less than or equal to end time')
             }
 
