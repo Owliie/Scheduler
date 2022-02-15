@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import { AuthenticatedRequest } from '../common/authenticated-request'
 import { AppointmentService, BusinessService } from '../../services'
+import { responseUtils } from '../../utils/response-utils'
 
 class BusinessesController {
 
@@ -20,7 +21,6 @@ class BusinessesController {
         const userId = req.user?.id
         const date = new Date(req.query.date as string)
         const result = await AppointmentService.getApprovedByBusinessAndDate(userId, date)
-        console.log(result)
 
         res.json(result)
     }
@@ -29,6 +29,17 @@ class BusinessesController {
         const userId = req.user?.id
         const result = await AppointmentService.getPendingByBusiness(userId)
         res.json(result)
+    }
+
+    public updateBusinessDetails = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
+        const body = {
+            description: req.body.description,
+            address: req.body.address
+        }
+
+        BusinessService.updateBusinessDetails(req.user?.id, body)
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while updating the business details.'))
     }
 
 }

@@ -6,6 +6,7 @@ import { CompanyColumns, UserColumns } from '../data/models/user-columns'
 import { QueryArgsHelper } from '../utils/query-args-helper'
 import { BusinessDetailsProjectionModel } from '../models/projection/business-projection-models'
 import { BusinessMappings } from '../models/mappings/business-mappings'
+import { TaskResult } from '../common/taskResult'
 
 class BusinessService {
 
@@ -39,6 +40,17 @@ class BusinessService {
                 addedToFavourites: favouritesSet.has(b.id.toString())
             }
         })
+    }
+
+    public async updateBusinessDetails (id: string, businessDetails: { description: string; address: string }): Promise<TaskResult> {
+        const updateObject = {
+            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.description)]: businessDetails.description,
+            [QueryArgsHelper.combine(UserColumns.company, CompanyColumns.address)]: businessDetails.address
+        }
+
+        return this.usersData.update(id, updateObject)
+            .then(() => TaskResult.success('The business details are updated.'))
+            .catch(() => TaskResult.failure('Error while updating the business details.'))
     }
 
 }
