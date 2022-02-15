@@ -15,6 +15,17 @@ export class RequestAPI {
     static post(endpoint, body = undefined) {
         return axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
             .then(data => {
+                this.handleSuccess()
+                return data.data;
+            }).catch(error => {
+                this.handleError(error)
+            })
+    }
+
+    static put(endpoint, body = undefined) {
+        return axios.put(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
+            .then(data => {
+                this.handleSuccess()
                 return data.data;
             }).catch(error => {
                 this.handleError(error)
@@ -24,10 +35,15 @@ export class RequestAPI {
     static delete(endpoint) {
         return axios.delete(process.env.REACT_APP_API_ENDPOINT + endpoint)
             .then(data => {
+                this.handleSuccess()
                 return data.data;
             }).catch(error => {
                 this.handleError(error)
             })
+    }
+
+    static handleSuccess() {
+        toastHandler({ success: TOAST_STATES.SUCCESS, message: 'Action successful' })
     }
 
     static handleError(error) {

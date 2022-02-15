@@ -1,5 +1,5 @@
 import { action, thunk } from 'easy-peasy';
-import SignService from '../../services/signService';
+import UserService from '../../services/userService';
 import { PORTALS } from '../../utils/portals';
 
 export const userStore = {
@@ -15,33 +15,29 @@ export const userStore = {
         state.account = payload;
         if (state.account) {
             state.account.isCustomer = !payload.roles // only b holders have roles
-            state.account.chosenPortal = payload.roles ? null : PORTALS.CUSTOMER;
         }
         state.isLoggedIn = !!(payload && payload.token);
-    }),
-    setPortal: action((state, payload) => {
-        state.account.chosenPortal = payload;
     }),
     /**
      * THUNKS
      */
     registerCustomer: thunk(async (actions, payload, { getState, getStoreState }) => {
         const { portalStore } = getStoreState();
-        const data = await SignService.registerCustomer(payload)
+        const data = await UserService.registerCustomer(payload)
 
         portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),
     registerBusinessHolder: thunk(async (actions, payload, { getState, getStoreState }) => {
         const { portalStore } = getStoreState();
-        const data = await SignService.registerBusinessHolder(payload)
+        const data = await UserService.registerBusinessHolder(payload)
 
         portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),
     login: thunk(async (actions, payload, { getState, getStoreState }) => {
         const { portalStore } = getStoreState();
-        const data = await SignService.login(payload)
+        const data = await UserService.login(payload)
 
         portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
