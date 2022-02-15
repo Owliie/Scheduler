@@ -34,11 +34,11 @@ const Router = (props) => {
         switch (true) {
             case !isLoggedIn:
                 return RouteOptions.GO_TO_SIGN;
-            case !account?.isCustomer && !chosenPortal:
+            case account && !account.isCustomer && !chosenPortal:
                 return RouteOptions.GO_TO_PORTALS;
-            case !account?.isCustomer && chosenPortal === PORTALS.B_HOLDER:
+            case account && !account.isCustomer && chosenPortal === PORTALS.B_HOLDER:
                 return RouteOptions.GO_TO_BHOLDER_PORTAL;
-            case account?.isCustomer:
+            case account && account.isCustomer:
                 return RouteOptions.GO_TO_CUSTOMER_PORTAL;
             default:
                 return RouteOptions.GO_TO_SIGN;
