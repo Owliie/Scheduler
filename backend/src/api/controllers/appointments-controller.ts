@@ -1,8 +1,10 @@
 import { AuthenticatedRequest } from '../common/authenticated-request'
 import { Response } from 'express'
-import { AppointmentService } from '../../services'
+import { AppointmentService, BusinessService } from '../../services'
 import { AppointmentStatus } from '../../models/enums/appointment-status'
 import { responseUtils } from '../../utils/response-utils.js'
+import { AvailabilityModel } from '../../models/availability-model'
+import { AppointmentModel } from '../../models/appointment-model'
 
 class AppointmentsController {
 
@@ -53,21 +55,29 @@ class AppointmentsController {
     }
 
     public create = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
-        const appointment = {
+        const appointment: AppointmentModel = {
             businessHolder: req.body.businessHolder,
             client: req.user?.id,
             start: req.body.start,
-            end: req.body.end,
+            durationInMinutes: req.body.durationInMinutes,
             status: AppointmentStatus.Pending,
-            service: req.body.service
+            product: req.body.product
         }
 
-        // TODO: validate that the appointment start and end  are correct
-        console.log(appointment)
+        const dayAvailability: AvailabilityModel = await BusinessService
+            .getAvailabilityByDay(appointment.businessHolder, new Date(appointment.start))
+        if (!dayAvailability) {
+            return responseUtils.sendErrorMessage(res, 'The business is not working at the selected date.')
+        }
+
+        const validationResult = await AppointmentService.validateAppointment(appointment, dayAvailability)
+        if (!validationResult.isSuccessful) {
+            return responseUtils.sendErrorMessage(res, validationResult.message)
+        }
 
         AppointmentService.create(appointment)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'Appointment created successfully.')
+            .then((result) => {
+                responseUtils.processTaskResult(res, result)
             })
             .catch(() => {
                 responseUtils.sendErrorMessage(res, 'The appointments cannot be booked.')

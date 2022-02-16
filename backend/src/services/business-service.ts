@@ -9,6 +9,7 @@ import { BusinessMappings } from '../models/mappings/business-mappings'
 import { TaskResult } from '../common/taskResult'
 import { AvailabilityModel } from '../models/availability-model'
 import { DateExtensions } from '../utils/date-extensions'
+import { ObjectId } from 'mongodb'
 
 class BusinessService {
 
@@ -58,7 +59,7 @@ class BusinessService {
             .catch(() => TaskResult.failure('Error while updating the business details.'))
     }
 
-    public async getAvailabilityByDay (userId: string, date: Date): Promise<AvailabilityModel | undefined> {
+    public async getAvailabilityByDay (userId: string | ObjectId, date: Date): Promise<AvailabilityModel | undefined> {
         const projection = QueryArgsHelper.build(
             QueryArgsHelper.combine(UserColumns.company, CompanyColumns.availability)
         )

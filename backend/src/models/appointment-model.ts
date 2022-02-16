@@ -3,7 +3,7 @@ import { BaseModel } from './base-model'
 import { ObjectId } from 'mongodb'
 
 export interface AppointmentModel extends BaseModel {
-    createdOn: Date;
+    createdOn?: Date;
     client: string | ObjectId;
     businessHolder: string | ObjectId;
     status: AppointmentStatus;

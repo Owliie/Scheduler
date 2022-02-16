@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from '../common/authenticated-request'
 import { AppointmentService, BusinessService, ProductService } from '../../services'
 import { responseUtils } from '../../utils/response-utils'
 import { AvailabilityModel } from '../../models/availability-model'
+import { ModelHelpers } from '../../utils/model-helpers'
 
 class BusinessesController {
 
@@ -58,14 +59,8 @@ class BusinessesController {
             businessId,
             date,
             minIntervalLength,
-            {
-                hour: dayAvailability.startHour,
-                minute: dayAvailability.startMinute
-            },
-            {
-                hour: dayAvailability.endHour,
-                minute: dayAvailability.endMinute
-            })
+            ModelHelpers.getAvailabilityStart(dayAvailability),
+            ModelHelpers.getAvailabilityEnd(dayAvailability))
         return res.json(freeSlots)
     }
 

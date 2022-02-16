@@ -1,6 +1,7 @@
 import { Model } from 'mongoose'
 import { BaseModel } from '../../models/base-model'
 import { QueryOptions } from '../../models/common/query-options'
+import { ObjectId } from 'mongodb'
 
 export class Repository<T extends BaseModel> {
 
@@ -28,7 +29,7 @@ export class Repository<T extends BaseModel> {
         return query.exec()
     }
 
-    public getById (id: string, projection: string = '', options: QueryOptions = null): Promise<T> {
+    public getById (id: string | ObjectId, projection: string = '', options: QueryOptions = null): Promise<T> {
         let query = this.entity.findById(id)
 
         query = Repository.applyProjection(query, projection)

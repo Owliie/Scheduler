@@ -7,6 +7,11 @@ import { TimeModel } from '../models/common/time-model'
 import { TimeHelper } from '../utils/time-helper'
 import { Appointment } from '../data/models'
 import { DateExtensions } from '../utils/date-extensions'
+import { TaskResult } from '../common/taskResult'
+import { AvailabilityModel } from '../models/availability-model'
+import { ObjectId } from 'mongodb'
+import { ModelHelpers } from '../utils/model-helpers'
+import { TimeInterval } from '../models/common/time-interval'
 
 const appointments = [
     {
@@ -121,9 +126,27 @@ class AppointmentService {
         return Promise.resolve([...result])
     }
 
-    public create (appointment: any): Promise<any> {
-        appointments.push(appointment)
-        return Promise.resolve()
+    public create (appointment: any): Promise<TaskResult> {
+        return this.appointmentsData.create(appointment)
+            .then(appointment => TaskResult.success('The appointment was created successfully', appointment))
+            .catch((err) => TaskResult.failure('Error while saving the appointment', err))
+    }
+
+    public async validateAppointment (appointment: AppointmentModel, dayAvailability: AvailabilityModel): Promise<TaskResult> {
+        const freeSlots = await this.getFreeSlotsByDay(
+            appointment.businessHolder,
+            new Date(appointment.start),
+            appointment.durationInMinutes,
+            ModelHelpers.getAvailabilityStart(dayAvailability),
+            ModelHelpers.getAvailabilityEnd(dayAvailability)
+        )
+
+        const appointmentInterval = TimeHelper.buildInterval(appointment.start, appointment.durationInMinutes)
+        if (freeSlots.some(s => TimeHelper.contains(s, appointmentInterval))) {
+            return TaskResult.success('The appointment start is valid.')
+        }
+
+        return TaskResult.failure('The appointment start is invalid.')
     }
 
     public decline (id: string): Promise<any> {
@@ -145,11 +168,11 @@ class AppointmentService {
     }
 
     public async getFreeSlotsByDay (
-        businessId: string,
+        businessId: string | ObjectId,
         date: Date,
         minIntervalLength: number,
         workdayStart: TimeModel,
-        workdayEnd: TimeModel): Promise<any> {
+        workdayEnd: TimeModel): Promise<TimeInterval[]> {
         const appointments = await this.getUserAppointmentsByDay(businessId, date)
 
         if (!appointments || appointments.length === 0) {
@@ -185,7 +208,7 @@ class AppointmentService {
         return slots
     }
 
-    private getUserAppointmentsByDay (businessId: string, date: Date): Promise<AppointmentModel[]> {
+    private getUserAppointmentsByDay (businessId: string | ObjectId, date: Date): Promise<AppointmentModel[]> {
         const projection = QueryArgsHelper.build(
             AppointmentColumns.start,
             AppointmentColumns.durationInMinutes
