@@ -187,19 +187,19 @@ class AppointmentService {
 
     private getUserAppointmentsByDay (businessId: string, date: Date): Promise<AppointmentModel[]> {
         const projection = QueryArgsHelper.build(
-            AppointmentColumns.status,
+            AppointmentColumns.start,
             AppointmentColumns.durationInMinutes
         )
         const filter = {
             [AppointmentColumns.businessHolder]: businessId,
             [AppointmentColumns.start]: {
                 $gte: DateExtensions.getDate(date),
-                $let: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
             }
         }
 
         return this.appointmentsData.filter(filter, projection, {
-            sort: [AppointmentColumns.start]
+            sort: AppointmentColumns.start
         })
     }
 

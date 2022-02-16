@@ -45,7 +45,8 @@ class BusinessesController {
 
     public getFreeSlotsByDay = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
         const businessId = req.params.id
-        const minIntervalLength = (await ProductService.getProductWithMinDuration(businessId))?.durationInMinutes ?? 0
+        const product = await ProductService.getProductWithMinDuration(businessId)
+        const minIntervalLength = product && product.durationInMinutes ? product.durationInMinutes : 0
         const date = new Date(req.query.date as string)
         const dayAvailability: AvailabilityModel = await BusinessService.getAvailabilityByDay(businessId, date)
 
@@ -53,7 +54,7 @@ class BusinessesController {
             return responseUtils.sendErrorMessage(res, 'The business is not working at the selected date.')
         }
 
-        const freeSlots = AppointmentService.getFreeSlotsByDay(
+        const freeSlots = await AppointmentService.getFreeSlotsByDay(
             businessId,
             date,
             minIntervalLength,
