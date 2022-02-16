@@ -64,6 +64,10 @@ class BusinessesController {
         return res.json(freeSlots)
     }
 
+    public getProducts = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        res.json(await ProductService.getAllForUser(req.params.businessId))
+    }
+
 }
 
 export default new BusinessesController()
