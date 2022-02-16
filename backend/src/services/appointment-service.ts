@@ -141,12 +141,12 @@ class AppointmentService {
             ModelHelpers.getAvailabilityEnd(dayAvailability)
         )
 
-        const appointmentInterval = TimeHelper.buildInterval(appointment.start, appointment.durationInMinutes)
+        const appointmentInterval = TimeHelper.buildInterval(new Date(appointment.start), appointment.durationInMinutes)
         if (freeSlots.some(s => TimeHelper.contains(s, appointmentInterval))) {
             return TaskResult.success('The appointment start is valid.')
         }
 
-        return TaskResult.failure('The appointment start is invalid.')
+        return TaskResult.failure('The selected time slot is not free.')
     }
 
     public decline (id: string): Promise<any> {
@@ -194,7 +194,7 @@ class AppointmentService {
                 })
             }
 
-            start = TimeHelper.addMinutes(start, appointment.durationInMinutes)
+            start = TimeHelper.addMinutes(end, appointment.durationInMinutes)
         })
 
         const lastIntervalLength = TimeHelper.calculateIntervalLength(start, workdayEnd)
