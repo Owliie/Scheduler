@@ -5,7 +5,7 @@ import { TableNames } from './table-names'
 import { ObjectId } from 'mongodb'
 
 const appointmentSchema = new Schema<AppointmentModel>({
-    [AppointmentColumns.createdOn]: { type: Date, required: true },
+    [AppointmentColumns.createdOn]: { type: Date, required: true, default: Date.now() },
     [AppointmentColumns.client]: { type: Schema.Types.ObjectId, required: true, ref: TableNames.user },
     [AppointmentColumns.businessHolder]: { type: Schema.Types.ObjectId, required: true, ref: TableNames.user },
     [AppointmentColumns.status]: { type: String, required: true },

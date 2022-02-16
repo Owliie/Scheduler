@@ -1,6 +1,7 @@
 import { Model } from 'mongoose'
 import { BaseModel } from '../../models/base-model'
 import { QueryOptions } from '../../models/common/query-options'
+import { ObjectId } from 'mongodb'
 
 export class Repository<T extends BaseModel> {
 
@@ -10,43 +11,40 @@ export class Repository<T extends BaseModel> {
         this.entity = entity
     }
 
-    public getAll (projection: string = ''): Promise<T[]> {
+    public getAll (projection: string = '', options: QueryOptions = null): Promise<T[]> {
         let query = this.entity.find()
-        if (projection) {
-            query = query.select(projection)
-        }
+
+        query = Repository.applyProjection(query, projection)
+        query = Repository.applyQueryOptions(query, options)
 
         return query.exec()
     }
 
-    public filter (filter: any = {}, projection: string = '', options: QueryOptions = undefined): Promise<T[]> {
+    public filter (filter: any = {}, projection: string = '', options: QueryOptions = null): Promise<T[]> {
         let query = this.entity.find(filter)
-        if (projection) {
-            query = query.select(projection)
-        }
-        if (options && options.populate) {
-            query = query.populate({
-                path: options.populate
-            })
-        }
-        if (options && options.sort) {
-            query = query.sort(options.sort)
-        }
+
+        query = Repository.applyProjection(query, projection)
+        query = Repository.applyQueryOptions(query, options)
 
         return query.exec()
     }
 
-    public getById (id: string, projection: string = ''): Promise<T> {
+    public getById (id: string | ObjectId, projection: string = '', options: QueryOptions = null): Promise<T> {
         let query = this.entity.findById(id)
-        if (projection) {
-            query = query.select(projection)
-        }
+
+        query = Repository.applyProjection(query, projection)
+        query = Repository.applyQueryOptions(query, options)
 
         return query.exec()
     }
 
-    public findOne (filter: any, projection: string = ''): Promise<T> {
-        return this.entity.findOne(filter, projection).exec()
+    public firstOrDefault (filter: any, projection: string = '', options: QueryOptions = null): Promise<T> {
+        let query = this.entity.findOne(filter)
+
+        query = Repository.applyProjection(query, projection)
+        query = Repository.applyQueryOptions(query, options)
+
+        return query.exec()
     }
 
     public update (id: string, updateValue: any): Promise<any> {
@@ -63,6 +61,27 @@ export class Repository<T extends BaseModel> {
 
     public delete (id: string): any {
         return this.entity.deleteOne({ _id: id })
+    }
+
+    private static applyProjection (query: any, projection: string = ''): any {
+        if (projection) {
+            query = query.select(projection)
+        }
+
+        return query
+    }
+
+    private static applyQueryOptions (query: any, options: QueryOptions): any {
+        if (options && options.populate) {
+            query = query.populate({
+                path: options.populate
+            })
+        }
+        if (options && options.sort) {
+            query = query.sort(options.sort)
+        }
+
+        return query
     }
 
 }

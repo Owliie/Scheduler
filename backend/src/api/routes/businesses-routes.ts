@@ -5,9 +5,11 @@ export const businessesRoutes = (expressApp: any) => {
 
     router.get('/schedule', BusinessController.getScheduleByDate)
     router.get('/pendingAppointments', BusinessController.getPendingAppointments)
+    router.get('/freeSlots/:id', BusinessController.getFreeSlotsByDay)
     router.get('/byType/:id', BusinessController.getByType)
-    router.get('/:id', BusinessController.details)
     router.put('/company', BusinessController.updateBusinessDetails)
+    router.get('/products/:businessId', BusinessController.getProducts)
+    router.get('/:id', BusinessController.details)
 
     return router
 }

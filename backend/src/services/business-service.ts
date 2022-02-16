@@ -7,6 +7,9 @@ import { QueryArgsHelper } from '../utils/query-args-helper'
 import { BusinessDetailsProjectionModel } from '../models/projection/business-projection-models'
 import { BusinessMappings } from '../models/mappings/business-mappings'
 import { TaskResult } from '../common/taskResult'
+import { AvailabilityModel } from '../models/availability-model'
+import { DateExtensions } from '../utils/date-extensions'
+import { ObjectId } from 'mongodb'
 
 class BusinessService {
 
@@ -17,10 +20,13 @@ class BusinessService {
     }
 
     public async getById (id: string, userId: string): Promise<any> {
-        const business = await this.usersData.getById(id, BusinessDetailsProjectionModel)
+        const business = await this.usersData.getById(id, BusinessDetailsProjectionModel, {
+            populate: QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)
+        })
         const { favourites } = await this.usersData.getById(userId, UserColumns.favourites)
         return {
             ...BusinessMappings.mapToDetailsModel(business),
+            businessType: business.company.businessType,
             addedToFavourites: favourites.map(f => f.toString()).includes(id)
         }
     }
@@ -51,6 +57,18 @@ class BusinessService {
         return this.usersData.update(id, updateObject)
             .then(() => TaskResult.success('The business details are updated.'))
             .catch(() => TaskResult.failure('Error while updating the business details.'))
+    }
+
+    public async getAvailabilityByDay (userId: string | ObjectId, date: Date): Promise<AvailabilityModel | undefined> {
+        const projection = QueryArgsHelper.build(
+            QueryArgsHelper.combine(UserColumns.company, CompanyColumns.availability)
+        )
+        const user = await this.usersData.getById(userId, projection)
+        if (!user || !user.company || !user.company.availability) {
+            return undefined
+        }
+
+        return user.company.availability.find(a => a.day === DateExtensions.getDayOfWeek(date))
     }
 
 }

@@ -37,7 +37,7 @@ class UserService {
     }
 
     public async login (email: string, password: string) {
-        const user = await this.usersData.findOne({ email })
+        const user = await this.usersData.firstOrDefault({ email })
 
         if (user && await bcrypt.compare(password, user.password)) {
             const userData = {

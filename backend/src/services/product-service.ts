@@ -53,6 +53,14 @@ class ProductService {
             .catch((err: any) => TaskResult.failure('Error while updating the product', err))
     }
 
+    public getProductWithMinDuration (userId: string): Promise<ProductModel> {
+        const projection = QueryArgsHelper.build(ProductColumns.durationInMinutes)
+        const filter = { [ProductColumns.businessOwner]: userId }
+        return this.productsData.firstOrDefault(filter, projection, {
+            sort: ProductColumns.durationInMinutes
+        })
+    }
+
 }
 
 export default new ProductService(new Repository<ProductModel>(Product), new Repository<AppointmentModel>(Appointment))
