@@ -1,0 +1,58 @@
+@import "../../sharedStyles/shared.module.scss";
+
+.Container {
+    width: 70%;
+    min-width: 500px;
+    margin-bottom: 30px;
+
+    .Heading {
+        margin-bottom: 50px;
+
+        h1 {
+            text-align: center;
+            color: $tertiary-color;
+            font-weight: 400;
+            line-height: 36px;
+            font-size: 34pt;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            color: $muted-color;
+            opacity: 0.6;
+            font-weight: 400;
+            line-height: 14px;
+            font-size: 14pt;
+        }
+    }
+
+    .Selector {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            margin-bottom: 0;
+            height: 36px;
+            display: inline-block;
+        }
+
+        .DateSelector {
+            display: inline-block;
+            margin: auto;
+            margin-bottom: 20px;
+            height: 36px;
+            padding: 0 5px 0 12px;
+            border: none;
+            box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
+        }
+    }
+
+    // to remove demo label
+    .Calendar {
+        >div:first-of-type>div:first-of-type>div:first-of-type>div:first-of-type>div:first-of-type div:last-of-type {
+            visibility: hidden !important;
+        }
+    }
+}
