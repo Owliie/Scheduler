@@ -1,7 +1,8 @@
 import { Response } from 'express'
 import { AuthenticatedRequest } from '../common/authenticated-request'
-import { AppointmentService, BusinessService } from '../../services'
+import { AppointmentService, BusinessService, ProductService } from '../../services'
 import { responseUtils } from '../../utils/response-utils'
+import { AvailabilityModel } from '../../models/availability-model'
 
 class BusinessesController {
 
@@ -40,6 +41,31 @@ class BusinessesController {
         BusinessService.updateBusinessDetails(req.user?.id, body)
             .then((result) => responseUtils.processTaskResult(res, result))
             .catch(() => responseUtils.sendErrorMessage(res, 'Error while updating the business details.'))
+    }
+
+    public getFreeSlotsByDay = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
+        const businessId = req.params.id
+        const minIntervalLength = (await ProductService.getProductWithMinDuration(businessId))?.durationInMinutes ?? 0
+        const date = new Date(req.query.date as string)
+        const dayAvailability: AvailabilityModel = await BusinessService.getAvailabilityByDay(businessId, date)
+
+        if (!dayAvailability) {
+            return responseUtils.sendErrorMessage(res, 'The business is not working at the selected date.')
+        }
+
+        const freeSlots = AppointmentService.getFreeSlotsByDay(
+            businessId,
+            date,
+            minIntervalLength,
+            {
+                hour: dayAvailability.startHour,
+                minute: dayAvailability.startMinute
+            },
+            {
+                hour: dayAvailability.endHour,
+                minute: dayAvailability.endMinute
+            })
+        return res.json(freeSlots)
     }
 
 }

@@ -1,4 +1,12 @@
 import { AppointmentStatus } from '../models/enums/appointment-status'
+import { QueryArgsHelper } from '../utils/query-args-helper'
+import { AppointmentColumns } from '../data/models/appointment-columns'
+import { Repository } from '../data/repositories'
+import { AppointmentModel } from '../models/appointment-model'
+import { TimeModel } from '../models/common/time-model'
+import { TimeHelper } from '../utils/time-helper'
+import { Appointment } from '../data/models'
+import { DateExtensions } from '../utils/date-extensions'
 
 const appointments = [
     {
@@ -95,6 +103,12 @@ const appointments = [
 
 class AppointmentService {
 
+    private appointmentsData: Repository<AppointmentModel>
+
+    public constructor (appointmentsData: Repository<AppointmentModel>) {
+        this.appointmentsData = appointmentsData
+    }
+
     public async getApprovedByBusinessAndDate (businessId: string, date: Date): Promise<any> {
         const result = appointments
             .filter(a => a.status === AppointmentStatus.Accepted)
@@ -130,6 +144,65 @@ class AppointmentService {
         return Promise.resolve()
     }
 
+    public async getFreeSlotsByDay (
+        businessId: string,
+        date: Date,
+        minIntervalLength: number,
+        workdayStart: TimeModel,
+        workdayEnd: TimeModel): Promise<any> {
+        const appointments = await this.getUserAppointmentsByDay(businessId, date)
+
+        if (!appointments || appointments.length === 0) {
+            return [{
+                start: { ...workdayStart },
+                end: { ...workdayEnd }
+            }]
+        }
+
+        let start = { ...workdayStart }
+        const slots = []
+        appointments.forEach(appointment => {
+            const end = TimeHelper.getTime(appointment.start)
+            const intervalLength = TimeHelper.calculateIntervalLength(start, end)
+            if (intervalLength >= minIntervalLength) {
+                slots.push({
+                    start: { ...start },
+                    end: end
+                })
+            }
+
+            start = TimeHelper.addMinutes(start, appointment.durationInMinutes)
+        })
+
+        const lastIntervalLength = TimeHelper.calculateIntervalLength(start, workdayEnd)
+        if (lastIntervalLength >= minIntervalLength) {
+            slots.push({
+                start: { ...start },
+                end: { ...workdayEnd }
+            })
+        }
+
+        return slots
+    }
+
+    private getUserAppointmentsByDay (businessId: string, date: Date): Promise<AppointmentModel[]> {
+        const projection = QueryArgsHelper.build(
+            AppointmentColumns.status,
+            AppointmentColumns.durationInMinutes
+        )
+        const filter = {
+            [AppointmentColumns.businessHolder]: businessId,
+            [AppointmentColumns.start]: {
+                $gte: DateExtensions.getDate(date),
+                $let: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+            }
+        }
+
+        return this.appointmentsData.filter(filter, projection, {
+            sort: [AppointmentColumns.start]
+        })
+    }
+
 }
 
-export default new AppointmentService()
+export default new AppointmentService(new Repository<AppointmentModel>(Appointment))
