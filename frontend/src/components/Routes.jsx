@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { useStoreState } from 'easy-peasy';
+import { useLocation } from 'react-router';
 
 import Sign from '../containers/Sign/Sign';
 import Spinner from './common/Spinner/Spinner';
 import Portal from '../containers/Portal/Portal';
 import CustomerPortal from '../containers/CustomerPortal/CustomerPortal';
 import BHolderPortal from '../containers/BHolderPortal/BHolderPortal';
-import { useStoreState } from 'easy-peasy';
 import { PORTALS } from '../utils/portals';
 import Favorites from '../containers/Favorites/Favorites';
 import BusinessManagement from '../containers/BusinessManagement/BusinessManagement';
+import Book from '../containers/Book/Book';
 
 const RouteOptions = {
     GO_TO_SIGN: 'GO_TO_SIGN',
@@ -24,6 +26,8 @@ const Router = (props) => {
     const { chosenPortal } = useStoreState((state) => state.portalStore);
 
     const [routerAction, setRouterAction] = useState(null);
+
+    const { state } = useLocation();
 
     useEffect(() => {
         setRouterAction(resolveNavigationRoute())
@@ -85,6 +89,7 @@ const Router = (props) => {
                     (
                         <Routes>
                             <Route path="/" exact element={<CustomerPortal />} />
+                            <Route path="/book" exact element={<Book id={state?.id} />} />
                             <Route path="/favorites" exact element={<Favorites />} />
                             <Route path="*" element={<Navigate to='/' />} />
                         </Routes>

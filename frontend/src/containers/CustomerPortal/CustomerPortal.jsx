@@ -1,6 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
 import { Image, CardImage, Heart, HeartFill } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
 import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
@@ -15,6 +16,8 @@ const CustomerPortal = (props) => {
     const [services, setServices] = useState([]);
     const [servicesTypes, setServicesTypes] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect((e) => {
         if (chosenType) {
@@ -90,7 +93,7 @@ const CustomerPortal = (props) => {
                     icon={<Image />}
                     image={<CardImage />}
                     theme={classes.ServiceTheme}
-                    button={<button id={service.id}>Details</button>}
+                    button={<button id={service.id} onClick={() => navigate('/book', { state: { id: service.id } })}>Details</button>}
                     additionalBtn={<button className={classes.LikeBtn}
                         onClick={() => likeServiceHandler(service)}>
                         {service.addedToFavourites ? <HeartFill className={classes.IconHeartFill} /> : <Heart />}

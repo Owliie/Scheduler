@@ -1,0 +1,114 @@
+@import "../../sharedStyles/shared.module.scss";
+
+.Container {
+    .Heading {
+        h1 {
+            text-align: center;
+            color: $tertiary-color;
+            font-weight: 400;
+            line-height: 36px;
+            font-size: 34pt;
+            margin-bottom: 20px;
+            text-transform: capitalize;
+        }
+
+        p {
+            text-align: center;
+            color: $muted-color;
+            opacity: 0.6;
+            font-weight: 400;
+            line-height: 14px;
+            font-size: 14pt;
+        }
+    }
+
+    .Details {
+        display: flex;
+        columns: 2;
+        justify-content: center;
+
+        >div {
+            border: 1px solid $primary-color;
+            border-radius: 10px;
+            box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
+            padding: 15px 20px;
+            min-width: 400px;
+            width: 35%;
+            margin: 70px 50px;
+
+            h4 {
+                font-size: 12pt;
+                line-height: 14px;
+                letter-spacing: 0.0857143px;
+            }
+
+            p {
+                margin-bottom: 0;
+                font-size: 10pt;
+                color: $tertiary-color;
+            }
+        }
+    }
+
+    .Form {
+        display: flex;
+        width: 80%;
+        margin: auto;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 40px 0;
+
+        >div {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 50%;
+            padding: 30px;
+
+            span {
+                color: $tertiary-color;
+                background-color: transparentize($tertiary-color, 0.7) !important;
+                margin-right: 10px;
+            }
+
+            span.Active {
+                background-color: transparentize($primary-color, 0.7) !important;
+            }
+
+            .SelectForm,
+            input {
+                min-width: 300px;
+                width: 35%;
+                display: inline-block;
+                border: none;
+                box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
+            }
+
+            >input {
+                height: 36px;
+                padding: 0 5px 0 12px;
+            }
+
+            .BookBtn {
+                display: flex;
+                align-items: center;
+
+                background-color: transparent;
+                border: none;
+                background-color: $primary-color;
+                border-radius: 5px;
+                font-weight: 500;
+                color: white;
+                padding: 5px 10px;
+
+                svg {
+                    font-size: 25px;
+                    background-color: transparent !important;
+                    color: white;
+                }
+            }
+        }
+
+    }
+}
