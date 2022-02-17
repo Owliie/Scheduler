@@ -5,6 +5,10 @@ class ProductService {
         return RequestAPI.get('/products')
     }
 
+    static getByBusiness = (id) => {
+        return RequestAPI.get(`/businesses/products/${id}`)
+    }
+
     static create = (data) => {
         return RequestAPI.post('/products', data)
     }

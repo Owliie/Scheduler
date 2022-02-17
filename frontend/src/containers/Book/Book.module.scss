@@ -77,7 +77,7 @@
             }
 
             .SelectForm,
-            input {
+            input:not([type=radio]) {
                 min-width: 300px;
                 width: 35%;
                 display: inline-block;
@@ -85,22 +85,47 @@
                 box-shadow: 3.27429px 3.27429px 13.0972px rgba(240, 84, 84, 0.25);
             }
 
-            >input {
+            >input:not(input[type=radio]) {
                 height: 36px;
                 padding: 0 5px 0 12px;
             }
+        }
 
-            .BookBtn {
+        .Time {
+            flex-direction: column;
+
+            input:not(input[type=radio]) {
+                height: 36px;
+            }
+
+            >div {
                 display: flex;
                 align-items: center;
+                margin-bottom: 10px;
+
+                form {
+                    display: flex;
+                }
+            }
+
+            input[type=submit],
+            input[type=time] {
+                min-width: 150px;
+                padding: 0 10px;
+            }
+
+            .BookBtn {
+                vertical-align: middle;
 
                 background-color: transparent;
                 border: none;
                 background-color: $primary-color;
-                border-radius: 5px;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
                 font-weight: 500;
                 color: white;
                 padding: 5px 10px;
+                height: 36px;
 
                 svg {
                     font-size: 25px;

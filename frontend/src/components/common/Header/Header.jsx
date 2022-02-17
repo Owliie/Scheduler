@@ -25,6 +25,7 @@ const Header = (props) => {
     const servicesHandler = () => {
         setPortal(PORTALS.CUSTOMER)
         setType(null)
+        navigate('/')
     }
 
     const businessHandler = () => {

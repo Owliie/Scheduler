@@ -37,13 +37,15 @@ const Favorites = () => {
     const setData = async (pendingData) => {
         const data = await pendingData
         const tempServices = {}
-        data.forEach(service => service.company.businessTypes.forEach(type => {
+
+        data.forEach(service => {
+            const type = service.company.businessType
             if (!!tempServices[type.name] === false) {
                 tempServices[type.name] = []
             }
 
             tempServices[type.name].push(service)
-        }))
+        })
 
         setServices(tempServices)
         setLoading(false)

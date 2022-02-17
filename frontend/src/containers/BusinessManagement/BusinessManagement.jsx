@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, InputGroup, Table } from 'react-bootstrap';
-import { CloudPlus, TrashFill } from 'react-bootstrap-icons';
+import { CloudPlus, PencilFill, TrashFill } from 'react-bootstrap-icons';
 import { toastHandler, TOAST_STATES } from '../../helpers/toast';
 import BusinessService from '../../services/businessService';
 import ProductService from '../../services/productService';
@@ -149,14 +149,14 @@ const BusinessManagement = (props) => {
             <div>
                 <div className={classes.Category}>Products</div>
                 <div className={classes.Products}>
-                    <Table hover>
+                    <Table hover responsive>
                         <thead>
                             <tr>
                                 <th>Delete</th>
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Duration in minutes</th>
-                                <th></th>
+                                <th>Edit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,7 +166,7 @@ const BusinessManagement = (props) => {
                                     <td><input disabled={!product.edit} defaultValue={product.name}></input></td>
                                     <td><input disabled={!product.edit} defaultValue={product.price}></input></td>
                                     <td><input disabled={!product.edit} defaultValue={product.durationInMinutes}></input></td>
-                                    <td>{product.edit ? <CloudPlus onClick={() => updateProductHandler(product.id, product)} /> : null}</td>
+                                    <td>{product.edit ? <CloudPlus onClick={() => updateProductHandler(product.id, product)} /> : <PencilFill onClick={() => enableEditHandler(product)} />}</td>
                                 </tr>
                             )}
                             {expandForm ?

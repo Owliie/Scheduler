@@ -6,7 +6,15 @@ class BusinessService {
     }
 
     static getAllByType = (id) => {
-        return RequestAPI.get('/businesses/byType/' + id)
+        return RequestAPI.get(`/businesses/byType/${id}`)
+    }
+
+    static getById = (id) => {
+        return RequestAPI.get(`/businesses/${id}`)
+    }
+
+    static getAvailability = (id, date) => {
+        return RequestAPI.get(`/businesses/freeSlots/${id}?date=${date}`)
     }
 
     static getFavourites = () => {
@@ -14,11 +22,15 @@ class BusinessService {
     }
 
     static deleteFavourite = (id) => {
-        return RequestAPI.delete('/users/favourites/' + id)
+        return RequestAPI.delete(`/users/favourites/${id}`)
     }
 
     static addFavourite = (businessId) => {
         return RequestAPI.post('/users/favourites', { businessId })
+    }
+
+    static book = (data) => {
+        return RequestAPI.post('/appointments', { ...data })
     }
 }
 

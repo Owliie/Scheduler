@@ -1,7 +1,7 @@
 @import "../../sharedStyles/shared.module.scss";
 
 .Container {
-    width: 600px;
+    width: 610px;
     padding-bottom: 50px;
 
     .Heading {
@@ -53,6 +53,7 @@
         text-align: center;
         max-height: 400px;
         overflow-y: auto;
+        width: 610px;
 
         table {
             width: 100%;
