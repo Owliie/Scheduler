@@ -55,6 +55,7 @@ export class APIServer {
 
     private config (): void {
         this.port = process.env.PORT
+        this.app.use('/public', express.static('public'))
         this.app.use(express.urlencoded({ extended: false }))
         this.app.use(express.json())
         this.app.use(cors())
@@ -80,6 +81,7 @@ export class APIServer {
     }
 
     private listen (): void {
+        console.log(__dirname)
         this.server.listen(this.port, async () => {
             console.log('  App is running at http://localhost:%d in %s mode', this.port, process.env.NODE_ENV)
             console.log('  Press CTRL-C to stop\n')
