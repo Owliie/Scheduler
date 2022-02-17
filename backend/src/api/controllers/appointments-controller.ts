@@ -1,10 +1,11 @@
 import { AuthenticatedRequest } from '../common/authenticated-request'
 import { Response } from 'express'
-import { AppointmentService, BusinessService } from '../../services'
+import { AppointmentService, BusinessService, EmailSender } from '../../services'
 import { AppointmentStatus } from '../../models/enums/appointment-status'
 import { responseUtils } from '../../utils/response-utils.js'
 import { AvailabilityModel } from '../../models/availability-model'
 import { AppointmentModel } from '../../models/appointment-model'
+import { EmailBuilder } from '../../utils/email-builder'
 
 class AppointmentsController {
 
@@ -46,7 +47,18 @@ class AppointmentsController {
         const id = req.params.id
 
         AppointmentService.decline(id)
-            .then((result) => responseUtils.processTaskResult(res, result))
+            .then(async (result) => {
+                if (result.isSuccessful) {
+                    const appointment = await AppointmentService.details(id)
+                    await EmailSender.sendEmail({
+                        to: appointment.client.email,
+                        subject: EmailBuilder.declinedAppointmentSubject(appointment.businessHolder.company.businessType.name),
+                        html: EmailBuilder.declinedAppointmentBody(appointment)
+                    })
+                }
+
+                responseUtils.processTaskResult(res, result)
+            })
             .catch(() => responseUtils.sendErrorMessage(res, 'Error while declining the appointment.'))
     }
 
@@ -54,7 +66,18 @@ class AppointmentsController {
         const id = req.params.id
 
         AppointmentService.accept(id)
-            .then((result) => responseUtils.processTaskResult(res, result))
+            .then(async (result) => {
+                if (result.isSuccessful) {
+                    const appointment = await AppointmentService.details(id)
+                    await EmailSender.sendEmail({
+                        to: appointment.client.email,
+                        subject: EmailBuilder.acceptedAppointmentSubject(appointment.businessHolder.company.businessType.name),
+                        html: EmailBuilder.acceptedAppointmentBody(appointment)
+                    })
+                }
+
+                responseUtils.processTaskResult(res, result)
+            })
             .catch(() => responseUtils.sendErrorMessage(res, 'Error while accepting the appointment.'))
     }
 

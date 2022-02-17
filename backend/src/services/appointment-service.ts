@@ -13,7 +13,11 @@ import { ObjectId } from 'mongodb'
 import { ModelHelpers } from '../utils/model-helpers'
 import { TimeInterval } from '../models/common/time-interval'
 import { ProductColumns } from '../data/models/product-columns'
-import { CompanyColumns, UserColumns } from '../data/models/user-columns'
+import { UserColumns } from '../data/models/user-columns'
+import {
+    AppointmentDetailsForUserPopulate,
+    AppointmentDetailsForUserProjectionModel
+} from '../models/projection/appointment-projection-models'
 
 class AppointmentService {
 
@@ -21,6 +25,19 @@ class AppointmentService {
 
     public constructor (appointmentsData: Repository<AppointmentModel>) {
         this.appointmentsData = appointmentsData
+    }
+
+    public async details (id: string): Promise<any> {
+        const complexPopulate = [
+            ...AppointmentDetailsForUserPopulate,
+            {
+                path: AppointmentColumns.client,
+                select: UserColumns.email
+            }
+        ]
+        return this.appointmentsData.getById(id, AppointmentDetailsForUserProjectionModel, {
+            complexPopulate
+        })
     }
 
     public async getAppointmentsByBusinessAndDate (businessId: string, date: Date): Promise<any> {
@@ -88,48 +105,35 @@ class AppointmentService {
         return TaskResult.failure('The selected time slot is not free.')
     }
 
-    public decline (id: string): Promise<TaskResult> {
+    public async decline (id: string): Promise<TaskResult> {
+        const appointment = await this.appointmentsData.getById(id)
+        if (!appointment) {
+            return TaskResult.failure('The appointment does not exists.')
+        }
+        if (appointment.status === AppointmentStatus.Declined) {
+            return TaskResult.failure('The appointment has been already declined.')
+        }
+
         return this.appointmentsData.update(id, { [AppointmentColumns.status]: AppointmentStatus.Declined })
             .then(() => TaskResult.success('The appointment is successfully declined.'))
             .catch(() => TaskResult.failure('Error while declining the appointment.'))
     }
 
-    public accept (id: string): Promise<any> {
+    public async accept (id: string): Promise<TaskResult> {
+        const appointment = await this.appointmentsData.getById(id)
+        if (!appointment) {
+            return TaskResult.failure('The appointment does not exists.')
+        }
+        if (appointment.status === AppointmentStatus.Accepted) {
+            return TaskResult.failure('The appointment has been already accepted.')
+        }
+
         return this.appointmentsData.update(id, { [AppointmentColumns.status]: AppointmentStatus.Accepted })
             .then(() => TaskResult.success('The appointment is successfully accepted.'))
             .catch(() => TaskResult.failure('Error while accepting the appointment.'))
     }
 
     public async getUpcomingForUser (userId: string): Promise<any> {
-        const complexPopulate = [
-            {
-                path: AppointmentColumns.businessHolder,
-                select: QueryArgsHelper.build(
-                    UserColumns.firstName,
-                    UserColumns.lastName,
-                    UserColumns.email,
-                    UserColumns.phone,
-                    QueryArgsHelper.combine(UserColumns.company, CompanyColumns.description),
-                    QueryArgsHelper.combine(UserColumns.company, CompanyColumns.address)
-                ),
-                populate: {
-                    path: QueryArgsHelper.combine(UserColumns.company, CompanyColumns.businessType)
-                }
-            },
-            {
-                path: AppointmentColumns.product,
-                select: QueryArgsHelper.build(
-                    ProductColumns.name,
-                    ProductColumns.price
-                )
-            }
-        ]
-        const projection = QueryArgsHelper.build(
-            AppointmentColumns.createdOn,
-            AppointmentColumns.status,
-            AppointmentColumns.start,
-            AppointmentColumns.durationInMinutes
-        )
         const filter = {
             [AppointmentColumns.client]: userId,
             [AppointmentColumns.start]: {
@@ -140,8 +144,8 @@ class AppointmentService {
             }
         }
 
-        return this.appointmentsData.filter(filter, projection, {
-            complexPopulate,
+        return this.appointmentsData.filter(filter, AppointmentDetailsForUserProjectionModel, {
+            complexPopulate: AppointmentDetailsForUserPopulate,
             sort: AppointmentColumns.start
         })
     }

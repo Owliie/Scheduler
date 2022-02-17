@@ -81,7 +81,6 @@ export class APIServer {
     }
 
     private listen (): void {
-        console.log(__dirname)
         this.server.listen(this.port, async () => {
             console.log('  App is running at http://localhost:%d in %s mode', this.port, process.env.NODE_ENV)
             console.log('  Press CTRL-C to stop\n')
