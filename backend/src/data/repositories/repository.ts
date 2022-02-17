@@ -73,12 +73,20 @@ export class Repository<T extends BaseModel> {
 
     private static applyQueryOptions (query: any, options: QueryOptions): any {
         if (options && options.populate) {
-            query = query.populate({
-                path: options.populate
-            })
+            options.populate.split(' ')
+                .forEach(path => {
+                    query = query.populate({
+                        path: path
+                    })
+                })
         }
         if (options && options.sort) {
-            query = query.sort(options.sort)
+            query.sort(options.sort)
+        }
+        if (options && options.complexPopulate) {
+            options.complexPopulate.forEach(populateOptions => {
+                query = query.populate(populateOptions)
+            })
         }
 
         return query
