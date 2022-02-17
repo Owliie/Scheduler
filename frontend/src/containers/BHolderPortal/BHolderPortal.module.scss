@@ -31,17 +31,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 20px;
 
         p {
-            margin-bottom: 0;
+            margin: 0 10px;
             height: 36px;
             display: inline-block;
         }
 
         .DateSelector {
             display: inline-block;
-            margin: auto;
-            margin-bottom: 20px;
+            margin-bottom: 13px;
             height: 36px;
             padding: 0 5px 0 12px;
             border: none;
@@ -53,6 +53,53 @@
     .Calendar {
         >div:first-of-type>div:first-of-type>div:first-of-type>div:first-of-type>div:first-of-type div:last-of-type {
             visibility: hidden !important;
+        }
+    }
+
+    .Event {
+        display: flex;
+        justify-content: space-around;
+        background-color: transparentize($primary-color, 0.8);
+        margin: 20px 0;
+        color: $tertiary-color;
+        padding: 10px;
+        border: 1px solid $primary-color;
+        border-radius: 10px;
+
+        div>p:first-of-type {
+            background-color: transparentize($tertiary-color, 0.8);
+            font-size: 12pt;
+            font-weight: 700;
+            border: 1px solid $tertiary-color;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            margin: 0;
+
+            span {
+                margin: 0 2px;
+            }
+        }
+
+        button {
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-weight: 700;
+        }
+
+        .AcceptBtn {
+            background-color: $tertiary-color;
+            margin-right: 5px;
+        }
+
+        .RejectBtn {
+            background-color: $primary-color;
+            margin-left: 5px;
         }
     }
 }

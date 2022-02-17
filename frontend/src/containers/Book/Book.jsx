@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Form } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 
+import { convertToTime } from '../../utils/converter';
 import ProductService from '../../services/productService';
 import BusinessService from '../../services/businessService';
 import classes from './Book.module.scss';
@@ -62,21 +63,6 @@ const Book = (props) => {
 
         var minDate = year + '-' + month + '-' + day;
         setMinDate(minDate)
-    }
-
-    const convertToTime = (hour, minute) => {
-        let strTime = ''
-        if (+hour < 10) {
-            strTime += '0'
-        }
-        strTime += hour + ':'
-
-        if (+minute < 10) {
-            strTime += '0'
-        }
-        strTime += minute
-
-        return strTime
     }
 
     return (
