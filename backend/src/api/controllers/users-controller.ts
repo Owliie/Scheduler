@@ -25,7 +25,8 @@ class UsersController {
             user.company = {
                 description: req.body.description,
                 address: req.body.address,
-                availability: UserService.buildDefaultAvailability(req.body.availability)
+                availability: UserService.buildDefaultAvailability(req.body.availability),
+                businessType: null
             }
         }
 

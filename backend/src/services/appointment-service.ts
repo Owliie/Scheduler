@@ -15,99 +15,6 @@ import { TimeInterval } from '../models/common/time-interval'
 import { ProductColumns } from '../data/models/product-columns'
 import { CompanyColumns, UserColumns } from '../data/models/user-columns'
 
-const appointments = [
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818847',
-        start: '2022-01-29T14:00:00',
-        durationInMinutes: '2022-01-29T15:00:00',
-        product: 'Lady hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Ivan',
-            lastName: 'Ivanov',
-            phone: '+35976351998'
-        },
-        status: AppointmentStatus.Accepted
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818841',
-        start: '2022-01-29T15:00:00',
-        durationInMinutes: '2022-01-29T15:00:00',
-        product: 'Children hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Ivancho',
-            lastName: 'Ivanov',
-            phone: '+35976351978'
-        },
-        status: AppointmentStatus.Accepted
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818840',
-        start: '2022-01-29T17:00:00',
-        durationInMinutes: '2022-01-29T17:30:00',
-        product: 'Gentleman hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Maria',
-            lastName: 'Luiza',
-            phone: '+35977351978'
-        },
-        status: AppointmentStatus.Accepted
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818842',
-        start: '2022-01-29T17:00:00',
-        durationInMinutes: '2022-01-29T17:30:00',
-        product: 'Gentleman hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Marian',
-            lastName: 'Marianov',
-            phone: '+35977351978'
-        },
-        status: AppointmentStatus.Declined
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818843',
-        start: '2022-01-29T12:00:00',
-        durationInMinutes: '2022-01-29T12:30:00',
-        product: 'Gentleman hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Peter',
-            lastName: 'Petrov',
-            phone: '+35977351978'
-        },
-        status: AppointmentStatus.Pending
-    },
-    {
-        id: '6c9ef89f-d9b0-43c6-9aae-991022818844',
-        start: '2022-01-29T10:00:00',
-        durationInMinutes: '2022-01-29T10:30:00',
-        product: 'Gentleman hairstyle',
-        businessHolder: {
-            id: '6c9ef89f-d9b0-43c6-9aae-99102281884e'
-        },
-        client: {
-            firstName: 'Atanas',
-            lastName: 'Vasilev',
-            phone: '+35977351978'
-        },
-        status: AppointmentStatus.Pending
-    }
-]
-
 class AppointmentService {
 
     private appointmentsData: Repository<AppointmentModel>
@@ -116,16 +23,46 @@ class AppointmentService {
         this.appointmentsData = appointmentsData
     }
 
-    public async getApprovedByBusinessAndDate (businessId: string, date: Date): Promise<any> {
-        const result = appointments
-            .filter(a => a.status === AppointmentStatus.Accepted)
-        return Promise.resolve([...result])
-    }
+    public async getAppointmentsByBusinessAndDate (businessId: string, date: Date): Promise<any> {
+        const complexPopulate = [
+            {
+                path: AppointmentColumns.client,
+                select: QueryArgsHelper.build(
+                    UserColumns.firstName,
+                    UserColumns.lastName,
+                    UserColumns.email,
+                    UserColumns.phone
+                )
+            },
+            {
+                path: AppointmentColumns.product,
+                select: QueryArgsHelper.build(
+                    ProductColumns.name,
+                    ProductColumns.price
+                )
+            }
+        ]
+        const projection = QueryArgsHelper.build(
+            AppointmentColumns.createdOn,
+            AppointmentColumns.status,
+            AppointmentColumns.start,
+            AppointmentColumns.durationInMinutes
+        )
+        const filter = {
+            [AppointmentColumns.businessHolder]: businessId,
+            [AppointmentColumns.start]: {
+                $gte: DateExtensions.getDate(date),
+                $lt: DateExtensions.nextDate(date)
+            },
+            [AppointmentColumns.status]: {
+                $in: [AppointmentStatus.Accepted, AppointmentStatus.Pending]
+            }
+        }
 
-    public async getPendingByBusiness (businessId: string): Promise<any> {
-        const result = appointments
-            .filter(a => a.status === AppointmentStatus.Pending)
-        return Promise.resolve([...result])
+        return this.appointmentsData.filter(filter, projection, {
+            complexPopulate,
+            sort: AppointmentColumns.start
+        })
     }
 
     public create (appointment: any): Promise<TaskResult> {
@@ -151,22 +88,16 @@ class AppointmentService {
         return TaskResult.failure('The selected time slot is not free.')
     }
 
-    public decline (id: string): Promise<any> {
-        const appointment = appointments.find(a => a.id === id)
-        if (appointment) {
-            appointment.status = AppointmentStatus.Declined
-        }
-
-        return Promise.resolve()
+    public decline (id: string): Promise<TaskResult> {
+        return this.appointmentsData.update(id, { [AppointmentColumns.status]: AppointmentStatus.Declined })
+            .then(() => TaskResult.success('The appointment is successfully declined.'))
+            .catch(() => TaskResult.failure('Error while declining the appointment.'))
     }
 
     public accept (id: string): Promise<any> {
-        const appointment = appointments.find(a => a.id === id)
-        if (appointment) {
-            appointment.status = AppointmentStatus.Accepted
-        }
-
-        return Promise.resolve()
+        return this.appointmentsData.update(id, { [AppointmentColumns.status]: AppointmentStatus.Accepted })
+            .then(() => TaskResult.success('The appointment is successfully accepted.'))
+            .catch(() => TaskResult.failure('Error while accepting the appointment.'))
     }
 
     public async getUpcomingForUser (userId: string): Promise<any> {
@@ -265,7 +196,10 @@ class AppointmentService {
             [AppointmentColumns.businessHolder]: businessId,
             [AppointmentColumns.start]: {
                 $gte: DateExtensions.getDate(date),
-                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+                $lt: DateExtensions.nextDate(date)
+            },
+            [AppointmentColumns.status]: {
+                $in: [AppointmentStatus.Accepted, AppointmentStatus.Pending]
             }
         }
 

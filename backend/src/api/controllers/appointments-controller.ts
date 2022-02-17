@@ -46,24 +46,16 @@ class AppointmentsController {
         const id = req.params.id
 
         AppointmentService.decline(id)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'The appointment is successfully declined.')
-            })
-            .catch(() => {
-                responseUtils.sendErrorMessage(res, 'Error while declining the appointment.')
-            })
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while declining the appointment.'))
     }
 
     public accept = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
         const id = req.params.id
 
         AppointmentService.accept(id)
-            .then(() => {
-                responseUtils.sendSuccessMessage(res, 'The appointment is approved.')
-            })
-            .catch(() => {
-                responseUtils.sendErrorMessage(res, 'Error while accepting the appointment.')
-            })
+            .then((result) => responseUtils.processTaskResult(res, result))
+            .catch(() => responseUtils.sendErrorMessage(res, 'Error while accepting the appointment.'))
     }
 
 }
