@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { CardImage, HeartFill, Image } from 'react-bootstrap-icons';
+import { Badge } from 'react-bootstrap';
+import { BellFill, CardImage, Image } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
@@ -7,9 +8,9 @@ import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
 import BusinessService from '../../services/businessService';
 
-import classes from './Favorites.module.scss';
+import classes from './Booked.module.scss';
 
-const Favorites = () => {
+const Booked = () => {
     const [services, setServices] = useState({});
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -19,30 +20,16 @@ const Favorites = () => {
         setData(data)
     }, []);
 
-    const likeServiceHandler = async (service) => {
-        await BusinessService.deleteFavourite(service.id)
-        let tempServices = JSON.parse(JSON.stringify(services))
-
-        Object.keys(tempServices).forEach(key => {
-            const found = tempServices[key].findIndex(el => el.id === service.id)
-            if (found !== -1) {
-                tempServices[key].splice(found, 1);
-            }
-        })
-
-        setServices(tempServices)
-    }
-
     const loadData = () => {
-        return BusinessService.getFavourites()
+        return BusinessService.getBooked()
     }
 
     const setData = async (pendingData) => {
         const data = await pendingData
         const tempServices = {}
-
         data.forEach(service => {
-            const type = service.company.businessType
+            // TODO const type = service.company.businessType
+            const type = { name: 'type' }
             if (!!tempServices[type.name] === false) {
                 tempServices[type.name] = []
             }
@@ -61,7 +48,7 @@ const Favorites = () => {
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>
-                <h1>Favorites</h1>
+                <h1>Booked</h1>
                 <p>Choose a business</p>
             </div>
             {Object.keys(services).map(key =>
@@ -70,24 +57,22 @@ const Favorites = () => {
                         <hr />
                         <div className={classes.BusinessType}>{key}</div>
                         <CustomerSlide services={services[key].map((service, i) => <Service key={i}
-                            caption={service.company.address}
-                            heading={service.company.description}
+                            caption={service.businessHolder.address}
+                            heading={service.product}
                             icon={<Image />}
                             theme={classes.ServiceTheme}
                             image={<CardImage />}
                             button={<button id={service.id}
                                 onClick={() => navigate('/book', { state: { id: service.id } })}
                             >Details</button>}
-                            additionalBtn={<button className={classes.LikeBtn}
-                                onClick={() => likeServiceHandler(service)}>
-                                <HeartFill className={classes.IconHeartFill} />
-                            </button>} />)} />
+                            additionalBtn={<Badge className={classes.Badge}><BellFill /> {new Date(service.start).toLocaleString()}</Badge>}
+                        />)} />
                     </div>
                     : null
             )
             }
-        </div>
+        </div >
     )
 }
 
-export default Favorites;
+export default Booked;

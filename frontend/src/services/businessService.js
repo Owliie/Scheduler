@@ -32,6 +32,10 @@ class BusinessService {
     static book = (data) => {
         return RequestAPI.post('/appointments', { ...data })
     }
+
+    static getBooked = () => {
+        return RequestAPI.get('/appointments/upcoming')
+    }
 }
 
 export default BusinessService;

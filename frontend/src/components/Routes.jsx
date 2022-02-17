@@ -12,6 +12,7 @@ import { PORTALS } from '../utils/portals';
 import Favorites from '../containers/Favorites/Favorites';
 import BusinessManagement from '../containers/BusinessManagement/BusinessManagement';
 import Book from '../containers/Book/Book';
+import Booked from '../containers/Booked/Booked';
 
 const RouteOptions = {
     GO_TO_SIGN: 'GO_TO_SIGN',
@@ -91,6 +92,7 @@ const Router = (props) => {
                             <Route path="/" exact element={<CustomerPortal />} />
                             <Route path="/book" exact element={<Book id={state?.id} />} />
                             <Route path="/favorites" exact element={<Favorites />} />
+                            <Route path="/booked" exact element={<Booked />} />
                             <Route path="*" element={<Navigate to='/' />} />
                         </Routes>
                     )

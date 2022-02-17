@@ -1,0 +1,66 @@
+@import "../../sharedStyles/shared.module.scss";
+
+.Container {
+    height: 100%;
+    width: 100%;
+
+    .Heading {
+        margin-bottom: 50px;
+
+        h1 {
+            text-align: center;
+            color: $tertiary-color;
+            font-weight: 400;
+            line-height: 36px;
+            font-size: 34pt;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            color: $muted-color;
+            opacity: 0.6;
+            font-weight: 400;
+            line-height: 14px;
+            font-size: 14pt;
+        }
+    }
+
+    hr {
+        color: $muted-color;
+    }
+
+    .BusinessType {
+        padding: 10px 15px;
+        width: fit-content;
+        margin: auto;
+        border: 1px solid $primary-color;
+        border-radius: 15px;
+
+        color: $tertiary-color;
+        font-weight: 500;
+        font-size: 18.0097px;
+        line-height: 20px;
+    }
+
+    .Badge {
+        display: flex;
+        background-color: transparentize($muted-color, 0.85) !important;
+        color: $tertiary-color;
+        font-size: 13px;
+    }
+}
+
+.LikeBtn {
+    background-color: transparent;
+    border: none;
+    font-size: 15pt;
+
+    .IconHeartFill {
+        fill: $like-btn-color;
+    }
+}
+
+.ServiceTheme {
+    background-color: pink;
+}
