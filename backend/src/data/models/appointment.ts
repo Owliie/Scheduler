@@ -11,7 +11,7 @@ const appointmentSchema = new Schema<AppointmentModel>({
     [AppointmentColumns.status]: { type: String, required: true },
     [AppointmentColumns.start]: { type: Date, required: true },
     [AppointmentColumns.durationInMinutes]: { type: Number, required: true },
-    [AppointmentColumns.product]: { type: ObjectId, required: true }
+    [AppointmentColumns.product]: { type: ObjectId, required: true, ref: TableNames.product }
 })
 
 const Appointment = model<AppointmentModel>(TableNames.appointment, appointmentSchema)

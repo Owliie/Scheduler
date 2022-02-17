@@ -9,49 +9,7 @@ import { AppointmentModel } from '../../models/appointment-model'
 class AppointmentsController {
 
     public getUpcomingForUser = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
-        // const userId = req.user.id
-        // TODO: get all the upcoming appointments from the db
-        const response = [
-            {
-                id: '3c9ef89f-d9b0-43c6-9aae-99102281884e',
-                createdOn: '2022-01-08 15:15:25.000',
-                businessHolder: {
-                    firstName: 'Atanas',
-                    lastName: 'Vasilev',
-                    phone: '0874588965',
-                    email: 'nasko.it@scheduler.com',
-                    address: 'Studentki grad, Atanas Ishirkov 12'
-                },
-                start: '2022-01-15 15:30:00.000',
-                durationInMinutes: '2022-01-15 16:00:25.000',
-                product: 'Short men cutting'
-            }
-        ]
-
-        res.json(response)
-    }
-
-    public getPendingForUser = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
-        // const userId = req.user.id
-        // TODO: get all the pending appointments created in the last n days
-        const response = [
-            {
-                id: '3c9ef89f-d9b0-43c6-9aae-99102281884e',
-                createdOn: '2022-01-08 15:15:25.000',
-                businessHolder: {
-                    firstName: 'Atanas',
-                    lastName: 'Vasilev',
-                    phone: '0874588965',
-                    email: 'nasko.it@scheduler.com',
-                    address: 'Studentki grad, Stefan Mladenov 14'
-                },
-                start: '2022-01-15 15:30:00.000',
-                durationInMinutes: '2022-01-15 16:00:25.000',
-                product: 'Short men cutting'
-            }
-        ]
-
-        res.json(response)
+        res.json(await AppointmentService.getUpcomingForUser(req.user?.id))
     }
 
     public create = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
