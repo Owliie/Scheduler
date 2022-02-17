@@ -14,7 +14,7 @@ export const DateExtensions = {
             .join('/')
         const timeAsString = [date.getHours(), date.getMinutes()]
             .map(part => part.toString().padStart(2, '0'))
-            .join('0')
+            .join(':')
         return dateAsString + ' ' + timeAsString
     }
 }
