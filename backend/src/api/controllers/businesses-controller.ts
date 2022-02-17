@@ -22,14 +22,8 @@ class BusinessesController {
     public getScheduleByDate = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
         const userId = req.user?.id
         const date = new Date(req.query.date as string)
-        const result = await AppointmentService.getApprovedByBusinessAndDate(userId, date)
+        const result = await AppointmentService.getAppointmentsByBusinessAndDate(userId, date)
 
-        res.json(result)
-    }
-
-    public getPendingAppointments = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
-        const userId = req.user?.id
-        const result = await AppointmentService.getPendingByBusiness(userId)
         res.json(result)
     }
 
