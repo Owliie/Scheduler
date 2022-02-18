@@ -4,6 +4,8 @@ import { UserRegisterInputModel } from '../../models/user-input-models'
 import { Roles } from '../../common'
 import { AuthenticatedRequest } from '../common/authenticated-request'
 import { responseUtils } from '../../utils/response-utils.js'
+import { validateRequest } from '../validators/validate-request'
+import { CompanyValidators } from '../validators/company-validators'
 
 const BUSINESS_HOLDER_REGISTRATION_TYPE = 'BusinessHolder'
 
@@ -21,6 +23,11 @@ class UsersController {
         const registrationType = req.query.type
 
         if (registrationType === BUSINESS_HOLDER_REGISTRATION_TYPE) {
+            const companyValidationErrors = await validateRequest(req, CompanyValidators)
+            if (companyValidationErrors) {
+                return responseUtils.sendValidationError(res, companyValidationErrors)
+            }
+
             user.roles = [Roles.businessHolder]
             user.company = {
                 description: req.body.description,

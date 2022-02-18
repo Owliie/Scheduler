@@ -57,9 +57,9 @@ class UserService {
                 },
                 accessToken
             }
-        } else {
-            return null
         }
+
+        return null
     }
 
     public async getProfileData (userId: string): Promise<any> {

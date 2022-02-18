@@ -1,3 +1,5 @@
+export const BG_CULTURE = 'bg-BG'
+
 export const HTTP_STATUS_CODES = {
     BAD_REQUEST: 400
 }
