@@ -34,5 +34,13 @@ export const responseUtils = {
         }
 
         this.sendErrorMessage(res, result.message, result.data)
+    },
+    sendUnauthorizedError: (res: Response, error: string): void => {
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST)
+            .json({
+                message: error,
+                status: OperationStatus.Unauthorized,
+                data: null
+            })
     }
 }
