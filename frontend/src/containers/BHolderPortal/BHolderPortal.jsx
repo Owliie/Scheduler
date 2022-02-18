@@ -5,64 +5,33 @@ import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
 import { STATUS } from '../../utils/status';
 import classes from './BHolderPortal.module.scss';
 import { convertToTime } from '../../utils/converter';
-
-let events = [
-    {
-        id: '620d7654d426a4beea96803a',
-        createdOn: '2022-02-16T21:45:12.836+00:00',
-        client: {
-            id: '620d7654d426a4beea9680f3',
-            firstName: 'Nasko',
-            lastName: 'Atanasov',
-            email: 'dev@scheduler.com',
-            phone: '0876351984',
-        },
-        status: 'Pending', // Accepted
-        start: '2022-02-17T17:30:00.000+00:00',
-        durationInMinutes: 30,
-        product: {
-            id: '620d7654d426a4beea9680bb',
-            name: 'Gentleman hairstyle',
-            price: 30
-        }
-    },
-    {
-        id: '620d7654d426a4beea96803a',
-        createdOn: '2022-02-16T21:45:12.836+00:00',
-        client: {
-            id: '620d7654d426a4beea9680f3',
-            firstName: 'Neti',
-            lastName: 'Tsvetkova',
-            email: 'neti@scheduler.com',
-            phone: '08763519843',
-        },
-        status: 'Pending', // Accepted
-        start: '2022-02-17T18:00:00.000+00:00',
-        durationInMinutes: 30,
-        product: {
-            id: '620d7654d426a4beea9680bb',
-            name: 'Lady hairstyle',
-            price: 30
-        }
-    }
-]
+import BusinessService from '../../services/businessService';
 
 const BHolderPortal = (props) => {
-    const [data, setData] = useState({ businessBeginsHour: new Date(Date.now()).getHours(), businessEndsHour: 24, height: 500, heightSpec: 'Fixed' });
+    const [data, setData] = useState({
+        businessBeginsHour: new Date(Date.now()).getHours(),
+        businessEndsHour: 24,
+        height: 500,
+        heightSpec: 'Fixed',
+        startDate: new Date(Date.now()).toISOString()
+    });
     const [event, setEvent] = useState(null);
     const calendarRef = useRef(null);
 
     useEffect(() => {
-        mapEvents()
-    }, []);
+        loadEvents()
+    }, [data.startDate]);
 
-    const mapEvents = () => {
-        events = events.map(e => {
+    const loadEvents = async () => {
+        const res = await BusinessService.getSchedule(data.startDate)
+
+        const events = res.map(e => {
             const start = new Date(e.start)
             const end = new Date(start.getTime() + +e.durationInMinutes * 60 * 1000).toISOString()
             e.end = end
             e.text = `${e.product.name}, ${e.client.firstName} ${e.client.lastName}, ${e.client.phone}`
-            e.backColor = e.status === STATUS.PENDING ? 'lightgray' : 'lightgreen'
+            e.backColor = e.status === STATUS.PENDING ? 'lightgray' : '#415a74'
+            e.fontColor = e.status === STATUS.PENDING ? 'black' : 'white'
             return e
         })
 
@@ -73,12 +42,17 @@ const BHolderPortal = (props) => {
         setEvent(e.e.data)
     }
 
-    const acceptEventHandler = () => {
+    const acceptEventHandler = async () => {
+        await BusinessService.acceptAppointment(event.id)
+
+        await loadEvents()
         setEvent(null)
     }
 
-    const rejectEventHandler = () => {
+    const rejectEventHandler = async () => {
+        await BusinessService.rejectAppointment(event.id)
 
+        await loadEvents()
         setEvent(null)
     }
 
@@ -120,6 +94,7 @@ const BHolderPortal = (props) => {
                         <p><span>Appointment</span></p>
                         <p>
                             <span>{event.product.name}</span>
+                            -
                             <span>${event.product.price}</span>
                         </p>
                         <p>

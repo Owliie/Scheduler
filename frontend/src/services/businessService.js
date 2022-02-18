@@ -36,6 +36,18 @@ class BusinessService {
     static getBooked = () => {
         return RequestAPI.get('/appointments/upcoming')
     }
+
+    static acceptAppointment = (id) => {
+        return RequestAPI.post(`/appointments/accept/${id}`)
+    }
+
+    static rejectAppointment = (id) => {
+        return RequestAPI.post(`/appointments/decline/${id}`)
+    }
+
+    static getSchedule = (date) => {
+        return RequestAPI.get(`/businesses/schedule?date=${date}`)
+    }
 }
 
 export default BusinessService;

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Badge } from 'react-bootstrap';
-import { BellFill, CardImage, Image } from 'react-bootstrap-icons';
+import { BellFill, CardImage, Check2Circle, HourglassSplit, Image } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
 import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
 import BusinessService from '../../services/businessService';
+import { STATUS } from '../../utils/status';
 
 import classes from './Booked.module.scss';
 
@@ -28,8 +29,7 @@ const Booked = () => {
         const data = await pendingData
         const tempServices = {}
         data.forEach(service => {
-            // TODO const type = service.company.businessType
-            const type = { name: 'type' }
+            const type = service.businessHolder.company.businessType
             if (!!tempServices[type.name] === false) {
                 tempServices[type.name] = []
             }
@@ -57,15 +57,19 @@ const Booked = () => {
                         <hr />
                         <div className={classes.BusinessType}>{key}</div>
                         <CustomerSlide services={services[key].map((service, i) => <Service key={i}
-                            caption={service.businessHolder.address}
-                            heading={service.product}
-                            icon={<Image />}
+                            caption={service.businessHolder.company.address}
+                            heading={service.product.name}
+                            icon={service.status === STATUS.PENDING ? <HourglassSplit className={classes.StatusIcon} /> : <Check2Circle className={classes.StatusIcon} />}
                             theme={classes.ServiceTheme}
                             image={<CardImage />}
                             button={<button id={service.id}
                                 onClick={() => navigate('/book', { state: { id: service.id } })}
                             >Details</button>}
-                            additionalBtn={<Badge className={classes.Badge}><BellFill /> {new Date(service.start).toLocaleString()}</Badge>}
+                            additionalBtn={
+                                <Badge className={classes.Badge}>
+                                    <BellFill /> {new Date(service.start).toLocaleString()}
+                                </Badge>
+                            }
                         />)} />
                     </div>
                     : null

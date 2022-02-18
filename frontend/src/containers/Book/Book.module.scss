@@ -106,6 +106,10 @@
                 form {
                     display: flex;
                 }
+
+                .Hours {
+                    flex-direction: column;
+                }
             }
 
             input[type=submit],

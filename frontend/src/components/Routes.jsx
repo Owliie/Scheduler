@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useStoreState } from 'easy-peasy';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import Sign from '../containers/Sign/Sign';
 import Spinner from './common/Spinner/Spinner';
@@ -28,13 +28,20 @@ const Router = (props) => {
 
     const [routerAction, setRouterAction] = useState(null);
 
-    const { state } = useLocation();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setRouterAction(resolveNavigationRoute())
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoggedIn, chosenPortal]);
+
+    useEffect(() => {
+        if ('#' + location.pathname !== window.location.hash) {
+            navigate(location.pathname)
+        }
+    }, [location.pathname]);
 
     const resolveNavigationRoute = () => {
         switch (true) {
@@ -90,7 +97,7 @@ const Router = (props) => {
                     (
                         <Routes>
                             <Route path="/" exact element={<CustomerPortal />} />
-                            <Route path="/book" exact element={<Book id={state?.id} />} />
+                            <Route path="/book" exact element={<Book id={location.state?.id} />} />
                             <Route path="/favorites" exact element={<Favorites />} />
                             <Route path="/booked" exact element={<Booked />} />
                             <Route path="*" element={<Navigate to='/' />} />

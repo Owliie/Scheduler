@@ -2,6 +2,7 @@ import { useStoreState } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
 import { Badge, Form } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router';
 
 import { convertToTime } from '../../utils/converter';
 import ProductService from '../../services/productService';
@@ -18,6 +19,8 @@ const Book = (props) => {
     const [type, setType] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         // TODO get products by profile id
@@ -38,7 +41,8 @@ const Book = (props) => {
         setAvailability(res)
     }
 
-    const timeHandler = async () => {
+    const timeHandler = async (e) => {
+        e.preventDefault()
         const selectedDate = date + 'T' + time
         const foundType = products.find(product => product.id === type)
 
@@ -48,6 +52,8 @@ const Book = (props) => {
             durationInMinutes: foundType.durationInMinutes,
             product: foundType.id
         })
+
+        navigate('/booked')
     }
 
     const loadMinDate = () => {
@@ -107,19 +113,22 @@ const Book = (props) => {
                         </div>
                     </div>
                     <div>
-                        <Form>
-                            {availability.map((hours, i) =>
-                                <Form.Check
-                                    type='radio'
-                                    key={i}
-                                    label={`${convertToTime(hours.start.hour, hours.start.minute)} - ${convertToTime(hours.end.hour, hours.end.minute)}`}
-                                    onClick={() => setTimeLimit({
-                                        min: convertToTime(hours.start.hour, hours.start.minute),
-                                        max: convertToTime(hours.end.hour, hours.end.minute)
-                                    })}
-                                />
-                            )}
-                        </Form>
+                        {availability.length && availability[0].start.hour === availability[0].end.hour &&
+                            availability[0].start.minute === availability[0].end.minute ?
+                            <p>Closed this day</p>
+                            : <Form className={classes.Hours}>
+                                {availability.map((hours, i) =>
+                                    <Form.Check
+                                        type='radio'
+                                        key={i}
+                                        label={`${convertToTime(hours.start.hour, hours.start.minute)} - ${convertToTime(hours.end.hour, hours.end.minute)}`}
+                                        onClick={() => setTimeLimit({
+                                            min: convertToTime(hours.start.hour, hours.start.minute),
+                                            max: convertToTime(hours.end.hour, hours.end.minute)
+                                        })}
+                                    />
+                                )}
+                            </Form>}
                     </div>
                 </div>
             </div>
