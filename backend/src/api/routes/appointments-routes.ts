@@ -15,5 +15,7 @@ export const appointmentsRoutes = (expressApp: any) => {
     router.post('/decline/:id', addAuth, isInRole(Roles.businessHolder), AppointmentsController.decline)
     router.post('/accept/:id', addAuth, isInRole(Roles.businessHolder), AppointmentsController.accept)
 
+    router.put('/:id', addAuth, addValidation(AppointmentValidators), AppointmentsController.update)
+
     return router
 }

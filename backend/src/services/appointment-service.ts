@@ -133,6 +133,19 @@ class AppointmentService {
             .catch(() => TaskResult.failure('Error while accepting the appointment.'))
     }
 
+    public update (id: string, newData: any): Promise<TaskResult> {
+        return this.appointmentsData.update(id, newData)
+            .then(() => TaskResult.success('The appointment was updated successfully.'))
+            .catch((err: any) => TaskResult.failure('Error while updating the appointment', err))
+    }
+
+    public async existsByIdAndBusinessHolder (id: string, businessId: string): Promise<boolean> {
+        return this.appointmentsData.exists({
+            _id: id,
+            [AppointmentColumns.businessHolder]: businessId
+        })
+    }
+
     public async getUpcomingForUser (userId: string): Promise<any> {
         const filter = {
             [AppointmentColumns.client]: userId,

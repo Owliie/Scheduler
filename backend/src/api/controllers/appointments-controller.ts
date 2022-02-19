@@ -43,6 +43,33 @@ class AppointmentsController {
             })
     }
 
+    public update = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
+        const id = req.params.id
+        const body = {
+            start: req.body.start,
+            durationInMinutes: req.body.durationInMinutes
+        }
+
+        if (!await AppointmentService.existsByIdAndBusinessHolder(id, req.user.id)) {
+            return responseUtils.sendErrorMessage(res, 'The appointment does not exist.')
+        }
+
+        AppointmentService.update(req.params.id, body)
+            .then(async result => {
+                if (result.isSuccessful) {
+                    const appointment = await AppointmentService.details(id)
+                    await EmailSender.sendEmail({
+                        to: appointment.client.email,
+                        subject: EmailBuilder.updateAppointmentSubject(appointment.businessHolder.company.businessType.name),
+                        html: EmailBuilder.updateAppointmentBody(appointment)
+                    })
+                }
+
+                responseUtils.processTaskResult(res, result)
+            })
+            .catch(() => responseUtils.sendErrorMessage(res, 'Problem occur while updating the product.'))
+    }
+
     public decline = async (req: AuthenticatedRequest, res: Response): Promise<any> => {
         const id = req.params.id
 
