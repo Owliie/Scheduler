@@ -59,12 +59,12 @@ const Booked = () => {
                         <div className={classes.BusinessType}>{key}</div>
                         <CustomerSlide services={services[key].map((service, i) => <Service key={i}
                             caption={service.businessHolder.company.address}
-                            heading={service.product.name}
+                            heading={`${service.product.name} - $${service.product.price}`}
                             icon={service.status === STATUS.PENDING ? <HourglassSplit className={classes.StatusIcon} /> : <Check2Circle className={classes.StatusIcon} />}
                             theme={classes.ServiceTheme}
                             image={`/assets/${service?.businessHolder.company.businessType.imagePath.split('/').slice(-1)[0]}`}
                             button={<button id={service.id}
-                                onClick={() => navigate('/book', { state: { id: service.id } })}
+                                onClick={() => navigate('/book', { state: { id: service.businessHolder.id } })}
                             >Details</button>}
                             additionalBtn={
                                 <Badge className={classes.Badge}>

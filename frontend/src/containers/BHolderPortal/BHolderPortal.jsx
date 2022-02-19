@@ -66,10 +66,12 @@ const BHolderPortal = (props) => {
                 <p>Select date</p>
                 <input type='date'
                     className={classes.DateSelector}
-                    onChange={(e) =>
+                    onChange={(e) => {
                         setData({
                             ...data, startDate: new Date(e.target.value).toISOString()
                         })
+                        setEvent(null)
+                    }
                     } />
             </div>
             <div className={classes.Calendar}>

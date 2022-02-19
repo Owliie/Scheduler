@@ -1,6 +1,5 @@
 
 import axios from 'axios';
-import { StoreProvider } from 'easy-peasy';
 import { toastHandler, TOAST_STATES } from '../helpers/toast';
 import store from '../store/index';
 import { RESPONSE_STATUS } from '../utils/status';
@@ -54,8 +53,7 @@ export class RequestAPI {
     static handleError(error) {
         const data = error.response.data
         this.userUnauthorized(data);
-        this.cannotConnectToServer(data);
-        this.notFound(data);
+        this.genericError(data);
     }
 
     static userUnauthorized(error) {
