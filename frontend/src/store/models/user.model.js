@@ -14,7 +14,7 @@ export const userStore = {
     setAccount: action((state, payload) => {
         state.account = payload;
         if (state.account) {
-            state.account.isCustomer = !payload.roles // only b holders have roles
+            state.account.isCustomer = payload.roles.length === 0 // only b holders have roles
         }
         state.isLoggedIn = !!(payload && payload.token);
     }),
@@ -39,7 +39,7 @@ export const userStore = {
         const { portalStore } = getStoreState();
         const data = await UserService.login(payload)
 
-        portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
+        portalStore.chosenPortal = data.roles.length > 0 ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),
     logout: thunk((actions, payload, { getState, getStoreState }) => {
