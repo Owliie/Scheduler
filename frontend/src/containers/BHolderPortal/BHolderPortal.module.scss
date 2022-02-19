@@ -103,4 +103,25 @@
             margin-left: 5px;
         }
     }
+
+    .Edit {
+
+        >div {}
+
+        form {
+            display: flex;
+            justify-content: space-between;
+
+            input {
+                border: 1px solid $primary-color;
+                border-radius: 10px;
+                padding: 5px 10px;
+                width: 40%;
+            }
+
+            button {
+                background-color: $primary-color;
+            }
+        }
+    }
 }

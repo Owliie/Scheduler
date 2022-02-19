@@ -16,6 +16,10 @@ class AppointmentService {
     static rejectAppointment = (id) => {
         return RequestAPI.post(`/appointments/decline/${id}`)
     }
+
+    static editAppointment = (id, edited) => {
+        return RequestAPI.put(`/appointments/${id}`, { ...edited })
+    }
 }
 
 export default AppointmentService;
