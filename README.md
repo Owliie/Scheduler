@@ -2,7 +2,7 @@
 ## API docuemntation
 - [Authentication and authorization](./docs/api/authentication-and-authorization.md)
 - [Business types](./docs/api/business-types.md)
-- [Businesses](./docs/api/businesses.md)
+- [Businesses](./docs/api/businesse.md)
 - [Favourite businsses](./docs/api/favourite-businesses.md)
 - [Book appointment](./docs/api/book-appointment.md)
 - [Customer booked services](./docs/api/customer-booked-services.md)
