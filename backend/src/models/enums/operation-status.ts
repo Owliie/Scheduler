@@ -1,4 +1,6 @@
 export enum OperationStatus {
     Success = 'success',
-    Failure = 'failure'
+    Failure = 'failure',
+    ValidationError = 'validationError',
+    Unauthorized = 'unauthorized'
 }

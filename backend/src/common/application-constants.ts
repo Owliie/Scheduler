@@ -4,7 +4,7 @@ export const WORKING_TIME = {
         minute: 0
     },
     end: {
-        hour: 9,
+        hour: 18,
         minute: 0
     }
 }

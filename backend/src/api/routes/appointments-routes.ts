@@ -1,14 +1,19 @@
 import AppointmentsController from '../controllers/appointments-controller'
+import { addAuth } from '../middleware/add-authorization'
+import { addValidation } from '../middleware/add-validate-middleware'
+import { isInRole } from '../middleware/add-role-based-authorization'
+import { Roles } from '../../common'
+import { AppointmentValidators } from '../validators/appointment-validators'
 
 export const appointmentsRoutes = (expressApp: any) => {
     const router = expressApp.Router()
 
-    router.post('/', AppointmentsController.create)
+    router.post('/', addAuth, addValidation(AppointmentValidators), AppointmentsController.create)
 
-    router.get('/upcoming', AppointmentsController.getUpcomingForUser)
+    router.get('/upcoming', addAuth, AppointmentsController.getUpcomingForUser)
 
-    router.post('/decline/:id', AppointmentsController.decline)
-    router.post('/accept/:id', AppointmentsController.accept)
+    router.post('/decline/:id', addAuth, isInRole(Roles.businessHolder), AppointmentsController.decline)
+    router.post('/accept/:id', addAuth, isInRole(Roles.businessHolder), AppointmentsController.accept)
 
     return router
 }

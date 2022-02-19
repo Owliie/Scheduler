@@ -5,12 +5,10 @@ import { ObjectId } from 'mongodb'
 import { AvailabilityColumns, CompanyColumns, UserColumns } from './user-columns'
 import { TableNames } from './table-names'
 import { AvailabilityModel } from '../../models/availability-model'
-import { DAYS_OF_WEEK_ARRAY } from '../../common/application-constants'
 
 const availabilitySchema = new Schema<AvailabilityModel>({
     [AvailabilityColumns.day]: {
-        type: Number,
-        enum: [...DAYS_OF_WEEK_ARRAY]
+        type: Number
     },
     [AvailabilityColumns.startHour]: { type: Number },
     [AvailabilityColumns.startMinute]: { type: Number },
