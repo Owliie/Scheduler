@@ -1,6 +1,6 @@
 import { useStoreActions } from 'easy-peasy';
 import React from 'react';
-import { CardImage, Image } from 'react-bootstrap-icons';
+import { PersonCircle } from 'react-bootstrap-icons';
 import Service from '../../components/Service/Service';
 import { PORTALS } from '../../utils/portals';
 import classes from './Portal.module.scss';
@@ -22,16 +22,16 @@ const Portal = (props) => {
                 heading='Business Portal'
                 caption='This is the place where your business blooms!'
                 theme={classes.ServiceTheme}
-                icon={<Image />}
-                image={<CardImage />}
+                icon={<PersonCircle />}
+                image={'/assets/businessPortal.jpg'}
                 button={<button onClick={bHolderHandler}>Proceed</button>} />
 
             <Service
                 heading='Customer Portal'
                 caption='Book your service now!'
                 theme={classes.ServiceTheme}
-                icon={<Image />}
-                image={<CardImage />}
+                icon={<PersonCircle />}
+                image={'/assets/customerPortal.jpg'}
                 button={<button onClick={customerHandler}>Proceed</button>} />
         </div>
     )

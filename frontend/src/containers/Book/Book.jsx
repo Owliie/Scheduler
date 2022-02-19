@@ -16,6 +16,7 @@ const Book = (props) => {
     const [minDate, setMinDate] = useState();
     const [availability, setAvailability] = useState([]);
     const [timeLimit, setTimeLimit] = useState({});
+    const [profile, setProfile] = useState({});
     const [type, setType] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
@@ -24,9 +25,15 @@ const Book = (props) => {
 
     useEffect(() => {
         // TODO get products by profile id
+        loadProfile()
         loadProducts()
         loadMinDate()
     }, []);
+
+    const loadProfile = async () => {
+        const res = await BusinessService.getById(props.id)
+        setProfile(res)
+    }
 
     const loadProducts = async () => {
         const productsRes = await ProductService.getByBusiness(props.id)
@@ -81,11 +88,11 @@ const Book = (props) => {
             <div className={classes.Details}>
                 <div>
                     <h4>Description</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>{profile.description}</p>
                 </div>
                 <div>
                     <h4>Place</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>{profile.address}</p>
                 </div>
             </div>
             <div className={classes.Form}>

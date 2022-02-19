@@ -1,6 +1,6 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
-import { Image, CardImage, Heart, HeartFill } from 'react-bootstrap-icons';
+import { Heart, HeartFill, PersonBoundingBox } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
@@ -9,7 +9,7 @@ import Service from '../../components/Service/Service';
 import BusinessService from '../../services/businessService';
 import classes from './CustomerPortal.module.scss';
 
-const CustomerPortal = (props) => {
+const CustomerPortal = () => {
     const { chosenType } = useStoreState((state) => state.portalStore);
     const { setType } = useStoreActions((actions) => actions.portalStore);
 
@@ -50,8 +50,8 @@ const CustomerPortal = (props) => {
         setServices(tempServices)
     }
 
-    const loadType = ({ name, id }) => {
-        setType({ name, id })
+    const loadType = (service) => {
+        setType({ ...service })
     }
 
     if (chosenType === null) {
@@ -65,10 +65,10 @@ const CustomerPortal = (props) => {
                     caption={`Book a ${service.name} service`}
                     heading={service.name}
                     theme={classes.ServiceTheme}
-                    icon={<Image />}
-                    image={<CardImage />}
+                    icon={<PersonBoundingBox />}
+                    image={`/assets/${servicesTypes[0]?.imagePath.split('/').slice(-1)[0]}`}
                     button={<button
-                        onClick={() => loadType({ name: service.name, id: service.id })}>
+                        onClick={() => loadType({ ...service })}>
                         Book now
                     </button>} />
                 )} />
@@ -90,8 +90,8 @@ const CustomerPortal = (props) => {
                 {services.map((service, i) => <Service key={i}
                     caption={service.address}
                     heading={service.description}
-                    icon={<Image />}
-                    image={<CardImage />}
+                    icon={<PersonBoundingBox />}
+                    image={`/assets/${chosenType.imagePath.split('/').slice(-1)[0]}`}
                     theme={classes.ServiceTheme}
                     button={<button id={service.id} onClick={() => navigate('/book', { state: { id: service.id } })}>Details</button>}
                     additionalBtn={<button className={classes.LikeBtn}

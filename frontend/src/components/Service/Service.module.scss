@@ -34,13 +34,13 @@
 
         svg {
             margin-right: 10px;
-            color: $secondary-color;
+            color: $tertiary-color;
         }
     }
 
     .Body {
         background-color: white;
-        padding: 5px 10px;
+        padding: 5px 15px;
         height: calc(300.7px - 2*44px);
 
         p {
@@ -55,7 +55,6 @@
 
             svg {
                 transform: scale(15) translateX(49%) translateY(32%);
-                color: $secondary-color;
             }
         }
     }
@@ -84,5 +83,16 @@
                 text-transform: uppercase;
             }
         }
+    }
+
+    .Icon {
+        width: 25px;
+        margin-right: 10px;
+    }
+
+    .Image {
+        height: 100%;
+        margin: auto;
+        display: block;
     }
 }

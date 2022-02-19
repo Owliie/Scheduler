@@ -8,6 +8,7 @@ import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
 import BusinessService from '../../services/businessService';
 import { STATUS } from '../../utils/status';
+// import  from '../../assets/';
 
 import classes from './Booked.module.scss';
 
@@ -45,6 +46,7 @@ const Booked = () => {
         return (<Spinner />)
     }
 
+    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>
@@ -61,7 +63,7 @@ const Booked = () => {
                             heading={service.product.name}
                             icon={service.status === STATUS.PENDING ? <HourglassSplit className={classes.StatusIcon} /> : <Check2Circle className={classes.StatusIcon} />}
                             theme={classes.ServiceTheme}
-                            image={<CardImage />}
+                            image={`/assets/${service?.businessHolder.company.businessType.imagePath.split('/').slice(-1)[0]}`}
                             button={<button id={service.id}
                                 onClick={() => navigate('/book', { state: { id: service.id } })}
                             >Details</button>}

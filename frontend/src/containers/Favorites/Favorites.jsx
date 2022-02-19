@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CardImage, HeartFill, Image } from 'react-bootstrap-icons';
+import { CardImage, HeartFill, Image, StarFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
@@ -58,6 +58,7 @@ const Favorites = () => {
         return (<Spinner />)
     }
 
+    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>
@@ -72,9 +73,9 @@ const Favorites = () => {
                         <CustomerSlide services={services[key].map((service, i) => <Service key={i}
                             caption={service.company.address}
                             heading={service.company.description}
-                            icon={<Image />}
+                            icon={<StarFill />}
                             theme={classes.ServiceTheme}
-                            image={<CardImage />}
+                            image={`/assets/${service?.company.businessType.imagePath.split('/').slice(-1)[0]}`}
                             button={<button id={service.id}
                                 onClick={() => navigate('/book', { state: { id: service.id } })}
                             >Details</button>}

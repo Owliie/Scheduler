@@ -5,7 +5,10 @@ import classes from './Service.module.scss';
 const Service = (props) => (
     <div className={classes.Service}>
         <div className={[classes.Heading, props.theme].join(' ')}>
-            {props.icon}
+            {typeof props.icon === 'string'
+                ?
+                <img className={classes.Icon} src={props.icon} alt='icon' />
+                : props.icon}
             <OverlayTrigger
                 key={'right'}
                 placement={'right'}
@@ -20,7 +23,7 @@ const Service = (props) => (
         </div>
         <div className={classes.Body}>
             <div className={classes.Image}>
-                {props.image}
+                <img className={classes.Image} src={props.image} alt='background' />
             </div>
             <p>{props.caption}</p>
         </div>

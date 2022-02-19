@@ -1,9 +1,12 @@
 
 import axios from 'axios';
+import { StoreProvider } from 'easy-peasy';
 import { toastHandler, TOAST_STATES } from '../helpers/toast';
-
+import store from '../store/index';
+import { RESPONSE_STATUS } from '../utils/status';
 export class RequestAPI {
     static get(endpoint) {
+        this.auth()
         return axios.get(process.env.REACT_APP_API_ENDPOINT + endpoint)
             .then(data => {
                 return data.data;
@@ -15,7 +18,7 @@ export class RequestAPI {
     static post(endpoint, body = undefined) {
         return axios.post(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
             .then(data => {
-                this.handleSuccess()
+                this.handleSuccess(data.data)
                 return data.data;
             }).catch(error => {
                 this.handleError(error)
@@ -25,7 +28,7 @@ export class RequestAPI {
     static put(endpoint, body = undefined) {
         return axios.put(process.env.REACT_APP_API_ENDPOINT + endpoint, body ? { ...body } : {})
             .then(data => {
-                this.handleSuccess()
+                this.handleSuccess(data.data)
                 return data.data;
             }).catch(error => {
                 this.handleError(error)
@@ -35,41 +38,40 @@ export class RequestAPI {
     static delete(endpoint) {
         return axios.delete(process.env.REACT_APP_API_ENDPOINT + endpoint)
             .then(data => {
-                this.handleSuccess()
+                this.handleSuccess(data.data)
                 return data.data;
             }).catch(error => {
                 this.handleError(error)
             })
     }
 
-    static handleSuccess() {
-        toastHandler({ success: TOAST_STATES.SUCCESS, message: 'Action successful' })
+    static handleSuccess(data) {
+        if (data && data.status === RESPONSE_STATUS.SUCCESS && data.message) {
+            toastHandler({ success: TOAST_STATES.SUCCESS, message: data.message })
+        }
     }
 
     static handleError(error) {
-        this.userUnauthorized(error);
-        this.cannotConnectToServer(error);
-        this.notFound(error);
+        const data = error.response.data
+        this.userUnauthorized(data);
+        this.cannotConnectToServer(data);
+        this.notFound(data);
     }
 
     static userUnauthorized(error) {
-        if (error.status === 401 || error.status === 440 || error.status === 422) {
+        if (error.status === RESPONSE_STATUS.VALIDATION_ERROR) {
             toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
-            throw new Error('Unauthorized: ' + error.message);
         }
     }
 
-    static cannotConnectToServer = (error) => {
-        if (error.status === 500) {
+    static genericError = (error) => {
+        if (error.status !== RESPONSE_STATUS.VALIDATION_ERROR) {
             toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
-            throw new Error('Internal server: ' + error.message)
         }
     }
 
-    static notFound = (error) => {
-        if (error.status === 404) {
-            toastHandler({ success: TOAST_STATES.ERROR, message: error.message })
-            throw new Error('Not found: ' + error.message)
-        }
+    static auth = () => {
+        const token = store.getState().userStore.account?.token
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
 }
