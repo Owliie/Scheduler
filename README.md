@@ -1,4 +1,23 @@
 # Scheduler
+
+## Set up guide
+- Back-end
+  - Go to ```backend``` folder adn run the following commnad in the terminal: ```npm start```
+  - Setup your local mongodb connection
+- Front-end
+  - Go to ```frontend``` folder and run the followig command in the terminal: ```npm start```
+
+## Technologies
+- Back-end
+  - Typescript
+  - Node
+  - Express
+  - MonogDB
+  - Mongoose
+- Front-end
+  - React
+  - Redux
+
 ## API docuemntation
 - [Authentication and authorization](./docs/api/authentication-and-authorization.md)
 - [Business types](./docs/api/business-types.md)
