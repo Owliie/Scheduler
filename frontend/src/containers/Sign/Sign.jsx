@@ -24,36 +24,39 @@ const Login = (props) => {
     }
 
     return (
-        <div className={classes.Form}>
-            <div className={classes.Tabs}>
-                <Tabs
-                    defaultActiveKey="login"
-                    transition={false}
-                    id="noanim-tab-example"
-                    className="mb-3"
-                >
-                    <Tab eventKey="login" title="Log in">
-                        <Form>
-                            <h3 className="h3 text-center">Log in</h3>
-                            <Input
-                                controlId="formGroupEmail" type="email"
-                                placeholder="Enter email" label="Email address"
-                                field={emailField} setField={setEmailField}
-                                validateFn={validateEmail} />
-                            <Input
-                                controlId="formGroupPassword" type="password"
-                                placeholder="Enter password" label="Password"
-                                field={passwordField} setField={setPasswordField}
-                                validateFn={validatePassword} />
-                            <Button onClick={loginClickedHandler}>Login</Button>
-                        </Form>
-                    </Tab>
-                    <Tab eventKey="register" title="Register">
-                        <Registration />
-                    </Tab>
-                </Tabs>
+        <>
+            <h1 className={classes.Heading}>Scheduler</h1>
+            <div className={classes.Form}>
+                <div className={classes.Tabs}>
+                    <Tabs
+                        defaultActiveKey="login"
+                        transition={false}
+                        id="noanim-tab-example"
+                        className="mb-3"
+                    >
+                        <Tab eventKey="login" title="Log in">
+                            <Form>
+                                <h3 className="h3 text-center">Log in</h3>
+                                <Input
+                                    controlId="formGroupEmail" type="email"
+                                    placeholder="Enter email" label="Email address"
+                                    field={emailField} setField={setEmailField}
+                                    validateFn={validateEmail} />
+                                <Input
+                                    controlId="formGroupPassword" type="password"
+                                    placeholder="Enter password" label="Password"
+                                    field={passwordField} setField={setPasswordField}
+                                    validateFn={validatePassword} />
+                                <Button onClick={loginClickedHandler}>Login</Button>
+                            </Form>
+                        </Tab>
+                        <Tab eventKey="register" title="Register">
+                            <Registration />
+                        </Tab>
+                    </Tabs>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

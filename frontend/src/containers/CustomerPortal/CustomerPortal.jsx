@@ -67,7 +67,7 @@ const CustomerPortal = () => {
                     heading={service.name}
                     theme={classes.ServiceTheme}
                     icon={<PersonBoundingBox />}
-                    image={`/assets/${servicesTypes[0]?.imagePath.split('/').slice(-1)[0]}`}
+                    image={`/assets/${service?.imagePath?.split('/').slice(-1)[0]}`}
                     button={<button
                         onClick={() => loadType({ ...service })}>
                         Book now
