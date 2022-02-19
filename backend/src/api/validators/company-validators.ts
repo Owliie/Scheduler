@@ -1,7 +1,7 @@
 import { body, ValidationChain } from 'express-validator'
 import { CompanyColumns } from '../../data/models/user-columns'
 
-export const CompanyValidators: ValidationChain[] = [
+export const CompanyDetailsValidators: ValidationChain[] = [
     body(CompanyColumns.address).isLength({
         min: 3,
         max: 1000
@@ -9,6 +9,13 @@ export const CompanyValidators: ValidationChain[] = [
     body(CompanyColumns.description).isLength({
         min: 3,
         max: 2000
-    }),
-    body(CompanyColumns.availability).isArray({ min: 1, max: 7 })
+    })
+]
+
+export const CompanyValidators: ValidationChain[] = [
+    ...CompanyDetailsValidators,
+    body(CompanyColumns.availability).isArray({
+        min: 1,
+        max: 7
+    })
 ]
