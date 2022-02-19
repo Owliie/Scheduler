@@ -24,6 +24,18 @@ class UserService {
     static setAvailability = (availability) => {
         return RequestAPI.post('/users/profile/availability', { availability })
     }
+
+    static getFavourites = () => {
+        return RequestAPI.get('/users/favourites')
+    }
+
+    static deleteFavourite = (id) => {
+        return RequestAPI.delete(`/users/favourites/${id}`)
+    }
+
+    static addFavourite = (businessId) => {
+        return RequestAPI.post('/users/favourites', { businessId })
+    }
 }
 
 export default UserService;

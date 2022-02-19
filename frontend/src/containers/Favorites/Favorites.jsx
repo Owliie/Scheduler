@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { CardImage, HeartFill, Image, StarFill } from 'react-bootstrap-icons';
+import { HeartFill, StarFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
 import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
-import BusinessService from '../../services/businessService';
+import UserService from '../../services/userService';
 
 import classes from './Favorites.module.scss';
 
@@ -20,7 +20,7 @@ const Favorites = () => {
     }, []);
 
     const likeServiceHandler = async (service) => {
-        await BusinessService.deleteFavourite(service.id)
+        await UserService.deleteFavourite(service.id)
         let tempServices = JSON.parse(JSON.stringify(services))
 
         Object.keys(tempServices).forEach(key => {
@@ -34,7 +34,7 @@ const Favorites = () => {
     }
 
     const loadData = () => {
-        return BusinessService.getFavourites()
+        return UserService.getFavourites()
     }
 
     const setData = async (pendingData) => {
@@ -58,7 +58,6 @@ const Favorites = () => {
         return (<Spinner />)
     }
 
-    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>

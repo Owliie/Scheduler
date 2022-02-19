@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
-import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
+import { DayPilotCalendar } from "daypilot-pro-react";
 
 import { STATUS } from '../../utils/status';
 import classes from './BHolderPortal.module.scss';
 import { convertToTime } from '../../utils/converter';
 import BusinessService from '../../services/businessService';
+import AppointmentService from '../../services/appointmentService';
 
 const BHolderPortal = (props) => {
     const [data, setData] = useState({
@@ -43,14 +43,14 @@ const BHolderPortal = (props) => {
     }
 
     const acceptEventHandler = async () => {
-        await BusinessService.acceptAppointment(event.id)
+        await AppointmentService.acceptAppointment(event.id)
 
         await loadEvents()
         setEvent(null)
     }
 
     const rejectEventHandler = async () => {
-        await BusinessService.rejectAppointment(event.id)
+        await AppointmentService.rejectAppointment(event.id)
 
         await loadEvents()
         setEvent(null)

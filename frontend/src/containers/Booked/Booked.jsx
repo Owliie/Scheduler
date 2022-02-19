@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Badge } from 'react-bootstrap';
-import { BellFill, CardImage, Check2Circle, HourglassSplit, Image } from 'react-bootstrap-icons';
+import { BellFill, Check2Circle, HourglassSplit } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 
 import Spinner from '../../components/common/Spinner/Spinner';
 import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
-import BusinessService from '../../services/businessService';
+import AppointmentService from '../../services/appointmentService';
 import { STATUS } from '../../utils/status';
 // import  from '../../assets/';
 
@@ -23,7 +23,7 @@ const Booked = () => {
     }, []);
 
     const loadData = () => {
-        return BusinessService.getBooked()
+        return AppointmentService.getBooked()
     }
 
     const setData = async (pendingData) => {
@@ -46,7 +46,6 @@ const Booked = () => {
         return (<Spinner />)
     }
 
-    console.log('services', services);
     return (
         <div className={classes.Container}>
             <div className={classes.Heading}>

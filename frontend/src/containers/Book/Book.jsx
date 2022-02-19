@@ -8,6 +8,7 @@ import { convertToTime } from '../../utils/converter';
 import ProductService from '../../services/productService';
 import BusinessService from '../../services/businessService';
 import classes from './Book.module.scss';
+import AppointmentService from '../../services/appointmentService';
 
 const Book = (props) => {
     const { account } = useStoreState((state) => state.userStore);
@@ -53,7 +54,7 @@ const Book = (props) => {
         const selectedDate = date + 'T' + time
         const foundType = products.find(product => product.id === type)
 
-        await BusinessService.book({
+        await AppointmentService.book({
             businessHolder: props.id,
             start: selectedDate,
             durationInMinutes: foundType.durationInMinutes,

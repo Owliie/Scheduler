@@ -7,6 +7,7 @@ import Spinner from '../../components/common/Spinner/Spinner';
 import CustomerSlide from '../../components/CustomerSlide/CustomerSlide';
 import Service from '../../components/Service/Service';
 import BusinessService from '../../services/businessService';
+import UserService from '../../services/userService';
 import classes from './CustomerPortal.module.scss';
 
 const CustomerPortal = () => {
@@ -41,9 +42,9 @@ const CustomerPortal = () => {
     const likeServiceHandler = async (service) => {
         const tempServices = [...services]
         if (service.addedToFavourites) {
-            await BusinessService.deleteFavourite(service.id)
+            await UserService.deleteFavourite(service.id)
         } else {
-            await BusinessService.addFavourite(service.id)
+            await UserService.addFavourite(service.id)
         }
         const tempService = tempServices.find(el => el.address === service.address)
         tempService.addedToFavourites = !tempService.addedToFavourites
