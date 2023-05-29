@@ -42,15 +42,15 @@ export class BusinessTypeSeeder implements Seeder {
             {
                 name: 'Massage',
                 imagePath: 'public/images/business-types/massage.jpg'
-            },
-            {
-                name: 'Personal Trainer',
-                imagePath: 'public/images/business-types/personal-trainer.jpg'
-            },
-            {
-                name: 'Dentist',
-                imagePath: 'public/images/business-types/dentist.jpg'
             }
+            // {
+            //     name: 'Personal Trainer',
+            //     imagePath: 'public/images/business-types/personal-trainer.jpg'
+            // },
+            // {
+            //     name: 'Dentist',
+            //     imagePath: 'public/images/business-types/dentist.jpg'
+            // }
         ]
     }
 

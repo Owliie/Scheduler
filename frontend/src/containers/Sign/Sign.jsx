@@ -25,7 +25,6 @@ const Login = (props) => {
 
     return (
         <>
-            <h1 className={classes.Heading}>Scheduler</h1>
             <div className={classes.Form}>
                 <div className={classes.Tabs}>
                     <Tabs

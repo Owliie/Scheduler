@@ -76,7 +76,7 @@ const Registration = (props) => {
 
         if (valid) {
             registerCustomer(data)
-            clearForm()
+            // clearForm()
         } else {
             toastHandler({ success: TOAST_STATES.ERROR, message: 'Invalid form fields' })
         }
@@ -100,6 +100,7 @@ const Registration = (props) => {
         })
 
         if (valid) {
+            data.availability = [...availability];
             registerBusinessHolder(data)
             clearForm()
         } else {
@@ -169,7 +170,7 @@ const Registration = (props) => {
                     <Form className={classes.BusinessRegister}>
                         <h3 className="h3 text-center">Register</h3>
                         <div className={classes.Content}>
-                            {fields.slice(0, 4).concat(fields.slice(4)).map(data => {
+                            {fields.slice(0, 4).concat(fields.slice(5)).map(data => {
                                 return (<Input key={data.label}
                                     controlId={data.controlId} label={data.label}
                                     type={data.type} placeholder={data.placeholder}

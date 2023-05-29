@@ -25,6 +25,7 @@ export const userStore = {
         const { portalStore } = getStoreState();
         const data = await UserService.registerCustomer(payload)
 
+        data.roles = data.roles ?? [];
         portalStore.chosenPortal = data.roles ? null : PORTALS.CUSTOMER;
         actions.setAccount(data);
     }),

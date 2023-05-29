@@ -14,7 +14,7 @@ class UserService {
     }
 
     static setBusinessType = (data) => {
-        return RequestAPI.post('/users/profile/businessType', { data })
+        return RequestAPI.post('/users/profile/businessType', { businessTypeId: data })
     }
 
     static getProfile = () => {

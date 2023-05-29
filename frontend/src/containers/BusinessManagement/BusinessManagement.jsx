@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Profiler, useEffect, useRef, useState } from 'react';
 import { Form, InputGroup, Table } from 'react-bootstrap';
 import { CloudPlus, PencilFill, TrashFill } from 'react-bootstrap-icons';
 import { toastHandler, TOAST_STATES } from '../../helpers/toast';
@@ -16,6 +16,7 @@ const BusinessManagement = (props) => {
     const [newProduct, setNewProduct] = useState({});
     const [weekData, setWeekData] = useState([]);
     const [availableDays, setAvailableDays] = useState([]);
+    const [businessType, setBusinessType] = useState('');
 
     const selectRef = useRef(null);
 
@@ -36,13 +37,17 @@ const BusinessManagement = (props) => {
     }
 
     const loadWeekData = async () => {
-        const res = await UserService.getProfile()
+        const res = await UserService.getProfile();
+        setBusinessType(res?.company?.businessType);
+        
         const tempDays = []
         for (const day of res.company.availability) {
             if (day.startHour !== day.endHour) {
                 tempDays.push(day.day)
             }
         }
+
+        
         setAvailableDays(tempDays)
         setWeekData(res.company.availability)
     }
@@ -92,6 +97,7 @@ const BusinessManagement = (props) => {
     }
 
     const changeDayHandler = async (e, value, day) => {
+        debugger;
         const newValue = e.target.value
         const updatedWeekData = [...weekData]
         let found = updatedWeekData.find(el => el.id === day.id)
@@ -138,8 +144,9 @@ const BusinessManagement = (props) => {
                 <div className={classes.SelectForm}>
                     <Form.Select ref={selectRef} aria-label="Select business type">
                         <option>Select type</option>
-                        {businessTypes.map(type =>
-                            <option key={type.id} value={type.id}>{type.name}</option>
+                        {businessTypes.map(type => type?.id === businessType ?
+                            <option selected key={type.id} value={type.id}>{type.name}</option>
+                            : <option key={type.id} value={type.id}>{type.name}</option>
                         )}
                     </Form.Select>
                     <button className={classes.SaveBtn} onClick={saveTypeHandler}>Save</button>
@@ -163,18 +170,18 @@ const BusinessManagement = (props) => {
                             {products.map(product =>
                                 <tr className={classes.Product} key={product.id} onDoubleClick={() => enableEditHandler(product)}>
                                     <td><TrashFill onClick={() => deleteProductHandler(product.id)} /></td>
-                                    <td><input disabled={!product.edit} defaultValue={product.name}></input></td>
-                                    <td><input disabled={!product.edit} defaultValue={product.price}></input></td>
-                                    <td><input disabled={!product.edit} defaultValue={product.durationInMinutes}></input></td>
+                                    <td><input type='text' disabled={!product.edit} defaultValue={product.name}></input></td>
+                                    <td><input type='number' disabled={!product.edit} defaultValue={product.price}></input></td>
+                                    <td><input type='number' disabled={!product.edit} defaultValue={product.durationInMinutes}></input></td>
                                     <td>{product.edit ? <CloudPlus onClick={() => updateProductHandler(product.id, product)} /> : <PencilFill onClick={() => enableEditHandler(product)} />}</td>
                                 </tr>
                             )}
                             {expandForm ?
                                 <tr className={classes.Product} >
                                     <td></td>
-                                    <td><input onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} placeholder='Name' /></td>
-                                    <td><input onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} placeholder='Price' /></td>
-                                    <td><input onChange={(e) => setNewProduct({ ...newProduct, durationInMinutes: e.target.value })} placeholder='Duration' /></td>
+                                    <td><input type='text' onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} placeholder='Name' /></td>
+                                    <td><input type='number' onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} placeholder='Price' /></td>
+                                    <td><input type='number' onChange={(e) => setNewProduct({ ...newProduct, durationInMinutes: e.target.value })} placeholder='Duration' /></td>
                                     <td><CloudPlus onClick={handleSaveProduct} /></td>
                                 </tr>
                                 : null}
@@ -196,21 +203,43 @@ const BusinessManagement = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {weekData.map((day, i) => {
-                            return (<tr key={i}>
-                                <th>
-                                    <Form.Check type='checkbox' defaultChecked={day.startHour !== day.endHour} onChange={(e) => updateAvailableDaysHandler(day.day, e.target.checked)} />
-                                </th>
-                                <td>{weekDays[i]}</td>
-                                <td className={classes.Time}>
-                                    <input onChange={(e) => changeDayHandler(e, 'startHour', day)} defaultValue={day.startHour} placeholder='h' /> :
-                                    <input onChange={(e) => changeDayHandler(e, 'startMinute', day)} defaultValue={day.startMinute} placeholder='m' />
-                                </td>
-                                <td className={classes.Time}>
-                                    <input onChange={(e) => changeDayHandler(e, 'endHour', day)} defaultValue={day.endHour} placeholder='h' /> :
-                                    <input onChange={(e) => changeDayHandler(e, 'endMinute', day)} defaultValue={day.endMinute} placeholder='m' />
-                                </td>
-                            </tr>)
+                        {weekDays.map((weekDay, i) => {
+                            const day = weekData.find(x => x.day === i);
+                            if (day) {
+                                return (<tr key={i}>
+                                    <th>
+                                        <Form.Check type='checkbox' checked onChange={(e) => updateAvailableDaysHandler(day.day, e.target.checked)} />
+                                    </th>
+                                    <td>{weekDay}</td>
+    
+                                    <td className={classes.Time}>
+                                        <input type='number' onChange={(e) => changeDayHandler(e, 'startHour', day)} defaultValue={day.startHour} placeholder='h' /> :
+                                        <input type='number' onChange={(e) => changeDayHandler(e, 'startMinute', day)} defaultValue={day.startMinute} placeholder='m' />
+                                    </td>
+                                    <td className={classes.Time}>
+                                        <input type='number' onChange={(e) => changeDayHandler(e, 'endHour', day)} defaultValue={day.endHour} placeholder='h' /> :
+                                        <input type='number' onChange={(e) => changeDayHandler(e, 'endMinute', day)} defaultValue={day.endMinute} placeholder='m' />
+                                    </td>
+                                </tr>)
+                            }
+                            else {
+                                return (<tr key={i}>
+                                    <th>
+                                        <Form.Check type='checkbox' />
+                                    </th>
+                                    <td>{weekDay}</td>
+    
+                                    <td className={classes.Time}>
+                                        <input type='number' placeholder='h' /> :
+                                        <input type='number' placeholder='m' />
+                                    </td>
+                                    <td className={classes.Time}>
+                                        <input type='number' placeholder='h' /> :
+                                        <input type='number' placeholder='m' />
+                                    </td>
+                                </tr>)
+                            }
+                            
                         })}
                     </tbody>
                 </Table>

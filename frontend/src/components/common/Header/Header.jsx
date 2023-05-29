@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Nav, Container, Offcanvas } from 'react-bootstrap';
 
 import classes from './Header.module.scss';
@@ -10,6 +10,7 @@ import Spinner from '../Spinner/Spinner';
 import { PORTALS } from '../../../utils/portals';
 
 const Header = (props) => {
+    const [expanded, setExpanded] = useState(false);
     const { isLoggedIn, account } = useStoreState((state) => state.userStore);
     const { chosenPortal } = useStoreState((state) => state.portalStore);
     const { logout } = useStoreActions((actions) => actions.userStore);
@@ -20,33 +21,41 @@ const Header = (props) => {
     const onLogoutClick = () => {
         logout()
         navigate('/sign');
+        handleNavbarToggle(true);
     }
 
     const servicesHandler = () => {
         setPortal(PORTALS.CUSTOMER)
         setType(null)
         navigate('/')
+        handleNavbarToggle(true);
     }
 
     const businessHandler = () => {
         setPortal(PORTALS.B_HOLDER)
-        setType(null)
+        setType(null);
+        handleNavbarToggle(true);
     }
 
     const navigateTo = (route) => {
         setPortal(PORTALS.CUSTOMER)
-        navigate(route)
+        navigate(route); 
+        handleNavbarToggle(true);
     }
+
+    const handleNavbarToggle = () => {
+        setExpanded(!expanded);
+      };
 
     if (account === null && isLoggedIn) {
         return (<Spinner />)
     }
 
     return (
-        <Navbar expand={isLoggedIn ? false : true} collapseOnSelect className={classes.Header} variant="dark">
+        <Navbar expand={isLoggedIn ? false : true} expanded={expanded} onToggle={handleNavbarToggle} className={classes.Header} variant="dark">
             <Container fluid>
                 <Navbar.Brand href="/">Scheduler</Navbar.Brand>
-                <Navbar.Toggle aria-controls="offcanvasNavbar" />
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Offcanvas
                     id="offcanvasNavbar"
                     aria-labelledby="offcanvasNavbarLabel"
@@ -91,7 +100,7 @@ const Header = (props) => {
                                     <>
                                         <div className={classes.Nav}>
                                             <Grid3x3GapFill />
-                                            <Link className="nav-link" to="/">Services</Link>
+                                            <Link className="nav-link" to="/" onClick={() => handleNavbarToggle(true)}>Services</Link>
                                         </div>
                                     </>
                                 }

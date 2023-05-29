@@ -44,6 +44,9 @@ const Book = (props) => {
     const dateHandler = async (e) => {
         const tempDate = e.target.value
         const res = await BusinessService.getAvailability(props.id, tempDate)
+        if (!res) {
+            return;
+        }
 
         setDate(tempDate)
         setAvailability(res)
